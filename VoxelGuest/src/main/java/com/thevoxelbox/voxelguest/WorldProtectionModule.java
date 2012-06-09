@@ -47,12 +47,16 @@ public class WorldProtectionModule extends Module{
     public HashSet<Integer> banneditems = new HashSet<Integer>();
     
     private List<EntityPurgeThread> purgeThreads = new ArrayList<EntityPurgeThread>();    
+    
+    private List<String> protectedWorlds = new ArrayList<String>();
 
     public WorldProtectionModule() {
         super(WorldProtectionModule.class.getAnnotation(MetaData.class));
     }
     
     class WorldProtectionConfiguration extends ModuleConfiguration {
+    	@Setting("enable-multi-worlds") public boolean multiworld = false;
+    	@Setting("protected-worlds") public String protectedWorlds = ""; 
         @Setting("disable-block-drops") public boolean blockdrops = false;
         @Setting("disable-leaf-decay") public boolean leafdecay = false;
         @Setting("disable-ice-melting") public boolean icemelt = false;
@@ -101,7 +105,14 @@ public class WorldProtectionModule extends Module{
         } catch (Exception ex) {
             VoxelGuest.log("Ignoring item blacklist");
         }
-    }
+
+		if (!getConfiguration().getBoolean("enable-multi-worlds")) {
+			String[] worlds = getConfiguration().getString("protected-worlds").split(",");
+			for (String world : worlds) {
+				protectedWorlds.add(world);
+			}
+		}
+	}
 
     @Override
     public String getLoadMessage() {
@@ -134,6 +145,20 @@ public class WorldProtectionModule extends Module{
         thread.start();
     }
     
+	private boolean isProtectedWorld(World world) {
+		if(protectedWorlds.isEmpty()) {
+			return true;
+		}
+		
+		for (String _w : protectedWorlds) {
+			if (world.getName().equals(_w)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+    
     /*
      * World Protection - BlockBreak Event
      * Written by: Razorcane
@@ -141,16 +166,20 @@ public class WorldProtectionModule extends Module{
      * Handles Block Drops.
      */
     @ModuleEvent(event=BlockBreakEvent.class)
-    public void onBlockBreak(BukkitEventWrapper wrapper) {
-        BlockBreakEvent event = (BlockBreakEvent) wrapper.getEvent();
-        Player p = event.getPlayer();
-        Block b = event.getBlock();
-        
-        if(getConfiguration().getBoolean("diable-block-drops")) {
-            b.setType(Material.AIR);
-            event.setCancelled(true);
-        }
-    }
+	public void onBlockBreak(BukkitEventWrapper wrapper) {
+		BlockBreakEvent event = (BlockBreakEvent) wrapper.getEvent();
+		Player p = event.getPlayer();
+		Block b = event.getBlock();
+
+		if (!isProtectedWorld(b.getWorld())) {
+			return;
+		}
+		
+		if (getConfiguration().getBoolean("diable-block-drops")) {
+			b.setType(Material.AIR);
+			event.setCancelled(true);
+		}
+	}
     
     /*
      * World Protection - BlockPlace Event
@@ -165,6 +194,10 @@ public class WorldProtectionModule extends Module{
         Player[] p = Bukkit.getOnlinePlayers();
         int onlinecount = Bukkit.getOnlinePlayers().length;
         Block b = event.getBlock();
+        
+        if(!isProtectedWorld(b.getWorld())) {
+        	return;
+        }
         
         if (!bannedblocks.isEmpty() && bannedblocks.contains(b.getTypeId()) && !PermissionsManager.getHandler().hasPermission(player.getName(), "voxelguest.protection.bannedblocks")) {
             event.setCancelled(true);
@@ -191,6 +224,10 @@ public class WorldProtectionModule extends Module{
         int onlinecount = Bukkit.getOnlinePlayers().length;
         ItemStack is = event.getItem();
         
+        if(!isProtectedWorld(player.getWorld())) {
+        	return;
+        }
+        
         if (is != null && !banneditems.isEmpty() && banneditems.contains(is.getTypeId()) && !PermissionsManager.getHandler().hasPermission(player.getName(), "voxelguest.protection.banneditems")) {
             event.setCancelled(true);
             
@@ -214,6 +251,10 @@ public class WorldProtectionModule extends Module{
     public void onLeavesDecay(BukkitEventWrapper wrapper) {
         LeavesDecayEvent event = (LeavesDecayEvent) wrapper.getEvent();
         
+        if(!isProtectedWorld(event.getBlock().getWorld())) {
+        	return;
+        }
+        
         if (getConfiguration().getBoolean("disable-leaf-decay")) {
             event.setCancelled(true);
         }
@@ -229,6 +270,10 @@ public class WorldProtectionModule extends Module{
     public void onBlockFade(BukkitEventWrapper wrapper) {
         BlockFadeEvent event = (BlockFadeEvent) wrapper.getEvent();
         Block b = event.getNewState().getBlock();
+        
+        if(!isProtectedWorld(b.getWorld())) {
+        	return;
+        }
         
         if(b.getType().equals(Material.ICE) && getConfiguration().getBoolean("disable-ice-melting")) {
             event.setCancelled(true);
@@ -251,6 +296,10 @@ public class WorldProtectionModule extends Module{
         BlockFormEvent event = (BlockFormEvent) wrapper.getEvent();
         Block b = event.getBlock();
         
+        if(!isProtectedWorld(b.getWorld())) {
+        	return;
+        }
+        
         if (b.getType().equals(Material.ICE) && getConfiguration().getBoolean("disable-ice-formation")) {
             event.setCancelled(true);
             return;
@@ -271,6 +320,10 @@ public class WorldProtectionModule extends Module{
     public void onBlockBurn(BukkitEventWrapper wrapper) {
         BlockBurnEvent event = (BlockBurnEvent) wrapper.getEvent();
         
+        if(!isProtectedWorld(event.getBlock().getWorld())) {
+        	return;
+        }
+        
         if(getConfiguration().getBoolean("disable-block-burning")) {
             event.setCancelled(true);
         }
@@ -287,6 +340,10 @@ public class WorldProtectionModule extends Module{
     public void onBlockIgnite(BukkitEventWrapper wrapper) {
         BlockIgniteEvent event = (BlockIgniteEvent) wrapper.getEvent();
         IgniteCause cause = event.getCause();
+        
+        if(!isProtectedWorld(event.getBlock().getWorld())) {
+        	return;
+        }
         
         boolean fireSpread = (cause == IgniteCause.SPREAD || cause == IgniteCause.LAVA || cause == IgniteCause.LIGHTNING);
         
@@ -306,6 +363,10 @@ public class WorldProtectionModule extends Module{
         BlockSpreadEvent event = (BlockSpreadEvent) wrapper.getEvent();
         boolean fireSpread = (event.getNewState().getType() == Material.FIRE);
         
+        if(!isProtectedWorld(event.getBlock().getWorld())) {
+        	return;
+        }
+        
         if (fireSpread && getConfiguration().getBoolean("disable-fire-spread")) {
             event.setCancelled(true);
         }
@@ -321,6 +382,10 @@ public class WorldProtectionModule extends Module{
     public void onEnchantItem(BukkitEventWrapper wrapper) {
         EnchantItemEvent event = (EnchantItemEvent) wrapper.getEvent();
         
+        if(!isProtectedWorld(event.getEnchanter().getWorld())) {
+        	return;
+        }
+        
         if(getConfiguration().getBoolean("disable-enchanting")) {
             event.setCancelled(true);
         }
@@ -335,6 +400,10 @@ public class WorldProtectionModule extends Module{
     @ModuleEvent(event=EntityExplodeEvent.class)
     public void onEntityExplode(BukkitEventWrapper wrapper) {
         EntityExplodeEvent event = (EntityExplodeEvent) wrapper.getEvent();
+        
+        if(!isProtectedWorld(event.getEntity().getWorld())) {
+        	return;
+        }
         
         if(getConfiguration().getBoolean("disable-creeper-explosion")) {
             event.setCancelled(true);
