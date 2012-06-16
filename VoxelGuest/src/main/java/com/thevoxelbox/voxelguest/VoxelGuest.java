@@ -88,6 +88,7 @@ public class VoxelGuest extends JavaPlugin {
         PlayerProtectionModule.class,
         RegionModule.class,
         VanishModule.class,
+        SignLoggerModule.class,
         WorldProtectionModule.class
     };
 

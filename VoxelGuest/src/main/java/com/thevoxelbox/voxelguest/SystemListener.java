@@ -42,6 +42,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -223,6 +224,11 @@ public class SystemListener extends ModuleSystemListener {
     
     @EventHandler
     public void onLeavesDecay(LeavesDecayEvent event) {
+        processModuleEvents(event);
+    }
+    
+    @EventHandler
+    public void signChangeEvent(SignChangeEvent event){
         processModuleEvents(event);
     }
     
