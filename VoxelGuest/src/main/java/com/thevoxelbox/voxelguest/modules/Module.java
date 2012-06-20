@@ -44,6 +44,8 @@ public abstract class Module {
     
     public abstract void disable() throws ModuleException;
     
+    public abstract void explorationToggle(boolean explorationSetting);
+    
     public boolean isEnabled() {
         return this.enabled;
     }

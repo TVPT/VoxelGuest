@@ -33,6 +33,7 @@ import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.AFKModule;
 import com.thevoxelbox.voxelguest.VanishModule;
 import com.thevoxelbox.voxelguest.VoxelGuest;
+import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleException;
 import com.thevoxelbox.voxelguest.modules.ModuleManager;
 import java.util.ArrayList;
@@ -147,6 +148,29 @@ public class MiscellaneousCommands {
             p.teleport(back);
         }
     }
+    
+    @Command(aliases={"vexploration"},
+          bounds={0, 0},
+          help="Sets the server to exploration day",
+          playerOnly=true)
+    @CommandPermission(permission="voxelguest.miscellaneous.vexploration")
+    public void vexploration(CommandSender cs, String[] args){
+        Player p = (Player) cs;
+        VoxelGuest vg = new VoxelGuest();
+        
+        if(vg.isExplorationMode()){
+            p.sendMessage("Exploration Mode:" + ChatColor.RED + " OFF");
+            vg.setExplorationMode(false);
+            vg.explorationToggleEvent(vg.isExplorationMode());
+        }
+        if(!vg.isExplorationMode()){
+            p.sendMessage("Exploration Mode:" + ChatColor.GREEN + " ON");
+            vg.setExplorationMode(true);
+            vg.explorationToggleEvent(vg.isExplorationMode());
+        }
+        
+    }
+    
     
     private void insertHistoryEntry(Player p, Location last) {
         teleportHistory.put(p.getName(), last);

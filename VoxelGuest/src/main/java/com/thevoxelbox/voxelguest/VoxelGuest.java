@@ -76,6 +76,7 @@ public class VoxelGuest extends JavaPlugin {
     protected static final Configuration config = new Configuration("VoxelGuest");
     
     public static int ONLINE_MEMBERS = 0;
+    public boolean explorationMode = false;
     
     protected Class<? extends Module>[] availableModules = new Class[] {
         AFKModule.class,
@@ -406,4 +407,24 @@ public class VoxelGuest extends JavaPlugin {
             VoxelGuest.log("Could not create command log file", 1);
         }
     }
+    
+    public void explorationToggleEvent(boolean explorationSetting){
+        Module[] allModules = moduleManager.getModules();
+        
+        for(int x = 0; x < allModules.length; x++){
+            allModules[x].explorationToggle(explorationSetting);
+        }
+    }
+    
+    public boolean isExplorationMode() {
+        return explorationMode;
+    }
+
+    public void setExplorationMode(boolean e) {
+        explorationMode = e;
+    }
+    
+    
+    
+    
 }
