@@ -78,6 +78,11 @@ public class CreatureProtectionModule extends Module{
         return;
     }
     
+    @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
         
     /*
      * Creature Protection - CreatureSpawn Event

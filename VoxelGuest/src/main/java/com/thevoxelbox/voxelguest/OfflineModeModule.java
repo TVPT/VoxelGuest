@@ -117,6 +117,11 @@ public class OfflineModeModule extends Module {
         }
     }
 
+    @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
     @Command(aliases = {"opass", "offlinepass", "offlinepassword"},
     bounds = {1, -1},
     help = "For a player, set your offline password using §c/opass [password]\n"

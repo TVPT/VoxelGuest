@@ -110,6 +110,11 @@ public class AFKModule extends Module {
     }
 
     @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
+    @Override
     public String getLoadMessage() {
         return "AFK module enabled - Auto-AFK timeout is " + (VoxelGuest.getConfigData().getBoolean("afk-timeout-enabled") ? "enabled" : "disabled");
     }

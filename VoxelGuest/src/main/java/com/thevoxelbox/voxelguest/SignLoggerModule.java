@@ -65,6 +65,11 @@ public class SignLoggerModule extends Module {
     @Override
     public void disable() throws ModuleException {}
     
+    @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
     
     @ModuleEvent(event=SignChangeEvent.class)
     public void signChangeEvent(BukkitEventWrapper wrapper) {
@@ -118,7 +123,7 @@ public class SignLoggerModule extends Module {
                 int S = Current.get(Calendar.SECOND);
         return "[" + MO + "/" + D + "  " + H + ":" + M + ":" + S + "]" + " | " + pname + " | " + "' " + lines[0] + " ' " + lines[1] + " ' " + lines[2] + " ' " + lines[3] + " ' " + " | Location -> " + "X:" + xCord + " Y:" + yCord + " Z:" + zCord + " @ " + world.getName();        
     }
-    
+
     
     
 }

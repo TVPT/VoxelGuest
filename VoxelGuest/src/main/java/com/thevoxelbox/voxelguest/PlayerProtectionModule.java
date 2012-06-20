@@ -72,6 +72,11 @@ public class PlayerProtectionModule extends Module {
         
     }
     
+    @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
     /*
      * Player Protection - EntityDamageByBlock Event
      * Written by: Razorcane

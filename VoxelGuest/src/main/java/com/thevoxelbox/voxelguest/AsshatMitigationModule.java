@@ -59,6 +59,11 @@ public class AsshatMitigationModule extends Module {
     }
 
     @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
+    @Override
     public String getLoadMessage() {
         return "Asshat Mitigator has been loaded.";
     }

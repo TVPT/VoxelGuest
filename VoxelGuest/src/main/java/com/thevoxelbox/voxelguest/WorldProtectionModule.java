@@ -118,6 +118,11 @@ public class WorldProtectionModule extends Module{
         }
     }
     
+    @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
     @Command(aliases={"entitypurge", "ep"},
             bounds={1,1},
             help="Purge all non-players and non-paintings from worlds using\n"

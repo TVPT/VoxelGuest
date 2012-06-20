@@ -140,6 +140,11 @@ public class GreylistModule extends Module {
     }
 
     @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
+    @Override
     public String getLoadMessage() {
         return "Greylist module loaded";
     }

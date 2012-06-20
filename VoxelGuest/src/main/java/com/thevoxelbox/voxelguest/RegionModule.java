@@ -107,6 +107,11 @@ public class RegionModule extends Module {
     }
 
     @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
+    @Override
     public String getLoadMessage() {
         return "Region module loaded - " + loadedRegions.size() + " regions registered";
     }

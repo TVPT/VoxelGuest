@@ -131,6 +131,11 @@ public class VanishModule extends Module {
     }
 
     @Override
+    public void explorationToggle(boolean explorationSetting) {
+        
+    }
+    
+    @Override
     public String getLoadMessage() {
         return "Vanish module loaded";
     }
