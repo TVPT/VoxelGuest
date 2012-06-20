@@ -141,7 +141,8 @@ public class GreylistModule extends Module {
 
     @Override
     public void explorationToggle(boolean explorationSetting) {
-        
+        if(explorationSetting)
+            this.disable();
     }
     
     @Override
