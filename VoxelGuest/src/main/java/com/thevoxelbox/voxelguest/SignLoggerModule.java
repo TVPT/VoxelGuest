@@ -13,11 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
  *
@@ -87,30 +84,6 @@ public class SignLoggerModule extends Module {
         
     }
     
-    @ModuleEvent(event=PlayerInteractEvent.class)
-    public void interactEvent(BukkitEventWrapper wrapper) {
-        
-        PlayerInteractEvent event = (PlayerInteractEvent) wrapper.getEvent();
-        
-        if(event.getPlayer().getItemInHand().getTypeId() == 268){
-            if(event.getPlayer().hasPermission("") || event.getPlayer().isOp()){
-                String[] logsToPrint = returnSignAtLocation(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ(), event.getClickedBlock().getWorld());
-            
-                if(logsToPrint == null){
-                    event.getPlayer().sendMessage(ChatColor.GOLD + "No Sign History here");
-                }
-                else{
-                    
-                }
-            }
-            
-        }
-        
-    }
-        
-        
-    
-    
     private void addSignLog(String logString){
         signLog.add(logString);
         
@@ -133,49 +106,6 @@ public class SignLoggerModule extends Module {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
-    }
-    
-    private String[] returnSignAtLocation(int x, int y, int z, World world){
-        
-        int xCordFromLog = 0;
-        int yCordFromLog = 0;
-        int zCordFromLog = 0;
-        String worldFromLog = world.getName();
-        String[] logsToReturn = null;
-        
-        for(String log : signLog){
-            String[] splitLog = log.split(" | Location ->");
-            String locationString = splitLog[1];
-            
-            if(locationString.startsWith("X:")){
-                String[] xSplit = locationString.split("Y:");
-                xCordFromLog = Integer.parseInt(xSplit[0].replace("X:", ""));
-                locationString.replace("X:", "");
-            }
-            else if(locationString.startsWith("Y:")){
-                String[] ySplit = locationString.split("Z:");
-                yCordFromLog = Integer.parseInt(ySplit[0].replace("Y:", ""));
-                locationString.replace("Y:", "");
-            }
-            else if(locationString.startsWith("Z:")){
-                String[] zSplit = locationString.split("@");
-                zCordFromLog = Integer.parseInt(zSplit[0].replace("Z:", ""));
-                locationString.replace("Z:", "");
-            }
-            else if(locationString.startsWith("@")){
-                locationString.replace("@", "");
-                worldFromLog = locationString.trim();
-            }
-            
-            
-            if(xCordFromLog == x && yCordFromLog == y && zCordFromLog == z && worldFromLog.equalsIgnoreCase(world.getName())){
-                logsToReturn[logsToReturn.length + 1] = splitLog[0];
-            }
-           
-        }
-        
-       return logsToReturn;
         
     }
     
