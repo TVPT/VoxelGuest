@@ -28,6 +28,7 @@ public class AsshatMitigationModule extends Module {
 
 	protected Configuration bannedList = new Configuration("banned", "/asshatmitigation");
 	public List<String> gagged = new ArrayList<String>();
+	private boolean silenceMode = false;
 
 	public AsshatMitigationModule() {
 		super(AsshatMitigationModule.class.getAnnotation(MetaData.class));
@@ -190,6 +191,17 @@ public class AsshatMitigationModule extends Module {
 			}
 		}
 	}
+	
+	@Command(aliases={"soapbox"},
+			bounds={0,0},
+			help="Toggle the silence")
+	@CommandPermission(permission="voxelguest.admin.silence")
+	public void silence(CommandSender cs, String[] args) {
+		silenceMode = !silenceMode;
+		Player p = (Player) cs;
+		getConfiguration().setBoolean("silence-mode",silenceMode);
+		cs.sendMessage(ChatColor.GOLD + "Silent mode has been" + ((silenceMode) ? "enabled" : "disabled"));
+	}
 
 	/*
 	 * Asshat Mitigation - Gag Written by: Razorcane
@@ -315,6 +327,10 @@ public class AsshatMitigationModule extends Module {
 	public void onPlayerChat(BukkitEventWrapper wrapper) {
 		PlayerChatEvent event = (PlayerChatEvent) wrapper.getEvent();
 		Player p = event.getPlayer();
+		if (silenceMode) {
+			if (PermissionsManager.getHandler().hasPermission(event.getPlayer().getName(), "voxelguest.bypass.silence"))
+				event.setCancelled(true);
+		}
 
 		if (gagged.contains(p.getName())) {
 			if (event.getMessage().equals(getConfiguration().getString("unrestrict-chat-message"))) {
