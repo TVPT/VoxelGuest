@@ -38,6 +38,7 @@ import com.thevoxelbox.voxelguest.modules.ModuleManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -163,11 +164,19 @@ public class MiscellaneousCommands {
     }
     
     private void adminWho(CommandSender sender) {
-        HashMap<String, List<String>> storage = new HashMap<String, List<String>>();
+        LinkedHashMap<String, List<String>> storage = new LinkedHashMap<String, List<String>>();
         String defaultGroupId = VoxelGuest.getGroupManager().getDefaultConfiguration().getString("group-id");
         boolean colorSwitch = false;
         
         String header = "";
+        
+        storage.put("A", null);
+        storage.put("C", null);
+        storage.put("S", null);
+        storage.put("L", null);
+        storage.put("M", null);
+        storage.put("G", null);
+        storage.put("V", null);
         
         for (Player p : Bukkit.getOnlinePlayers()) {
             String groupId;
@@ -212,11 +221,19 @@ public class MiscellaneousCommands {
     }
     
     private void normalWho(CommandSender sender) {
-        HashMap<String, List<String>> storage = new HashMap<String, List<String>>();
+        LinkedHashMap<String, List<String>> storage = new LinkedHashMap<String, List<String>>();
         String defaultGroupId = VoxelGuest.getGroupManager().getDefaultConfiguration().getString("group-id");
         boolean colorSwitch = false;
         
         String header = "";
+        
+        storage.put("A", null);
+        storage.put("C", null);
+        storage.put("S", null);
+        storage.put("L", null);
+        storage.put("M", null);
+        storage.put("G", null);
+        storage.put("V", null);
         
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (isInFakeQuit(p))
