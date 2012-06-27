@@ -53,6 +53,7 @@ public class MiscellaneousCommands {
     private final String COMMA = "§6,";
     
     private HashMap<String, Location> teleportHistory = new HashMap<String, Location>();
+    private String[] order = VoxelGuest.getConfigData().getString("who-order").split("-");
     
     
     @Command(aliases={"who", "online", "list", "readlist", "playerlist"},
@@ -204,8 +205,10 @@ public class MiscellaneousCommands {
         sender.sendMessage("§8------------------------------");
         sender.sendMessage(header.trim());
         
-        for (Map.Entry<String, List<String>> entry : storage.entrySet()) {
-            sendGroupStrings(sender, entry.getValue(), entry.getKey());
+        for (String x : order) {
+            String orderId = "§8[" + x + "§8]";
+        	List<String> l = storage.get(orderId);
+        	sendGroupStrings(sender, l, orderId);        	
         }
         
         sender.sendMessage("§8------------------------------");
@@ -256,9 +259,11 @@ public class MiscellaneousCommands {
         sender.sendMessage("§8------------------------------");
         sender.sendMessage(header.trim());
         
-      for (Map.Entry<String, List<String>> entry : storage.entrySet()) {
-          sendGroupStrings(sender, entry.getValue(), entry.getKey());
-      }
+     for (String x : order) {
+            String orderId = "§8[" + x + "§8]";
+        	List<String> l = storage.get(orderId);
+        	sendGroupStrings(sender, l, orderId);        	
+        }
         
         sender.sendMessage("§8------------------------------");
     }
@@ -272,14 +277,15 @@ public class MiscellaneousCommands {
             
             if (groupId == null)
                 groupId = defaultGroupId;
-            
-            String groupTest = "§8[" + groupId + "§8]";
-            
-            if (storage.containsKey(groupTest)) {
-                header = header + "§8[" + groupId + ":" + storage.get(groupTest).size() + "§8] ";
-            } else {
-                header = header + "§8[" + groupId + ":0§8] ";
-            }
+        }
+        
+        for (String x : order) {
+            String orderId = "§8[" + x + "§8]";
+        	if (storage.containsKey(orderId)) {
+        		header = header + "§8[" + x + ":" + storage.get(orderId).size() + "§8] ";
+        	} else {
+        		header = header + "§8[" + x + ":0§8] ";
+        	}
         }
         
         return (header.trim() + (" §8(§fO:" + onlineNumber + "§8)"));
