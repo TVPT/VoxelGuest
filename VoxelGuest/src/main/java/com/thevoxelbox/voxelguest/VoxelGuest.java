@@ -286,6 +286,7 @@ public class VoxelGuest extends JavaPlugin {
         getConfigData().setString("join-message-format", "&8(&6$nonline&8) &3$n &7joined");
         getConfigData().setString("leave-message-format", "&8(&6$nonline&8) &3$n &7left");
         getConfigData().setString("kick-message-format", "&8(&6$nonline&8) &3$n &4was kicked out");
+        getConfigData().setString("who-order", "A-B-C");
         
         getConfigData().setBoolean("permissions-multigroup", false);
         getConfigData().setBoolean("permissions-multiworld", false);
