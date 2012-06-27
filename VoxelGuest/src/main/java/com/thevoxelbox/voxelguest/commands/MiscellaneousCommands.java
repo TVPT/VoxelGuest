@@ -215,8 +215,7 @@ public class MiscellaneousCommands {
     private void normalWho(CommandSender sender) {
         HashMap<String, List<String>> storage = new HashMap<String, List<String>>();
         String defaultGroupId = VoxelGuest.getGroupManager().getDefaultConfiguration().getString("group-id");
-        boolean colorSwitch = false;
-        
+                
         String header = "";
         
         for (Player p : Bukkit.getOnlinePlayers()) {
