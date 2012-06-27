@@ -166,7 +166,6 @@ public class MiscellaneousCommands {
     private void adminWho(CommandSender sender) {
         HashMap<String, List<String>> storage = new HashMap<String, List<String>>();
         String defaultGroupId = VoxelGuest.getGroupManager().getDefaultConfiguration().getString("group-id");
-        boolean colorSwitch = false;
         
         String header = "";
         
@@ -184,7 +183,7 @@ public class MiscellaneousCommands {
             boolean afk = isAFK(p);
             boolean fq  = isInFakeQuit(p);
             
-            String user = ((fq) ? FAKEQUIT : "") + ((afk) ? AFK : "") + ((colorSwitch) ? "§7" : "§f") + p.getName();
+            String user = ((fq) ? FAKEQUIT : "") + ((afk) ? AFK : "") + ";" + p.getName();
             groupId = "§8[" + groupId + "§8]";
             
             if (!storage.containsKey(groupId)) {
@@ -197,7 +196,6 @@ public class MiscellaneousCommands {
                 storage.put(groupId, l);
             }
             
-            colorSwitch = !colorSwitch;
         }
         
         header = writeHeader(storage, Bukkit.getOnlinePlayers().length);
@@ -237,7 +235,7 @@ public class MiscellaneousCommands {
             
             boolean afk = isAFK(p);
             
-            String user = ((afk) ? AFK : "") + ((colorSwitch) ? "§7" : "§f") + p.getName();
+            String user = ((afk) ? AFK : "") + ";" + p.getName();
             groupId = "§8[" + groupId + "§8]";
             
             if (!storage.containsKey(groupId)) {
@@ -250,7 +248,6 @@ public class MiscellaneousCommands {
                 storage.put(groupId, l);
             }
             
-            colorSwitch = !colorSwitch;
         }
         
         
@@ -297,11 +294,14 @@ public class MiscellaneousCommands {
         } else {
             boolean groupStart = false;
             String line = " ";
-            Iterator<String> it = list.listIterator();
-            Collections.sort(list);
+            boolean colorSwitch = false;
+            Collections.sort(list , String.CASE_INSENSITIVE_ORDER);
             
             while (it.hasNext()) {
                 String str = it.next();
+                String[] str1 = str.split(";");
+                str = str1[0] + ((colorSwitch) ? "§7" : "§f") + str1[1];
+                colorSwitch = !colorSwitch;
                 
                 if (line.length() + (str.length() + COMMA.length() + 1) > 70) {
                     if (!groupStart) {
