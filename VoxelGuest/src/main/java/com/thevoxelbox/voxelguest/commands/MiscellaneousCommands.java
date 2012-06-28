@@ -295,6 +295,7 @@ public class MiscellaneousCommands {
             String line = " ";
             boolean colorSwitch = false;
             Collections.sort(list , String.CASE_INSENSITIVE_ORDER);
+            Iterator<String> it = list.listIterator();
             
             while (it.hasNext()) {
                 String str = it.next();
