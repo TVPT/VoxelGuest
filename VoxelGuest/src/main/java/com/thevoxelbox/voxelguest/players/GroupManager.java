@@ -28,11 +28,15 @@ package com.thevoxelbox.voxelguest.players;
 import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.util.Configuration;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class GroupManager {
@@ -41,27 +45,39 @@ public class GroupManager {
     protected static HashMap<String, List<String>> playerMap = new HashMap<String, List<String>>();
     // Basic group defaults
     private final String defaultGroupName = "Group";
-    private final String defaultGroupID = "Â§fG";
+    private final String defaultGroupID = "§fG";
     private final Configuration defaultConfig = new Configuration(defaultGroupName, "/groups");
+    private final Configuration config = new Configuration("config","/groups");  
 
     public GroupManager()
     {
         File dir = new File("plugins/VoxelGuest/groups/");
-
+        File mainFile = new File(dir, "config.properties");
+        
         if (!dir.isDirectory()) {
             dir.mkdirs();
             return;
         }
-
-        String[] files = dir.list();
-
-        for (String file : files) {
-            if (file.endsWith(".properties")) {
-                String f = file.replace(".properties", "");
-                Configuration config = new Configuration(f, "/groups");
-                groupMap.put(f, config);
-            }
+        //create main file
+        if (!mainFile.exists()) {
+        	try {
+				mainFile.createNewFile();
+			} catch (IOException e) {}
         }
+        
+        
+        config.load();
+        //now to auto add the groups and id's.... first letter of group in CAPITALS????
+        //make a list of groups first.
+        
+     
+        
+        //set who-order
+        if (config.getString("who-order") == null)
+        config.setString("who-order", "A-C-S-L-M-G-V");
+        
+        groupMap.put("config", config);
+        config.save();
 
         defaultConfig.setString("group-id", defaultGroupID);
     }
@@ -75,6 +91,11 @@ public class GroupManager {
         Configuration config = new Configuration(name, "/groups");
         setGroupConfiguration(name, config);
         return config;
+    }
+    
+    public String getGroupId(String groupName) {
+    	String id = config.getString(groupName);
+    	return id;
     }
 
     public void setGroupConfiguration(String name, Configuration config)
@@ -144,8 +165,10 @@ public class GroupManager {
     public List<String> getRegisteredGroups()
     {
         List<String> l = new ArrayList<String>();
-
-        for (Map.Entry<String, Configuration> entry : groupMap.entrySet()) {
+        HashMap<String, Object> map = config.getAllEntries();
+        map.remove("who-order");        
+        
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (!l.contains(entry.getKey())) {
                 l.add(entry.getKey());
             }
