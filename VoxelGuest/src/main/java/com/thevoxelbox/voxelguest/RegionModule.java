@@ -25,10 +25,10 @@
  */
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
-import com.thevoxelbox.voxelguest.commands.engine.Subcommands;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.commands.Subcommands;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
 import com.thevoxelbox.voxelguest.modules.MetaData;
 import com.thevoxelbox.voxelguest.modules.Module;
@@ -65,8 +65,7 @@ public class RegionModule extends Module {
 
     class RegionConfiguration extends ModuleConfiguration {
 
-        @Setting("enable-general-build-outside-defined-regions")
-        public boolean enableGeneralBuildOutsideDefinedRegions = true;
+        @Setting("enable-general-build-outside-defined-regions") public boolean enableGeneralBuildOutsideDefinedRegions = true;
 
         public RegionConfiguration(RegionModule parent)
         {
@@ -121,23 +120,22 @@ public class RegionModule extends Module {
     }
 
     @Command(aliases = {"regions", "rgs"},
-    bounds = {0, -1},
-    help = "/regions prints out the number of regions\n"
-    + "The regions subcommands are as follows:\n"
-    + "§b/regions [create, -c] [name] [x1] [y1] [z1] [x2] [y2] [z2]§f: Creates a\n"
-    + "new region \"[name]\" from (x1, y1, z1) to (x2, y2, z2)\n"
-    + "§b/regions [allow, -a] [(+/-)e(+/-)m(+/-)a]\n"
-    + "[-p, -g] [name] [region]§f:\n"
-    + "Allows player or group (-p or -g) \"[name]\" to\n"
-    + "modify (+m), enter (+e), or administer (+a) region \"[region]\"\n"
-    + "§b/regions [delete, -d] [region]§f: Deletes a region\n"
-    + "§b/regions -g [region] [true/false]§f: Enables/disables the general build override.")
-    @CommandPermission(permission = "voxelguest.regions.admin")
+        bounds = {0, -1},
+        help = "/regions prints out the number of regions\n"
+        + "The regions subcommands are as follows:\n"
+        + "§b/regions [create, -c] [name] [x1] [y1] [z1] [x2] [y2] [z2]§f: Creates a\n"
+        + "new region \"[name]\" from (x1, y1, z1) to (x2, y2, z2)\n"
+        + "§b/regions [allow, -a] [(+/-)e(+/-)m(+/-)a]\n"
+        + "[-p, -g] [name] [region]§f:\n"
+        + "Allows player or group (-p or -g) \"[name]\" to\n"
+        + "modify (+m), enter (+e), or administer (+a) region \"[region]\"\n"
+        + "§b/regions [delete, -d] [region]§f: Deletes a region\n"
+        + "§b/regions -g [region] [true/false]§f: Enables/disables the general build override.")
+    @CommandPermission("voxelguest.regions.admin")
     public void regions(CommandSender cs, String[] args)
     {
         if (args.length == 0) {
-            cs.sendMessage("§aThere are " + loadedRegions.size() + " registered regions.");
-            return;
+            cs.sendMessage("§aThere are " + loadedRegions.size() + " registered regions.");   
         } else {
             if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("-c")) {
                 if (!(cs instanceof Player)) {
@@ -173,11 +171,9 @@ public class RegionModule extends Module {
 
                     PermissionsManager.getHandler().givePermission(p.getName(), "system.region." + regName.toLowerCase() + ".admin");
                     p.sendMessage("§aRegion \"" + regName + "\" registered.");
-                    return;
                 } catch (NumberFormatException ex) {
                     p.sendMessage("§cNon-number found: " + ex.getMessage());
                     p.sendMessage("§cIncorrect formatting of command: /regions [create, -c] [name] [x1] [y1] [z1] [x2] [y2] [z2]");
-                    return;
                 }
             } else if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("-d")) {
                 if (args.length != 2) {
@@ -189,10 +185,8 @@ public class RegionModule extends Module {
 
                 if (l.isEmpty()) {
                     cs.sendMessage("§cNo region found by that name.");
-                    return;
                 } else if (l.size() > 1) {
                     cs.sendMessage("§cMultiple regions found by that name.");
-                    return;
                 } else {
                     if ((cs instanceof Player) && !PermissionsManager.getHandler().hasPermission(cs.getName(), "system.regions." + l.get(0).getName().toLowerCase() + ".admin")) {
                         cs.sendMessage("§cYou are not authorized to administer region \"" + l.get(0).getName() + "\"");
@@ -203,7 +197,6 @@ public class RegionModule extends Module {
                     loadedRegions.remove(toDelete);
                     toDelete.delete();
                     cs.sendMessage("§aRegion \"" + toDelete.getName() + "\" deleted.");
-                    return;
                 }
             } else if (args[0].equalsIgnoreCase("-g")) {
                 if (args.length != 3) {
@@ -220,10 +213,8 @@ public class RegionModule extends Module {
 
                 if (l.isEmpty()) {
                     cs.sendMessage("§cNo region found by that name.");
-                    return;
                 } else if (l.size() > 1) {
                     cs.sendMessage("§cMultiple regions found by that name.");
-                    return;
                 } else {
                     if ((cs instanceof Player) && !PermissionsManager.getHandler().hasPermission(cs.getName(), "system.regions." + l.get(0).getName().toLowerCase() + ".admin")) {
                         cs.sendMessage("§cYou are not authorized to administer region \"" + l.get(0).getName() + "\"");
@@ -232,7 +223,6 @@ public class RegionModule extends Module {
 
                     l.get(0).setGeneralBuildOverrideDisable(!Boolean.parseBoolean(args[2]));
                     cs.sendMessage("§aGeneral build override " + ((!l.get(0).isGeneralBuildOverrideDisabled()) ? "enabled" : "diabled") + " for region \"" + l.get(0).getName() + "\"");
-                    return;
                 }
             } else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("-a")) {
                 if (args.length != 5) {
@@ -244,10 +234,8 @@ public class RegionModule extends Module {
 
                 if (l.isEmpty()) {
                     cs.sendMessage("§cNo region found by that name.");
-                    return;
                 } else if (l.size() > 1) {
                     cs.sendMessage("§cMultiple regions found by that name.");
-                    return;
                 } else {
                     if ((cs instanceof Player) && !PermissionsManager.getHandler().hasPermission(cs.getName(), "system.regions." + l.get(0).getName().toLowerCase() + ".admin")) {
                         cs.sendMessage("§cYou are not authorized to administer region \"" + l.get(0).getName() + "\"");
@@ -343,18 +331,16 @@ public class RegionModule extends Module {
                     } else {
                         cs.sendMessage("§cIncorrect flag: " + args[1]);
                     }
-
-                    return;
                 }
             }
         }
     }
 
     @Command(aliases = {"listregions", "lr"},
-    bounds = {0, 2},
-    help = "List registered regions with /listregions\n"
-    + "Show a region's subregions with /lr children [region]")
-    @CommandPermission(permission = "voxelguest.regions.list.list")
+        bounds = {0, 2},
+        help = "List registered regions with /listregions\n"
+        + "Show a region's subregions with /lr children [region]")
+    @CommandPermission("voxelguest.regions.list.list")
     @Subcommands(arguments = {"children"}, permission = {"voxelguest.regions.list.children"})
     public void listRegions(CommandSender cs, String[] args)
     {
@@ -405,8 +391,6 @@ public class RegionModule extends Module {
         for (int i = 0; i < regions.length; i++) {
             cs.sendMessage("§f" + (i + 1) + "§7.§8) §f" + regions[i].getName() + ((!getSubregions(regions[i]).isEmpty()) ? (" §8[§fChildren: §6" + getSubregions(regions[i]).size() + "§8]") : ""));
         }
-
-        return;
     }
 
     @Command(aliases = {"regioninfo", "ri"},
@@ -508,7 +492,6 @@ public class RegionModule extends Module {
         if (!canModify(event.getPlayer(), event.getBlock().getLocation())) {
             event.getPlayer().sendMessage("§cYou cannot modify this area.");
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -520,7 +503,6 @@ public class RegionModule extends Module {
         if (!canModify(event.getPlayer(), event.getBlock().getLocation())) {
             event.getPlayer().sendMessage("§cYou cannot modify this area.");
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -532,7 +514,6 @@ public class RegionModule extends Module {
         if (!canModify(event.getPlayer(), event.getBlockPlaced().getLocation())) {
             event.getPlayer().sendMessage("§cYou cannot modify this area.");
             event.setCancelled(true);
-            return;
         }
     }
 

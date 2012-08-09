@@ -1,9 +1,9 @@
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.modules.*;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -49,36 +49,21 @@ public class WorldProtectionModule extends Module {
 
     class WorldProtectionConfiguration extends ModuleConfiguration {
 
-        @Setting("enable-multi-worlds")
-        public boolean multiworld = false;
-        @Setting("protected-worlds")
-        public String protectedWorlds = "";
-        @Setting("disable-block-drops")
-        public boolean blockdrops = false;
-        @Setting("disable-leaf-decay")
-        public boolean leafdecay = false;
-        @Setting("disable-ice-melting")
-        public boolean icemelt = false;
-        @Setting("disable-snow-melting")
-        public boolean snowmelt = false;
-        @Setting("disable-ice-formation")
-        public boolean iceform = false;
-        @Setting("disable-snow-formation")
-        public boolean snowform = false;
-        @Setting("disable-block-burning")
-        public boolean blockburn = false;
-        @Setting("disable-block-ignite")
-        public boolean blockignite = true;
-        @Setting("disable-fire-spread")
-        public boolean firespred = false;
-        @Setting("disable-enchanting")
-        public boolean enchanting = false;
-        @Setting("disable-creeper-explosion")
-        public boolean creeperexplode = false;
-        @Setting("unplacable-blocks")
-        public String unplacable = "8,9,10,11,46";
-        @Setting("unusable-items")
-        public String unusableitems = "325,326,327";
+        @Setting("enable-multi-worlds") public boolean multiworld = false;
+        @Setting("protected-worlds") public String protectedWorlds = "";
+        @Setting("disable-block-drops") public boolean blockdrops = false;
+        @Setting("disable-leaf-decay") public boolean leafdecay = false;
+        @Setting("disable-ice-melting") public boolean icemelt = false;
+        @Setting("disable-snow-melting")public boolean snowmelt = false;
+        @Setting("disable-ice-formation") public boolean iceform = false;
+        @Setting("disable-snow-formation") public boolean snowform = false;
+        @Setting("disable-block-burning") public boolean blockburn = false;
+        @Setting("disable-block-ignite") public boolean blockignite = true;
+        @Setting("disable-fire-spread") public boolean firespred = false;
+        @Setting("disable-enchanting") public boolean enchanting = false;
+        @Setting("disable-creeper-explosion") public boolean creeperexplode = false;
+        @Setting("unplacable-blocks") public String unplacable = "8,9,10,11,46";
+        @Setting("unusable-items") public String unusableitems = "325,326,327";
 
         public WorldProtectionConfiguration(WorldProtectionModule parent)
         {
@@ -142,10 +127,10 @@ public class WorldProtectionModule extends Module {
     }
 
     @Command(aliases = {"entitypurge", "ep"},
-    bounds = {1, 1},
-    help = "Purge all non-players and non-paintings from worlds using\n"
-    + "§c/entitypurge [world]")
-    @CommandPermission(permission = "voxelguest.protection.entitypurge")
+        bounds = {1, 1},
+        help = "Purge all non-players and non-paintings from worlds using\n"
+        + "§c/entitypurge [world]")
+    @CommandPermission("voxelguest.protection.entitypurge")
     public void entityPurge(CommandSender cs, String[] args)
     {
         World world = Bukkit.getWorld(args[0]);

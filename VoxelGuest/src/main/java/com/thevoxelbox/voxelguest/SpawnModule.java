@@ -25,8 +25,8 @@
  */
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
 import com.thevoxelbox.voxelguest.modules.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,26 +52,16 @@ public class SpawnModule extends Module {
 
     class SpawnConfiguration extends ModuleConfiguration {
 
-        @Setting("use-configuration-location")
-        public boolean defaultWorld = false;
-        @Setting("use-ender-pearl-teleportation-cause")
-        public boolean enderTeleport = false;
-        @Setting("world")
-        public String worldName = "";
-        @Setting("world-x")
-        public double x = 0;
-        @Setting("world-y")
-        public double y = 0;
-        @Setting("world-z")
-        public double z = 0;
-        @Setting("world-yaw")
-        public double yaw = 0;
-        @Setting("world-pitch")
-        public double pitch = 0;
-        @Setting("use-random-spawn-messages")
-        public boolean randomMessage = false;
-        @Setting("random-spawn-messages")
-        public String messages = "Your butt hurts,Woosh!,Weeee!,Buy Now! Ganz Ganz!,Huzzah!,*Blip*,*Pop*,Eat your veggies,Shake-Shake-Shake";
+        @Setting("use-configuration-location") public boolean defaultWorld = false;
+        @Setting("use-ender-pearl-teleportation-cause") public boolean enderTeleport = false;
+        @Setting("world") public String worldName = "";
+        @Setting("world-x") public double x = 0;
+        @Setting("world-y") public double y = 0;
+        @Setting("world-z") public double z = 0;
+        @Setting("world-yaw") public double yaw = 0;
+        @Setting("world-pitch") public double pitch = 0;
+        @Setting("use-random-spawn-messages") public boolean randomMessage = false;
+        @Setting("random-spawn-messages") public String messages = "Your butt hurts,Woosh!,Weeee!,Buy Now! Ganz Ganz!,Huzzah!,*Blip*,*Pop*,Eat your veggies,Shake-Shake-Shake";
 
         public SpawnConfiguration(SpawnModule parent)
         {
@@ -112,10 +102,10 @@ public class SpawnModule extends Module {
     }
 
     @Command(aliases = {"setspawn"},
-    bounds = {0, -1},
-    help = "To set the spawn location type §c/setspawn",
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.spawn.setspawn")
+        bounds = {0, -1},
+        help = "To set the spawn location type §c/setspawn",
+        playerOnly = true)
+    @CommandPermission("voxelguest.spawn.setspawn")
     public void setSpawn(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;
@@ -134,10 +124,10 @@ public class SpawnModule extends Module {
     }
 
     @Command(aliases = {"spawn"},
-    bounds = {0, -1},
-    help = "To travel to spawn type §c/spawn",
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.spawn.spawn")
+        bounds = {0, -1},
+        help = "To travel to spawn type §c/spawn",
+        playerOnly = true)
+    @CommandPermission("voxelguest.spawn.spawn")
     public void spawn(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;

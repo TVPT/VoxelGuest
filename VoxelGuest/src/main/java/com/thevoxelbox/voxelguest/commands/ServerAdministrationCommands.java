@@ -26,14 +26,14 @@
 
 package com.thevoxelbox.voxelguest.commands;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.config.PropertyConfiguration;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.ModuleManager;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
-import com.thevoxelbox.voxelguest.util.Configuration;
 import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
 import java.util.List;
@@ -90,8 +90,8 @@ public class ServerAdministrationCommands {
     }
 
     @Command(aliases = {"system", "sys"},
-    bounds = {0, -1})
-    @CommandPermission(permission = "system.admin")
+        bounds = {0, -1})
+    @CommandPermission("system.admin")
     public void system(CommandSender cs, String[] args)
     {
         if (args.length == 0) {
@@ -170,7 +170,7 @@ public class ServerAdministrationCommands {
 
                     for (String group : test) {
                         if (group.equalsIgnoreCase(args[3])) {
-                            Configuration config = VoxelGuest.getGroupManager().getGroupConfiguration(group);
+                            PropertyConfiguration config = VoxelGuest.getGroupManager().getGroupConfiguration(group);
                             smartSetSetting(config, args[4], concat);
                             cs.sendMessage("§aSet master setting \"" + args[4] + "\" to \"" + concat + "\"");
                             return;
@@ -261,7 +261,7 @@ public class ServerAdministrationCommands {
         + "§c/vmptg [player] [group]\n"
         + "§6WARNING: This does NOT support multiworld",
         playerOnly = true)
-    @CommandPermission(permission = "system.groups.set.enable")
+    @CommandPermission("system.groups.set.enable")
     public void setGroup(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;
@@ -402,7 +402,7 @@ public class ServerAdministrationCommands {
         return tps;
     }
 
-    private void smartSetSetting(Configuration config, String key, String value)
+    private void smartSetSetting(PropertyConfiguration config, String key, String value)
     {
         try {
             if (value.contains(".") || (Double.parseDouble(value) > 2147483647 || Double.parseDouble(value) < -2147483648)) {

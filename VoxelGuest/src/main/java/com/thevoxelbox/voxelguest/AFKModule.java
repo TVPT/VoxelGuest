@@ -26,8 +26,8 @@
 
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
 import com.thevoxelbox.voxelguest.modules.MetaData;
 import com.thevoxelbox.voxelguest.modules.Module;
@@ -62,10 +62,8 @@ public class AFKModule extends Module {
 
     class AFKConfiguration extends ModuleConfiguration {
 
-        @Setting("afk-timeout-enabled")
-        public boolean timeoutEnabled = false;
-        @Setting("afk-timeout-minutes")
-        public int timeoutMinutes = 5;
+        @Setting("afk-timeout-enabled") public boolean timeoutEnabled = false;
+        @Setting("afk-timeout-minutes") public int timeoutMinutes = 5;
 
         public AFKConfiguration(AFKModule parent)
         {
@@ -138,10 +136,10 @@ public class AFKModule extends Module {
     }
 
     @Command(aliases = {"afk", "vafk"},
-    bounds = {0, -1},
-    help = "To go AFK, type §c/afk (message)",
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.afk.afk")
+        bounds = {0, -1},
+        help = "To go AFK, type §c/afk (message)",
+        playerOnly = true)
+    @CommandPermission("voxelguest.afk.afk")
     public void afk(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;

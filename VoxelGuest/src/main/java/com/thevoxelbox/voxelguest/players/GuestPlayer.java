@@ -25,14 +25,14 @@
  */
 package com.thevoxelbox.voxelguest.players;
 
+import com.patrickanker.lib.permissions.PermissionsManager;
+import com.patrickanker.lib.util.JavaPropertiesFileManager;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
 
 import com.thevoxelbox.voxelguest.VoxelGuest;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
-import com.thevoxelbox.voxelguest.util.PropertyManager;
 
 public class GuestPlayer {
 
@@ -44,7 +44,7 @@ public class GuestPlayer {
     {
         this.p = player;
 
-        Map<String, Object> data = PropertyManager.load(p.getName(), "/players");
+        Map<String, Object> data = JavaPropertiesFileManager.load(p.getName(), "/VoxelGuest/players");
         storage.put(VoxelGuest.getPluginId(VoxelGuest.getInstance()), ((HashMap<String, Object>) data));
 
         groups = PermissionsManager.getHandler().getGroups(p.getName());
@@ -94,7 +94,7 @@ public class GuestPlayer {
         HashMap<String, Object> map = storage.get(pluginID);
 
         if (map != null) {
-            PropertyManager.save(p.getName(), map, "/players");
+            JavaPropertiesFileManager.save(p.getName(), map, "/VoxelGuest/players");
         }
     }
 

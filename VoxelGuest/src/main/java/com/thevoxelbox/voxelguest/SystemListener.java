@@ -25,10 +25,10 @@
  */
 package com.thevoxelbox.voxelguest;
 
+import com.patrickanker.lib.permissions.PermissionsManager;
+import com.patrickanker.lib.util.Formatter;
 import com.thevoxelbox.voxelguest.modules.ModuleSystemListener;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.players.GuestPlayer;
-import com.thevoxelbox.voxelguest.util.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -265,6 +265,6 @@ public class SystemListener extends ModuleSystemListener {
 
     private String formatJoinQuitKickMessage(String format, GuestPlayer gp)
     {
-        return Formatter.selectFormatter(SimpleFormatter.class).format(format, gp)[0];
+        return Formatter.selectFormatter(SimpleFormatter.class).formatMessage(format, gp);
     }
 }

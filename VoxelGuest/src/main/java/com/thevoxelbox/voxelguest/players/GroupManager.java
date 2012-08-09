@@ -25,8 +25,8 @@
  */
 package com.thevoxelbox.voxelguest.players;
 
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
-import com.thevoxelbox.voxelguest.util.Configuration;
+import com.patrickanker.lib.config.PropertyConfiguration;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,12 +37,12 @@ import org.bukkit.entity.Player;
 
 public class GroupManager {
 
-    protected static Map<String, Configuration> groupMap = new TreeMap<String, Configuration>();
+    protected static Map<String, PropertyConfiguration> groupMap = new TreeMap<String, PropertyConfiguration>();
     protected static HashMap<String, List<String>> playerMap = new HashMap<String, List<String>>();
     // Basic group defaults
     private final String defaultGroupName = "Group";
     private final String defaultGroupID = "§fG";
-    private final Configuration defaultConfig = new Configuration(defaultGroupName, "/groups");
+    private final PropertyConfiguration defaultConfig = new PropertyConfiguration(defaultGroupName, "/VoxelGuest/groups");
 
     public GroupManager()
     {
@@ -58,7 +58,7 @@ public class GroupManager {
         for (String file : files) {
             if (file.endsWith(".properties")) {
                 String f = file.replace(".properties", "");
-                Configuration config = new Configuration(f, "/groups");
+                PropertyConfiguration config = new PropertyConfiguration(f, "/VoxelGuest/groups");
                 groupMap.put(f, config);
             }
         }
@@ -66,26 +66,26 @@ public class GroupManager {
         defaultConfig.setString("group-id", defaultGroupID);
     }
 
-    public Configuration getGroupConfiguration(String name)
+    public PropertyConfiguration getGroupConfiguration(String name)
     {
         if (groupMap.containsKey(name)) {
             return groupMap.get(name);
         }
 
-        Configuration config = new Configuration(name, "/groups");
+        PropertyConfiguration config = new PropertyConfiguration(name, "/VoxelGuest/groups");
         setGroupConfiguration(name, config);
         return config;
     }
 
-    public void setGroupConfiguration(String name, Configuration config)
+    public void setGroupConfiguration(String name, PropertyConfiguration config)
     {
         groupMap.put(name, config);
     }
 
     public String findGroup(String key, Object value) throws GroupNotFoundException
     {
-        for (Map.Entry<String, Configuration> entry : groupMap.entrySet()) {
-            Configuration config = entry.getValue();
+        for (Map.Entry<String, PropertyConfiguration> entry : groupMap.entrySet()) {
+            PropertyConfiguration config = entry.getValue();
 
             if (config.getEntry(key) != null && value.equals(config.getEntry(key))) {
                 return entry.getKey();
@@ -97,7 +97,7 @@ public class GroupManager {
 
     public String findGroup(String str)
     {
-        for (Map.Entry<String, Configuration> entry : groupMap.entrySet()) {
+        for (Map.Entry<String, PropertyConfiguration> entry : groupMap.entrySet()) {
             if (entry.getKey().toLowerCase().startsWith(str.toLowerCase())) {
                 return entry.getKey();
             }
@@ -108,14 +108,14 @@ public class GroupManager {
 
     public void saveGroupConfigurations()
     {
-        for (Map.Entry<String, Configuration> entry : groupMap.entrySet()) {
+        for (Map.Entry<String, PropertyConfiguration> entry : groupMap.entrySet()) {
             saveGroupConfiguration(entry.getKey());
         }
     }
 
     public void saveGroupConfiguration(String name)
     {
-        Configuration config = groupMap.get(name);
+        PropertyConfiguration config = groupMap.get(name);
         config.save();
     }
 
@@ -145,7 +145,7 @@ public class GroupManager {
     {
         List<String> l = new ArrayList<String>();
 
-        for (Map.Entry<String, Configuration> entry : groupMap.entrySet()) {
+        for (Map.Entry<String, PropertyConfiguration> entry : groupMap.entrySet()) {
             if (!l.contains(entry.getKey())) {
                 l.add(entry.getKey());
             }
@@ -154,7 +154,7 @@ public class GroupManager {
         return l;
     }
 
-    public Configuration getDefaultConfiguration()
+    public PropertyConfiguration getDefaultConfiguration()
     {
         return defaultConfig;
     }

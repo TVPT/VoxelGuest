@@ -25,11 +25,11 @@
  */
 package com.thevoxelbox.voxelguest;
 
+import com.patrickanker.lib.config.PropertyConfiguration;
+import com.patrickanker.lib.util.Formatter;
 import com.thevoxelbox.voxelguest.modules.ModuleException;
 import com.thevoxelbox.voxelguest.modules.ModuleManager;
-import com.thevoxelbox.voxelguest.util.Formatter;
 import com.thevoxelbox.voxelguest.players.GuestPlayer;
-import com.thevoxelbox.voxelguest.util.Configuration;
 
 public class SimpleFormatter extends Formatter {
 
@@ -43,11 +43,20 @@ public class SimpleFormatter extends Formatter {
      * rewrite the group crap again
      *
      */
+
     @Override
-    public String[] format(String input, GuestPlayer gp, Object... others)
+    public String formatMessage(String in, Object... otherArgs)
     {
-        String copy = input;
+        return formatMessages(in, otherArgs)[0];
+    }
+
+    @Override
+    public String[] formatMessages(String in, Object... otherArgs)
+    {
+        String copy = in;
         boolean guestPlayerParcing;
+        
+        GuestPlayer gp = (GuestPlayer) otherArgs[0];
 
         guestPlayerParcing = (gp == null) ? false : true;
 
@@ -55,7 +64,7 @@ public class SimpleFormatter extends Formatter {
 
             if (gp.getGroups() != null && gp.getGroups().length >= 1) {
                 String group = gp.getGroups()[0];
-                Configuration config = VoxelGuest.getGroupManager().getGroupConfiguration(group);
+                PropertyConfiguration config = VoxelGuest.getGroupManager().getGroupConfiguration(group);
                 String groupID = config.getString("group-id");
 
                 copy = copy.replace("$group", group);

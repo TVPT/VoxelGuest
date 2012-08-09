@@ -31,54 +31,30 @@ public class CreatureProtectionModule extends Module {
 
     class CreatureProtectionConfiguration extends ModuleConfiguration {
 
-        @Setting("disable-blaze-spawning")
-        public boolean blaze = false;
-        @Setting("disable-cavespider-spawning")
-        public boolean cavespider = false;
-        @Setting("disable-chicken-spawning")
-        public boolean chicken = false;
-        @Setting("disable-cow-spawning")
-        public boolean cow = false;
-        @Setting("disable-creeper-spawning")
-        public boolean creeper = false;
-        @Setting("disable-enderman-spawning")
-        public boolean enderman = false;
-        @Setting("disable-enderdragon-spawning")
-        public boolean enderdragon = false;
-        @Setting("disable-ghast-spawning")
-        public boolean ghast = false;
-        @Setting("disable-irongolem-spawning")
-        public boolean irongolem = false;
-        @Setting("disable-magmacube-spawning")
-        public boolean magmacube = false;
-        @Setting("disable-mushroomcow-spawning")
-        public boolean mushroomcow = false;
-        @Setting("disable-ocelot-spawning")
-        public boolean ocelot = false;
-        @Setting("disable-pig-spawning")
-        public boolean pig = false;
-        @Setting("disable-pigzombie-spawning")
-        public boolean pigzombie = false;
-        @Setting("disable-sheep-spawning")
-        public boolean sheep = false;
-        @Setting("disable-silverfish-spawning")
-        public boolean silverfish = false;
-        @Setting("disable-skeleton-spawning")
-        public boolean skeleton = false;
-        @Setting("disable-slime-spawning")
-        public boolean slime = false;
-        @Setting("disable-snowman-spawning")
-        public boolean snowman = false;
-        @Setting("disable-spider-spawning")
-        public boolean spider = false;
-        @Setting("disable-squid-spawning")
-        public boolean squid = false;
-        @Setting("disable-villager-spawning")
-        public boolean villager = false;
-        @Setting("disable-wolf-spawning")
-        public boolean wolf = false;
-        @Setting("disable-zombie-spawning")
-        public boolean zombie = false;
+        @Setting("disable-blaze-spawning") public boolean blaze = false;
+        @Setting("disable-cavespider-spawning") public boolean cavespider = false;
+        @Setting("disable-chicken-spawning") public boolean chicken = false;
+        @Setting("disable-cow-spawning") public boolean cow = false;
+        @Setting("disable-creeper-spawning") public boolean creeper = false;
+        @Setting("disable-enderman-spawning") public boolean enderman = false;
+        @Setting("disable-enderdragon-spawning") public boolean enderdragon = false;
+        @Setting("disable-ghast-spawning") public boolean ghast = false;
+        @Setting("disable-irongolem-spawning") public boolean irongolem = false;
+        @Setting("disable-magmacube-spawning") public boolean magmacube = false;
+        @Setting("disable-mushroomcow-spawning") public boolean mushroomcow = false;
+        @Setting("disable-ocelot-spawning") public boolean ocelot = false;
+        @Setting("disable-pig-spawning") public boolean pig = false;
+        @Setting("disable-pigzombie-spawning") public boolean pigzombie = false;
+        @Setting("disable-sheep-spawning") public boolean sheep = false;
+        @Setting("disable-silverfish-spawning") public boolean silverfish = false;
+        @Setting("disable-skeleton-spawning") public boolean skeleton = false;
+        @Setting("disable-slime-spawning") public boolean slime = false;
+        @Setting("disable-snowman-spawning") public boolean snowman = false;
+        @Setting("disable-spider-spawning") public boolean spider = false;
+        @Setting("disable-squid-spawning") public boolean squid = false;
+        @Setting("disable-villager-spawning") public boolean villager = false;
+        @Setting("disable-wolf-spawning") public boolean wolf = false;
+        @Setting("disable-zombie-spawning") public boolean zombie = false;
 
         public CreatureProtectionConfiguration(CreatureProtectionModule parent)
         {
@@ -91,7 +67,6 @@ public class CreatureProtectionModule extends Module {
     public void enable()
     {
         setConfiguration(new CreatureProtectionConfiguration(this));
-        return;
     }
 
     @Override
@@ -103,7 +78,7 @@ public class CreatureProtectionModule extends Module {
     @Override
     public void disable()
     {
-        return;
+        // Nothing special
     }
 
     /*

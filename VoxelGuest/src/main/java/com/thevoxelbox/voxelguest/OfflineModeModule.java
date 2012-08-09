@@ -25,8 +25,8 @@
  */
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
 import com.thevoxelbox.voxelguest.modules.MetaData;
 import com.thevoxelbox.voxelguest.modules.Module;
@@ -123,11 +123,11 @@ public class OfflineModeModule extends Module {
     }
 
     @Command(aliases = {"opass", "offlinepass", "offlinepassword"},
-    bounds = {1, -1},
-    help = "For a player, set your offline password using §c/opass [password]\n"
-    + "On the console, set another's password using §c/opass [player] [password]",
-    playerOnly = false)
-    @CommandPermission(permission = "voxelguest.offline.opass")
+        bounds = {1, -1},
+        help = "For a player, set your offline password using §c/opass [password]\n"
+        + "On the console, set another's password using §c/opass [player] [password]",
+        playerOnly = false)
+    @CommandPermission("voxelguest.offline.opass")
     public void offlinePass(CommandSender cs, String[] args)
     {
         if (cs instanceof Player) {
@@ -143,6 +143,21 @@ public class OfflineModeModule extends Module {
 
             try {
                 setPassword(gp.getPlayer().getName(), concat);
+                cs.sendMessage(ChatColor.GRAY + "Offline password set to: " + ChatColor.GREEN + concat);
+            } catch (CouldNotStoreEncryptedPasswordException ex) {
+                cs.sendMessage(ex.getMessage());
+            }
+        } else {
+            String concat = "";
+
+            for (int i = 1; i < args.length; i++) {
+                concat = concat + args[i] + " ";
+            }
+            
+            concat = concat.trim();
+            
+            try {
+                setPassword(args[0], concat);
                 cs.sendMessage(ChatColor.GRAY + "Offline password set to: " + ChatColor.GREEN + concat);
             } catch (CouldNotStoreEncryptedPasswordException ex) {
                 cs.sendMessage(ex.getMessage());
@@ -237,7 +252,6 @@ public class OfflineModeModule extends Module {
 
         if (isActive() && needsUnlock.contains(event.getPlayer().getName())) {
             event.setCancelled(true);
-            return;
         }
     }
 

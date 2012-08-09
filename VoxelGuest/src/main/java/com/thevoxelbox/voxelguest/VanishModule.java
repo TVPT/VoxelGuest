@@ -25,17 +25,17 @@
  */
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.permissions.PermissionsManager;
+import com.patrickanker.lib.util.FlatFileManager;
+import com.patrickanker.lib.util.Formatter;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
 import com.thevoxelbox.voxelguest.modules.MetaData;
 import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.ModuleEvent;
 import com.thevoxelbox.voxelguest.modules.ModuleEventPriority;
-import com.thevoxelbox.voxelguest.util.FlatFileManager;
-import com.thevoxelbox.voxelguest.util.Formatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -128,9 +128,9 @@ public class VanishModule extends Module {
         saveFakequit = fakequit.toArray(saveFakequit);
         saveOfakequit = ofakequit.toArray(saveOfakequit);
 
-        FlatFileManager.save(saveVanished, "tmpvanished");
-        FlatFileManager.save(saveFakequit, "tmpfakequit");
-        FlatFileManager.save(saveOfakequit, "tmpofflinefakequit");
+        FlatFileManager.save(saveVanished, "tmpvanished", "/VoxelGuest");
+        FlatFileManager.save(saveFakequit, "tmpfakequit", "/VoxelGuest");
+        FlatFileManager.save(saveOfakequit, "tmpofflinefakequit", "/VoxelGuest");
     }
 
     @Override
@@ -140,11 +140,11 @@ public class VanishModule extends Module {
     }
 
     @Command(aliases = "vanish",
-    bounds = {0, 0},
-    help = "To toggle your vanish setting, type:\n"
-    + "§c/vanish",
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.vanish.vanish")
+        bounds = {0, 0},
+        help = "To toggle your vanish setting, type:\n"
+        + "§c/vanish",
+        playerOnly = true)
+    @CommandPermission("voxelguest.vanish.vanish")
     public void vanish(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;
@@ -157,9 +157,9 @@ public class VanishModule extends Module {
     }
 
     @Command(aliases = {"fakequit", "fq"},
-    bounds = {0, 0},
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.vanish.fakequit")
+        bounds = {0, 0},
+        playerOnly = true)
+    @CommandPermission("voxelguest.vanish.fakequit")
     public void fakequit(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;
@@ -176,6 +176,11 @@ public class VanishModule extends Module {
     {
         PlayerJoinEvent event = (PlayerJoinEvent) wrapper.getEvent();
 
+        for (String str : vanished) {
+            Player p = Bukkit.getPlayer(str);
+            silentHidePlayer(p);
+        }
+        
         if (PermissionsManager.getHandler().hasPermission(event.getPlayer().getName(), "voxelguest.vanish.safelist")) {
             addMemberToSafeList(event.getPlayer());
             revealVanishedToPlayer(event.getPlayer());
@@ -183,7 +188,7 @@ public class VanishModule extends Module {
 
         if (ofakequit.contains(event.getPlayer().getName())) {
             ofakequit.remove(event.getPlayer().getName());
-            hidePlayer(event.getPlayer());
+            silentFakequitMember(event.getPlayer());
 
             event.setJoinMessage("");
         }
@@ -221,7 +226,6 @@ public class VanishModule extends Module {
         if (isInFakequit(event.getPlayer())) {
             event.getPlayer().sendMessage("§cYou cannot chat while in FakeQuit");
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -241,6 +245,19 @@ public class VanishModule extends Module {
             }
 
             hidden.sendMessage("§bYou have vanished.");
+        }
+    }
+    
+    public void silentHidePlayer(Player hidden)
+    {
+        if (!vanished.contains(hidden.getName())) {
+            vanished.add(hidden.getName());
+        }
+        
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            if (!safeList.contains(p.getName())) {
+                p.hidePlayer(hidden);
+            }
         }
     }
 
@@ -291,11 +308,24 @@ public class VanishModule extends Module {
         if (leaveMessageFormat == null) {
             leaveMessage = "§e" + p.getName() + " left";
         } else {
-            String[] messages = Formatter.selectFormatter(SimpleFormatter.class).format(leaveMessageFormat, VoxelGuest.getGuestPlayer(p));
-            leaveMessage = messages[0];
+            leaveMessage = Formatter.selectFormatter(SimpleFormatter.class).formatMessage(leaveMessageFormat, VoxelGuest.getGuestPlayer(p));
         }
 
         Bukkit.broadcastMessage(leaveMessage);
+
+        if (!isVanished(p)) {
+            hidePlayer(p);
+        }
+    }
+    
+    public void silentFakequitMember(Player p) {
+        if (!fakequit.contains(p.getName())) {
+            fakequit.add(p.getName());
+        } else {
+            return;
+        }
+
+        VoxelGuest.log(name, p.getName() + " has gone into FakeQuit.", 0);
 
         if (!isVanished(p)) {
             hidePlayer(p);
@@ -317,8 +347,7 @@ public class VanishModule extends Module {
         if (leaveMessageFormat == null) {
             leaveMessage = "§e" + p.getName() + " joined";
         } else {
-            String[] messages = Formatter.selectFormatter(SimpleFormatter.class).format(leaveMessageFormat, VoxelGuest.getGuestPlayer(p));
-            leaveMessage = messages[0];
+            leaveMessage = Formatter.selectFormatter(SimpleFormatter.class).formatMessage(leaveMessageFormat, VoxelGuest.getGuestPlayer(p));
         }
 
         Bukkit.broadcastMessage(leaveMessage);

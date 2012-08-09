@@ -25,19 +25,19 @@
  */
 package com.thevoxelbox.voxelguest.modules;
 
-import com.thevoxelbox.voxelguest.util.Configuration;
+import com.patrickanker.lib.config.PropertyConfiguration;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class ModuleConfiguration {
 
-    protected final Configuration config;
+    protected final PropertyConfiguration config;
     private final Module parentModule;
 
     public ModuleConfiguration(Module parent)
     {
         parentModule = parent;
-        config = new Configuration(parentModule.getName(), "/modules");
+        config = new PropertyConfiguration(parentModule.getName(), "/VoxelGuest/modules");
     }
 
     public HashMap<String, Object> getAllEntries()

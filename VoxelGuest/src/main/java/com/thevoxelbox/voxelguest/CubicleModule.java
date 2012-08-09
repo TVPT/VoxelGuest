@@ -25,14 +25,14 @@
  */
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.permissions.PermissionsHandler;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.cubicle.Cubicle;
 import com.thevoxelbox.voxelguest.cubicle.CubicleGenerator;
 import com.thevoxelbox.voxelguest.cubicle.CubicleManager;
 import com.thevoxelbox.voxelguest.modules.*;
-import com.thevoxelbox.voxelguest.permissions.PermissionsHandler;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -74,30 +74,18 @@ public class CubicleModule extends Module {
 
     class CubicleConfiguration extends ModuleConfiguration {
 
-        @Setting("disable-module")
-        public boolean moduleDissabled = true;
-        @Setting("world-name")
-        public String worldName = "cubicle";
-        @Setting("chunk-size")
-        public int chunkSize = 4;
-        @Setting("terrain-top")
-        public int terrainTopLayer = 30;
-        @Setting("top-wall-level")
-        public int wallTopLayer = 60;
-        @Setting("terrain-filler-id")
-        public byte fillerID = 3;
-        @Setting("terrain-top-id")
-        public byte topID = 2;
-        @Setting("wall-id-1")
-        public byte colour1 = 7;
-        @Setting("wall-id-2")
-        public byte colour2 = 49;
-        @Setting("save-world-on-reload")
-        public boolean saveWorld = false;
-        @Setting("create-bedrock")
-        public boolean bedrock = false;
-        @Setting("cubicle-regeneration-speed")
-        public int regenSpeed = 5;
+        @Setting("disable-module") public boolean moduleDissabled = true;
+        @Setting("world-name") public String worldName = "cubicle";
+        @Setting("chunk-size") public int chunkSize = 4;
+        @Setting("terrain-top") public int terrainTopLayer = 30;
+        @Setting("top-wall-level") public int wallTopLayer = 60;
+        @Setting("terrain-filler-id") public byte fillerID = 3;
+        @Setting("terrain-top-id") public byte topID = 2;
+        @Setting("wall-id-1") public byte colour1 = 7;
+        @Setting("wall-id-2") public byte colour2 = 49;
+        @Setting("save-world-on-reload") public boolean saveWorld = false;
+        @Setting("create-bedrock") public boolean bedrock = false;
+        @Setting("cubicle-regeneration-speed") public int regenSpeed = 5;
 
         public CubicleConfiguration(CubicleModule parent)
         {
@@ -199,10 +187,10 @@ public class CubicleModule extends Module {
     }
 
     @Command(aliases = {"cwarp"},
-    bounds = {2, 2},
-    playerOnly = true,
-    help = "/cwarp allows you to warp to a players' cubicle.")
-    @CommandPermission(permission = "voxelguest.cubicle.command.warp")
+        bounds = {2, 2},
+        playerOnly = true,
+        help = "/cwarp allows you to warp to a players' cubicle.")
+    @CommandPermission("voxelguest.cubicle.command.warp")
     public void cubicleWarp(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;
@@ -210,10 +198,10 @@ public class CubicleModule extends Module {
     }
 
     @Command(aliases = {"cubicle", "cube"},
-    bounds = {0, -1},
-    playerOnly = true,
-    help = "/cubicle allows you to manage the cubicles.")
-    @CommandPermission(permission = "voxelguest.cubicle.command")
+        bounds = {0, -1},
+        playerOnly = true,
+        help = "/cubicle allows you to manage the cubicles.")
+    @CommandPermission("voxelguest.cubicle.command")
     public void cubicleCommand(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;

@@ -25,27 +25,16 @@
  */
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.ArgumentOutOfBoundsException;
-import com.thevoxelbox.voxelguest.commands.engine.CommandException;
-import com.thevoxelbox.voxelguest.commands.engine.CommandMethodInvocationException;
-import com.thevoxelbox.voxelguest.commands.engine.CommandManager;
-import com.thevoxelbox.voxelguest.commands.engine.MalformattedCommandException;
-import com.thevoxelbox.voxelguest.permissions.InsufficientPermissionsException;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
+import com.patrickanker.lib.commands.*;
+import com.patrickanker.lib.config.PropertyConfiguration;
+import com.patrickanker.lib.logging.ConsoleLogger;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.commands.MiscellaneousCommands;
 import com.thevoxelbox.voxelguest.commands.ServerAdministrationCommands;
 import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleManager;
 import com.thevoxelbox.voxelguest.players.GroupManager;
 import com.thevoxelbox.voxelguest.players.GuestPlayer;
-
-import com.thevoxelbox.voxelguest.util.Configuration;
-import com.thevoxelbox.voxelguest.util.Formatter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -64,15 +53,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class VoxelGuest extends JavaPlugin {
 
     private static VoxelGuest instance;
-    protected static CommandManager commandsManager = new CommandManager("[VoxelGuest]");
+    protected static CommandManager commandsManager = new CommandManager();
     protected static SystemListener listener = new SystemListener();
     protected static List<GuestPlayer> guestPlayers = new LinkedList<GuestPlayer>();
     protected static Map<Plugin, String> pluginIds = new HashMap<Plugin, String>();
     protected static GroupManager groupManager;
     protected static PermissionsManager perms;
     protected static ModuleManager moduleManager;
-    protected static final Configuration config = new Configuration("VoxelGuest");
+    protected static final PropertyConfiguration config = new PropertyConfiguration("VoxelGuest", "/VoxelGuest");
     public static int ONLINE_MEMBERS = 0;
+    
     protected Class<? extends Module>[] availableModules = new Class[]{
         AFKModule.class,
         SpawnModule.class,
@@ -117,8 +107,8 @@ public class VoxelGuest extends JavaPlugin {
         registerPluginIds();
 
         // Register system / miscellaneous commands
-        commandsManager.registerCommands(MiscellaneousCommands.class);
-        commandsManager.registerCommands(ServerAdministrationCommands.class);
+        commandsManager.registerCommands(MiscellaneousCommands.class, VoxelGuest.getInstance());
+        commandsManager.registerCommands(ServerAdministrationCommands.class, VoxelGuest.getInstance());
 
         // Load system event listeners
         Bukkit.getPluginManager().registerEvents(listener, this);
@@ -154,52 +144,11 @@ public class VoxelGuest extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender cs, Command command, String label, String[] args)
-    {
-        try {
-            commandsManager.executeCommand(command, cs, args);
-            commandLog(command, cs, args, true);
-        } catch (CommandException ex) {
-            String report = "&c" + ex.getMessage();
-
-            for (String str : Formatter.selectFormatter(SimpleFormatter.class).format(report, null)) {
-                cs.sendMessage(str);
-            }
-
-            if (ex instanceof CommandMethodInvocationException || ex instanceof MalformattedCommandException) {
-                log(ex.getMessage(), 2);
-                ex.printStackTrace();
-                return true;
-            } else if (ex instanceof ArgumentOutOfBoundsException) {
-                try {
-                    commandsManager.sendHelp(cs, command);
-                } catch (MalformattedCommandException ex1) {
-                    String _report = "&c" + ex1.getMessage();
-
-                    for (String str : Formatter.selectFormatter(SimpleFormatter.class).format(_report, null)) {
-                        cs.sendMessage(str);
-                    }
-
-                    log(ex.getMessage(), 2);
-                    ex.printStackTrace();
-                    return true;
-                }
-            }
-
-            commandLog(command, cs, args, false);
-        } catch (InsufficientPermissionsException ex) {
-            String report = "&c" + ex.getMessage();
-
-            for (String str : Formatter.selectFormatter(SimpleFormatter.class).format(report, null)) {
-                cs.sendMessage(str);
-            }
-
-            commandLog(command, cs, args, false);
-        }
-
-        return true;
+    {   
+        return commandsManager.executeCommandProcessErrors(command, cs, args, this);
     }
 
-    public static Configuration getConfigData()
+    public static PropertyConfiguration getConfigData()
     {
         return config;
     }
@@ -328,101 +277,16 @@ public class VoxelGuest extends JavaPlugin {
 
     public static void log(String str)
     {
-        log(str, 0);
+        ConsoleLogger.getLogger("VoxelGuest").log(str);
     }
 
     public static void log(String str, int importance)
     {
-        switch (importance) {
-            case 0:
-                Logger.getLogger("Mincraft").info("[VoxelGuest] " + str);
-                return;
-            case 1:
-                Logger.getLogger("Mincraft").warning("[VoxelGuest] " + str);
-                return;
-            case 2:
-                Logger.getLogger("Mincraft").severe("[VoxelGuest] " + str);
-                return;
-            default:
-                Logger.getLogger("Mincraft").info("[VoxelGuest] " + str);
-                return;
-        }
+        ConsoleLogger.getLogger("VoxelGuest").log(str, importance);
     }
 
     public static void log(String module, String str, int importance)
     {
-        switch (importance) {
-            case 0:
-                Logger.getLogger("Mincraft").info("[VoxelGuest:" + module + "] " + str);
-                return;
-            case 1:
-                Logger.getLogger("Mincraft").warning("[VoxelGuest:" + module + "] " + str);
-                return;
-            case 2:
-                Logger.getLogger("Mincraft").severe("[VoxelGuest:" + module + "] " + str);
-                return;
-            default:
-                Logger.getLogger("Mincraft").info("[VoxelGuest:" + module + "] " + str);
-                return;
-        }
-    }
-
-    public void commandLog(org.bukkit.command.Command command, CommandSender cs, String[] args, boolean status)
-    {
-        File f = new File("plugins/VoxelGuest/logs/commands.txt");
-        PrintWriter pw = null;
-
-        try {
-            if (!f.exists()) {
-                f.getParentFile().mkdirs();
-                f.createNewFile();
-            }
-
-            pw = new PrintWriter(new FileWriter(f, true));
-            Date d = new Date();
-
-            if (cs instanceof Player) {
-                Player p = (Player) cs;
-
-                String concat = "";
-
-                for (int i = 0; i < args.length; i++) {
-                    if (i == (args.length - 1)) {
-                        concat = concat + args[i];
-                        continue;
-                    }
-
-                    concat = concat + args[i] + " ";
-                }
-
-                pw.append(d.toString() + " Command: " + command.getName()
-                        + ", Player: " + p.getName()
-                        + ", Location: [" + p.getLocation().getWorld().getName() + "] (" + p.getLocation().getX() + ", " + p.getLocation().getY() + ", " + p.getLocation().getZ()
-                        + "), Arguments: \"" + concat + "\""
-                        + ", Status: " + (((status) ? "EXECUTED" : "FAILED")) + "\n");
-
-                pw.close();
-            } else {
-                String concat = "";
-
-                for (int i = 0; i < args.length; i++) {
-                    if (i == (args.length - 1)) {
-                        concat = concat + args[i];
-                        continue;
-                    }
-
-                    concat = concat + args[i] + " ";
-                }
-
-                pw.append(d.toString() + " Command: " + command.getName()
-                        + ", Sender: [CONSOLE]"
-                        + ", Arguments: \"" + concat + "\""
-                        + ", Status: " + (((status) ? "EXECUTED" : "FAILED") + "\n"));
-
-                pw.close();
-            }
-        } catch (IOException ex) {
-            VoxelGuest.log("Could not create command log file", 1);
-        }
+        ConsoleLogger.getLogger("VoxelGuest").log(module, str, importance);
     }
 }

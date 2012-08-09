@@ -25,10 +25,10 @@
  */
 package com.thevoxelbox.voxelguest.commands;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
-import com.thevoxelbox.voxelguest.commands.engine.Subcommands;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.commands.Subcommands;
+import com.patrickanker.lib.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.AFKModule;
 import com.thevoxelbox.voxelguest.VanishModule;
 import com.thevoxelbox.voxelguest.VoxelGuest;
@@ -54,11 +54,11 @@ public class MiscellaneousCommands {
     private HashMap<String, Location> teleportHistory = new HashMap<String, Location>();
 
     @Command(aliases = {"who", "online", "list", "readlist", "playerlist"},
-    bounds = {0, 1},
-    help = "To list all online players, type §c/who")
+        bounds = {0, 1},
+        help = "To list all online players, type §c/who")
     @Subcommands(arguments = {"-f"},
-    permission = {"voxelguest.miscellaneous.list.admin"})
-    @CommandPermission(permission = "voxelguest.miscellaneous.list.list")
+                 permission = {"voxelguest.miscellaneous.list.admin"})
+    @CommandPermission("voxelguest.miscellaneous.list.list")
     public void who(CommandSender cs, String[] args)
     {
         if (args != null && args.length > 0 && args[0].equalsIgnoreCase("-f")) {
@@ -70,12 +70,12 @@ public class MiscellaneousCommands {
     }
 
     @Command(aliases = {"vteleport", "vtp"},
-    bounds = {1, 2},
-    help = "Teleport to other people with /vtp [player]\n"
-    + "Teleport to other people at an offset with /vtp [player] [x#,y#,z#][num]\n"
-    + "Teleport others to you with /vtp [player] me",
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.miscellaneous.vtp")
+        bounds = {1, 2},
+        help = "Teleport to other people with /vtp [player]\n"
+        + "Teleport to other people at an offset with /vtp [player] [x#,y#,z#][num]\n"
+        + "Teleport others to you with /vtp [player] me",
+        playerOnly = true)
+    @CommandPermission("voxelguest.miscellaneous.vtp")
     public void vteleport(CommandSender cs, String[] args)
     {
         if (args != null && args.length > 0) {
@@ -130,10 +130,10 @@ public class MiscellaneousCommands {
     }
 
     @Command(aliases = {"vback"},
-    bounds = {0, 0},
-    help = "Go back to your previous location with §c/vback",
-    playerOnly = true)
-    @CommandPermission(permission = "voxelguest.miscellaneous.vback")
+        bounds = {0, 0},
+        help = "Go back to your previous location with §c/vback",
+        playerOnly = true)
+    @CommandPermission("voxelguest.miscellaneous.vback")
     public void vback(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;

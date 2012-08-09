@@ -1,16 +1,42 @@
+/*
+ * Copyright (C) 2011 - 2012, psanker and contributors
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are 
+ * permitted provided that the following conditions are met:
+ * * Redistributions of source code must retain the above copyright notice, this list of 
+ *   conditions and the following 
+ * * Redistributions in binary form must reproduce the above copyright notice, this list of 
+ *   conditions and the following disclaimer in the documentation and/or other materials 
+ *   provided with the distribution.
+ * * Neither the name of The VoxelPlugineering Team nor the names of its contributors may be 
+ *   used to endorse or promote products derived from this software without specific prior 
+ *   written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS 
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+ * COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
+ * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.commands.engine.Command;
-import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
+import com.patrickanker.lib.commands.Command;
+import com.patrickanker.lib.commands.CommandPermission;
+import com.patrickanker.lib.config.PropertyConfiguration;
+import com.patrickanker.lib.permissions.PermissionsManager;
+import com.patrickanker.lib.util.Formatter;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
 import com.thevoxelbox.voxelguest.modules.MetaData;
 import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.ModuleEvent;
 import com.thevoxelbox.voxelguest.modules.Setting;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
-import com.thevoxelbox.voxelguest.util.Configuration;
-import com.thevoxelbox.voxelguest.util.Formatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -29,7 +55,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 @MetaData(name = "Asshat Mitigator", description = "Major asshat handling.")
 public class AsshatMitigationModule extends Module {
 
-    protected Configuration bannedList = new Configuration("banned", "/asshatmitigation");
+    protected PropertyConfiguration bannedList = new PropertyConfiguration("banned", "/VoxelGuest/asshatmitigation");
     public List<String> gagged = new ArrayList<String>();
     
     private final List<String> frozen = new ArrayList<String>();
@@ -44,16 +70,11 @@ public class AsshatMitigationModule extends Module {
 
     class AsshatMitigationConfiguration extends ModuleConfiguration {
 
-        @Setting("default-asshat-reason")
-        public String defaultAsshatReason = "&cAsshat";
-        @Setting("save-banlist-on-ban")
-        public boolean saveBanlistOnBan = false;
-        @Setting("unrestrict-chat-message")
-        public String unrestrictChatMessage = "I agree. Allow me to chat.";
-        @Setting("gag-message-format")
-        public String gagMessageFormat = "&cYou have been gagged. You cannot chat until you say\n" + "&6the ungag key phrase.";
-        @Setting("ungag-message-format")
-        public String ungagMessageFormat = "&aYou have been ungagged.";
+        @Setting("default-asshat-reason") public String defaultAsshatReason = "&cAsshat";
+        @Setting("save-banlist-on-ban") public boolean saveBanlistOnBan = false;
+        @Setting("unrestrict-chat-message") public String unrestrictChatMessage = "I agree. Allow me to chat.";
+        @Setting("gag-message-format") public String gagMessageFormat = "&cYou have been gagged. You cannot chat until you say\n" + "&6the ungag key phrase.";
+        @Setting("ungag-message-format") public String ungagMessageFormat = "&aYou have been ungagged.";
 
         public AsshatMitigationConfiguration(AsshatMitigationModule parent)
         {
@@ -88,7 +109,7 @@ public class AsshatMitigationModule extends Module {
      * player names must be given when banning offline players.
      */
     @Command(aliases = {"ban", "vban", "vbano", "bano"}, bounds = {1, -1}, help = "To ban someone, simply type\n" + "§c/ban [player] (reason)")
-    @CommandPermission(permission = "voxelguest.asshat.ban")
+    @CommandPermission("voxelguest.asshat.ban")
     public void ban(CommandSender cs, String[] args)
     {
         List<Player> l = Bukkit.matchPlayer(args[0]);
@@ -172,7 +193,7 @@ public class AsshatMitigationModule extends Module {
      * must be banned, in order to be unbanned.
      */
     @Command(aliases = {"unban", "vunban"}, bounds = {1, -1}, help = "To unban someone, simply type\n" + "§c/unban [player]")
-    @CommandPermission(permission = "voxelguest.asshat.unban")
+    @CommandPermission("voxelguest.asshat.unban")
     public void unban(CommandSender cs, String[] args)
     {
         boolean silent = false;
@@ -215,7 +236,7 @@ public class AsshatMitigationModule extends Module {
      * there is a server restart, or they type the designated phrase.
      */
     @Command(aliases = {"gag", "vgag"}, bounds = {1, -1}, help = "To gag someone, simply type\n" + "§c/gag [player] (reason)", playerOnly = false)
-    @CommandPermission(permission = "voxelguest.asshat.gag")
+    @CommandPermission("voxelguest.asshat.gag")
     public void gag(CommandSender cs, String[] args)
     {
         List<Player> l = Bukkit.matchPlayer(args[0]);
@@ -274,7 +295,7 @@ public class AsshatMitigationModule extends Module {
      * default asshat reason, which is "Asshat".
      */
     @Command(aliases = {"kick", "vkick"}, bounds = {1, -1}, help = "To kick someone, simply type\n" + "§c/kick [player] (reason)", playerOnly = false)
-    @CommandPermission(permission = "voxelguest.asshat.kick")
+    @CommandPermission("voxelguest.asshat.kick")
     public void kick(CommandSender cs, String[] args)
     {
         List<Player> l = Bukkit.matchPlayer(args[0]);
@@ -320,7 +341,7 @@ public class AsshatMitigationModule extends Module {
     }
     
     @Command(aliases={"freeze", "fr"}, bounds={1,1}, help="Freezes the defined player in\n" + "§c/freeze [player]§f or freeze all players (except those with \"voxelguest.asshat.freeze.bypass\") with\n" + "§c/freeze --all§f or §c/freeze -a")
-    @CommandPermission(permission="voxelguest.asshat.freeze.freeze")
+    @CommandPermission("voxelguest.asshat.freeze.freeze")
     public void freeze(CommandSender cs, String[] args)
     {
         if (args[0].equalsIgnoreCase("--all") || args[0].equalsIgnoreCase("-a")) {
@@ -377,7 +398,7 @@ public class AsshatMitigationModule extends Module {
         Player p = event.getPlayer();
         
         if (silenceMode) {
-            if (PermissionsManager.getHandler().hasPermission(event.getPlayer().getName(), "voxelguest.bypass.silence")) {
+            if (!PermissionsManager.getHandler().hasPermission(event.getPlayer().getName(), "voxelguest.bypass.silence")) {
                 event.setCancelled(true);
             }
         }
@@ -386,13 +407,13 @@ public class AsshatMitigationModule extends Module {
             if (event.getMessage().equals(getConfiguration().getString("unrestrict-chat-message"))) {
                 gagged.remove(p.getName());
 
-                for (String str : Formatter.selectFormatter(SimpleFormatter.class).format(getConfiguration().getString("ungag-message-format"), VoxelGuest.getGuestPlayer(p))) {
+                for (String str : Formatter.selectFormatter(SimpleFormatter.class).formatMessages(getConfiguration().getString("ungag-message-format"), VoxelGuest.getGuestPlayer(p))) {
                     p.sendMessage(str);
                 }
 
                 event.setCancelled(true);
             } else {
-                for (String str : Formatter.selectFormatter(SimpleFormatter.class).format(getConfiguration().getString("gag-message-format"), VoxelGuest.getGuestPlayer(p))) {
+                for (String str : Formatter.selectFormatter(SimpleFormatter.class).formatMessages(getConfiguration().getString("gag-message-format"), VoxelGuest.getGuestPlayer(p))) {
                     p.sendMessage(str);
                 }
 
@@ -426,7 +447,7 @@ public class AsshatMitigationModule extends Module {
     @Command(aliases = {"soapbox", "silence"},
         bounds = {0, 0},
         help = "Toggle the silence")
-    @CommandPermission(permission = "voxelguest.admin.silence")
+    @CommandPermission("voxelguest.admin.silence")
     public void silence(CommandSender cs, String[] args)
     {
         silenceMode = !silenceMode;

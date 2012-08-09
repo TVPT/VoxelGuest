@@ -32,40 +32,23 @@ public class PlayerProtectionModule extends Module {
 
     class PlayerProtectionConfiguration extends ModuleConfiguration {
 
-        @Setting("disable-tnt-damage")
-        public boolean tnt = false;
-        @Setting("disable-cactus-damage")
-        public boolean cactus = false;
-        @Setting("disable-drowning-damage")
-        public boolean drowning = false;
-        @Setting("disable-pvp-damage")
-        public boolean pvp = false;
-        @Setting("disable-explosion-damage")
-        public boolean explosion = false;
-        @Setting("disable-fall-damage")
-        public boolean fall = false;
-        @Setting("disable-fire-damage")
-        public boolean fire = false;
-        @Setting("disable-firetick-damage")
-        public boolean firetick = false;
-        @Setting("disable-lava-damage")
-        public boolean lava = false;
-        @Setting("disable-lightning-damage")
-        public boolean lightning = false;
-        @Setting("disable-poison-damage")
-        public boolean potion = false;
-        @Setting("disable-magic-damage")
-        public boolean magic = false;
-        @Setting("disable-projectile-damage")
-        public boolean projectile = false;
-        @Setting("disable-starvation-damage")
-        public boolean starvation = false;
-        @Setting("disable-suffocation-damage")
-        public boolean suffocation = false;
-        @Setting("disable-void-damage")
-        public boolean voiddamage = false;
-        @Setting("disable-food-changes")
-        public boolean foodchange = false;
+        @Setting("disable-tnt-damage") public boolean tnt = false;
+        @Setting("disable-cactus-damage") public boolean cactus = false;
+        @Setting("disable-drowning-damage") public boolean drowning = false;
+        @Setting("disable-pvp-damage") public boolean pvp = false;
+        @Setting("disable-explosion-damage") public boolean explosion = false;
+        @Setting("disable-fall-damage") public boolean fall = false;
+        @Setting("disable-fire-damage") public boolean fire = false;
+        @Setting("disable-firetick-damage") public boolean firetick = false;
+        @Setting("disable-lava-damage") public boolean lava = false;
+        @Setting("disable-lightning-damage") public boolean lightning = false;
+        @Setting("disable-poison-damage") public boolean potion = false;
+        @Setting("disable-magic-damage") public boolean magic = false;
+        @Setting("disable-projectile-damage") public boolean projectile = false;
+        @Setting("disable-starvation-damage") public boolean starvation = false;
+        @Setting("disable-suffocation-damage") public boolean suffocation = false;
+        @Setting("disable-void-damage") public boolean voiddamage = false;
+        @Setting("disable-food-changes") public boolean foodchange = false;
 
         public PlayerProtectionConfiguration(PlayerProtectionModule parent)
         {

@@ -23,10 +23,11 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.thevoxelbox.voxelguest.regions;
 
-import com.thevoxelbox.voxelguest.util.Configuration;
-import com.thevoxelbox.voxelguest.util.PropertyManager;
+import com.patrickanker.lib.config.PropertyConfiguration;
+import com.patrickanker.lib.util.JavaPropertiesFileManager;
 import java.io.File;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
@@ -44,7 +45,7 @@ public class Region {
     public Region(String name)
     {
         this.name = name;
-        Configuration config = new Configuration(name, "/regions");
+        PropertyConfiguration config = new PropertyConfiguration(name, "/VoxelGuest/regions");
         this.world = Bukkit.getWorld(config.getString("world"));
         this.pos1 = new Vector3D(config.getDouble("x1"), config.getDouble("y1"), config.getDouble("z1"));
         this.pos2 = new Vector3D(config.getDouble("x2"), config.getDouble("y2"), config.getDouble("z2"));
@@ -90,12 +91,12 @@ public class Region {
         map.put("y2", pos2.getY());
         map.put("z2", pos2.getZ());
         map.put("disable-general-build-override", disableGeneralBuildOverride);
-        PropertyManager.save(name, map, "/regions");
+        JavaPropertiesFileManager.save(name, map, "/VoxelGuest/regions");
     }
 
     public void delete()
     {
-        File f = new File(PropertyManager.BASE + "/regions/" + name + ".properties");
+        File f = new File(JavaPropertiesFileManager.BASE + "/VoxelGuest/regions/" + name + ".properties");
         f.delete();
     }
 
