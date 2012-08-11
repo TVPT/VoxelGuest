@@ -48,7 +48,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -134,7 +134,7 @@ public class SystemListener extends ModuleSystemListener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(PlayerChatEvent event)
+    public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         processModuleEvents(event);
     }

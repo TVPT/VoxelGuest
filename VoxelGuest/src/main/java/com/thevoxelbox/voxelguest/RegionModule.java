@@ -506,8 +506,8 @@ public class RegionModule extends Module {
         BlockBreakEvent event = (BlockBreakEvent) wrapper.getEvent();
 
         if (!canModify(event.getPlayer(), event.getBlock().getLocation())) {
-            event.getPlayer().sendMessage("§cYou cannot modify this area.");
-            event.setCancelled(true);
+            //event.getPlayer().sendMessage("§cYou cannot modify this area.");
+            //event.setCancelled(true);
             return;
         }
     }

@@ -1,5 +1,17 @@
 package com.thevoxelbox.voxelguest;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+
 import com.thevoxelbox.voxelguest.commands.engine.Command;
 import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
@@ -11,16 +23,6 @@ import com.thevoxelbox.voxelguest.modules.Setting;
 import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.util.Configuration;
 import com.thevoxelbox.voxelguest.util.Formatter;
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  *
@@ -370,10 +372,10 @@ public class AsshatMitigationModule extends Module {
         }
     }
 
-    @ModuleEvent(event = PlayerChatEvent.class, ignoreCancelledEvents = false)
-    public void onPlayerChat(BukkitEventWrapper wrapper)
+    @ModuleEvent(event = AsyncPlayerChatEvent.class, ignoreCancelledEvents = false)
+    public void onAsyncPlayerChat(BukkitEventWrapper wrapper)
     {
-        PlayerChatEvent event = (PlayerChatEvent) wrapper.getEvent();
+        AsyncPlayerChatEvent event = (AsyncPlayerChatEvent) wrapper.getEvent();
         Player p = event.getPlayer();
         
         if (silenceMode) {
@@ -430,7 +432,6 @@ public class AsshatMitigationModule extends Module {
     public void silence(CommandSender cs, String[] args)
     {
         silenceMode = !silenceMode;
-        Player p = (Player) cs;
         getConfiguration().setBoolean("silence-mode", silenceMode);
         cs.sendMessage(ChatColor.GOLD + "Silent mode has been " + ((silenceMode) ? "enabled" : "disabled"));
     }

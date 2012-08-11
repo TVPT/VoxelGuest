@@ -183,7 +183,7 @@ public class WorldProtectionModule extends Module {
     public void onBlockBreak(BukkitEventWrapper wrapper)
     {
         BlockBreakEvent event = (BlockBreakEvent) wrapper.getEvent();
-        Player p = event.getPlayer();
+       // Player p = event.getPlayer();
         Block b = event.getBlock();
 
         if (!isProtectedWorld(b.getWorld())) {

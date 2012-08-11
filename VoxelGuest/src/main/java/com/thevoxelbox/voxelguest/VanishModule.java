@@ -25,28 +25,30 @@
  */
 package com.thevoxelbox.voxelguest;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
 import com.thevoxelbox.voxelguest.commands.engine.Command;
 import com.thevoxelbox.voxelguest.commands.engine.CommandPermission;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.modules.BukkitEventWrapper;
 import com.thevoxelbox.voxelguest.modules.MetaData;
 import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.ModuleEvent;
 import com.thevoxelbox.voxelguest.modules.ModuleEventPriority;
+import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
 import com.thevoxelbox.voxelguest.util.FlatFileManager;
 import com.thevoxelbox.voxelguest.util.Formatter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 @MetaData(name = "Vanish", description = "Vanish in front of your peers!")
 public class VanishModule extends Module {
@@ -213,10 +215,10 @@ public class VanishModule extends Module {
         }
     }
 
-    @ModuleEvent(event = PlayerChatEvent.class)
+    @ModuleEvent(event = AsyncPlayerChatEvent.class)
     public void onPlayerChat(BukkitEventWrapper wrapper)
     {
-        PlayerChatEvent event = (PlayerChatEvent) wrapper.getEvent();
+       AsyncPlayerChatEvent event = (AsyncPlayerChatEvent) wrapper.getEvent();
 
         if (isInFakequit(event.getPlayer())) {
             event.getPlayer().sendMessage("§cYou cannot chat while in FakeQuit");

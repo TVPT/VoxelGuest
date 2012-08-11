@@ -206,7 +206,6 @@ public class CubicleModule extends Module {
     public void cubicleWarp(CommandSender cs, String[] args)
     {
         Player p = (Player) cs;
-        String fullName = getFullName(p, args[1]);
     }
 
     @Command(aliases = {"cubicle", "cube"},
@@ -555,7 +554,7 @@ public class CubicleModule extends Module {
 
     public List<OfflinePlayer> matchOfflinePlayer(String partialName)
     {
-        List matchedPlayers = new ArrayList();
+        List<OfflinePlayer> matchedPlayers = new ArrayList<OfflinePlayer>();
 
         for (OfflinePlayer iterPlayer : Bukkit.getOfflinePlayers()) {
             String iterPlayerName = iterPlayer.getName();
