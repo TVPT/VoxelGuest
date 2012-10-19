@@ -26,6 +26,20 @@
 
 package com.thevoxelbox.voxelguest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+
 import com.patrickanker.lib.commands.Command;
 import com.patrickanker.lib.commands.CommandPermission;
 import com.patrickanker.lib.config.PropertyConfiguration;
@@ -37,419 +51,415 @@ import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.ModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.ModuleEvent;
 import com.thevoxelbox.voxelguest.modules.Setting;
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.*;
+
 
 /**
- *
+ * 
  * @author Razorcane
+ * @author Monofraps (cleanup and fixes)
  */
 @MetaData(name = "Asshat Mitigator", description = "Major asshat handling.")
 public class AsshatMitigationModule extends Module {
 
-    protected PropertyConfiguration bannedList = new PropertyConfiguration("banned", "/VoxelGuest/asshatmitigation");
-    public List<String> gagged = new ArrayList<String>();
-    
-    private final List<String> frozen = new ArrayList<String>();
-    private boolean allFreeze = false;
-    
-    private boolean silenceMode = false;
+	private final PropertyConfiguration bannedList = new PropertyConfiguration("banned", "/VoxelGuest/asshatmitigation");
+	private final List<String> gagged = new ArrayList<String>();
 
-    public AsshatMitigationModule()
-    {
-        super(AsshatMitigationModule.class.getAnnotation(MetaData.class));
-    }
+	private final List<String> frozen = new ArrayList<String>();
+	private boolean allFreeze = false;
 
-    class AsshatMitigationConfiguration extends ModuleConfiguration {
+	private boolean silenceMode = false;
 
-        @Setting("default-asshat-reason") public String defaultAsshatReason = "&cAsshat";
-        @Setting("save-banlist-on-ban") public boolean saveBanlistOnBan = false;
-        @Setting("unrestrict-chat-message") public String unrestrictChatMessage = "I agree. Allow me to chat.";
-        @Setting("gag-message-format") public String gagMessageFormat = "&cYou have been gagged. You cannot chat until you say\n" + "&6the ungag key phrase.";
-        @Setting("ungag-message-format") public String ungagMessageFormat = "&aYou have been ungagged.";
+	public AsshatMitigationModule() {
+		super(AsshatMitigationModule.class.getAnnotation(MetaData.class));
+	}
 
-        public AsshatMitigationConfiguration(AsshatMitigationModule parent)
-        {
-            super(parent);
-        }
-    }
+	class AsshatMitigationConfiguration extends ModuleConfiguration {
 
-    @Override
-    public void enable()
-    {
-        setConfiguration(new AsshatMitigationConfiguration(this));
-        bannedList.load();
-        gagged.clear();
-    }
+		@Setting("default-asshat-reason")
+		public String defaultAsshatReason = "&cAsshat";
+		@Setting("save-banlist-on-ban")
+		public boolean saveBanlistOnBan = false;
+		@Setting("unrestrict-chat-message")
+		public String unrestrictChatMessage = "I agree. Allow me to chat.";
+		@Setting("gag-message-format")
+		public String gagMessageFormat = "&cYou have been gagged. You cannot chat until you say\n" + "&6the ungag key phrase.";
+		@Setting("ungag-message-format")
+		public String ungagMessageFormat = "&aYou have been ungagged.";
 
-    @Override
-    public void disable()
-    {
-        bannedList.save();
-    }
+		public AsshatMitigationConfiguration(AsshatMitigationModule parent) {
+			super(parent);
+		}
+	}
 
-    @Override
-    public String getLoadMessage()
-    {
-        return "Asshat Mitigator has been loaded.";
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public void enable() {
+		setConfiguration(new AsshatMitigationConfiguration(this));
+		
+		bannedList.load();
+		// update ban list
+		final HashMap<String, Object> _updatedMap = new HashMap<String, Object>();
+		for(final String _name : bannedList.getAllEntries().keySet()) {
+			if(_updatedMap.containsKey(_name.toLowerCase())) {
+				continue;
+			}
+			
+			_updatedMap.put(_name.toLowerCase(), bannedList.getEntry(_name));
+		}
+		bannedList.clear();
+		for(final String _name : _updatedMap.keySet()) {
+			bannedList.setString(_name, (String)_updatedMap.get(_name));
+		}
+		bannedList.save();
+		
+		gagged.clear();
+	}
 
-    /*
-     * Asshat Mitigation - Ban Written by: Razorcane
-     *
-     * Handles the banning of both online and offline players. However, exact
-     * player names must be given when banning offline players.
-     */
-    @Command(aliases = {"ban", "vban", "vbano", "bano"}, bounds = {1, -1}, help = "To ban someone, simply type\n" + "§c/ban [player] (reason)")
-    @CommandPermission("voxelguest.asshat.ban")
-    public void ban(CommandSender cs, String[] args)
-    {
-        List<Player> l = Bukkit.matchPlayer(args[0]);
-        String reason = "";
-        boolean silent = false;
+	@Override
+	public void disable() {
+		bannedList.save();
+	}
 
-        if (args.length > 1) {
-            for (short i = 1; i < args.length; ++i) {
-                String arg = args[i];
+	@Override
+	public String getLoadMessage() {
+		return "Asshat Mitigator has been loaded.";
+	}
 
-                if (arg.equals("-silent") || arg.equals("-si")) {
-                    silent = true;
-                } else {
-                    reason += args[i] + " ";
-                }
-            }
-        }
+	/*
+	 * Asshat Mitigation - Ban Written by: Razorcane
+	 * 
+	 * Handles the banning of both online and offline players. However, exact
+	 * player names must be given when banning offline players.
+	 */
+	@Command(aliases = { "ban", "vban", "vbano", "bano" }, bounds = { 1, -1 }, help = "To ban someone, simply type\n" + "§c/ban [player] (reason)")
+	@CommandPermission("voxelguest.asshat.ban")
+	public void ban(final CommandSender cs, final String[] args) {
+		final String _playerName = args[0];
+		final List<Player> _players = Bukkit.matchPlayer(_playerName);
+		
+		String _reason = "";
+		boolean _silent = false;
 
-        if (l.size() > 1) {
-            cs.sendMessage(ChatColor.RED + "Partial match.");
-        } else if (l.isEmpty()) {
-            String player = args[0];
+		if (args.length > 1) {
+			for (short i = 1; i < args.length; ++i) {
+				String arg = args[i];
 
-            if (args.length > 1) {
-                bannedList.setString(player, reason);
+				if (arg.equalsIgnoreCase("-silent") || arg.equalsIgnoreCase("-si")) {
+					_silent = true;
+				} else {
+					_reason += args[i] + " ";
+				}
+			}
+		} 
 
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + player + " has been banned by " + cs.getName() + " for:");
-                    Bukkit.getLogger().info(reason);
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + player + ChatColor.DARK_GRAY + " has been banned by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                    Bukkit.broadcastMessage(ChatColor.BLUE + reason);
-                }
-            } else {
-                bannedList.setString(player, getConfiguration().getString("default-asshat-reason"));
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + player + " has been banned by " + cs.getName() + " for:");
-                    Bukkit.getLogger().info(getConfiguration().getString("default-asshat-reason"));
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + player + ChatColor.DARK_GRAY + " has been banned by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                    Bukkit.broadcastMessage(getConfiguration().getString("default-asshat-reason"));
-                }
-            }
-        } else {
-            Player toBan = l.get(0);
+		if(_reason.isEmpty()){
+			_reason = getConfiguration().getString("default-asshat-reason");
+		} else if (_players.size() > 1) {
+			cs.sendMessage(ChatColor.RED + "Partial match:");
+			String _nameList = "";
+			for (final Player _p : _players) {
+				_nameList += _p.getName() + " | ";
+			}
+			cs.sendMessage(_nameList);
+			return;
+		}
 
-            if (args.length > 1) {
-                toBan.kickPlayer("You have been banned for: " + reason);
-                bannedList.setString(toBan.getName(), reason);
+		banPlayer(_playerName, _reason);
+		
+		if (_silent) {
+			Bukkit.getLogger().info(String.format("Player %s has been banned by %s for: %s", _playerName, cs.getName(), _reason));
+		} else {
+			Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + _playerName + ChatColor.DARK_GRAY + " has been banned by "
+					+ ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
+			Bukkit.broadcastMessage(ChatColor.BLUE + _reason);
+		}
+	}
 
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + toBan.getName() + " has been banned by " + cs.getName() + " for:");
-                    Bukkit.getLogger().info(reason);
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + toBan.getName() + ChatColor.DARK_GRAY + " has been banned by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                    Bukkit.broadcastMessage(ChatColor.BLUE + reason);
-                }
-            } else {
-                toBan.kickPlayer("You have been banned for: " + getConfiguration().getString("default-asshat-reason"));
-                bannedList.setString(toBan.getName(), getConfiguration().getString("default-asshat-reason"));
+	/*
+	 * Asshat Mitigation - Unban Written by: Razorcane
+	 * 
+	 * Controls the unbanning of banned players. Name must be exact, and player
+	 * must be banned, in order to be unbanned.
+	 */
+	@Command(aliases = { "unban", "vunban" }, bounds = { 1, -1 }, help = "To unban someone, simply type\n" + "§c/unban [player]")
+	@CommandPermission("voxelguest.asshat.unban")
+	public void unban(final CommandSender cs, final String[] args) {
+		boolean _silent = false;
 
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + toBan.getName() + " has been banned by " + cs.getName() + " for:");
-                    Bukkit.getLogger().info(getConfiguration().getString("default-asshat-reason"));
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + toBan.getName() + ChatColor.DARK_GRAY + " has been banned by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                    Bukkit.broadcastMessage(getConfiguration().getString("default-asshat-reason"));
-                }
-            }
-        }
+		for (final String _arg : args) {
+			if (_arg.equalsIgnoreCase("-silent") || _arg.equalsIgnoreCase("-si")) {
+				_silent = true;
+			}
+		}
 
-        if (getConfiguration().getBoolean("save-banlist-on ban")) {
-            bannedList.save();
-        }
-    }
+		final String _playerName = args[0];
+		if(isPlayerBanned(_playerName)) {
+			unbanPlayer(_playerName);
+			
+			if (_silent) {
+				Bukkit.getLogger().info(String.format("Player %s has been unbanned by %s",  _playerName, cs.getName()));
+			} else {
+				Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + _playerName + ChatColor.DARK_GRAY + " has been unbanned by "
+						+ ChatColor.RED + cs.getName());
+			}
+		} else {
+			cs.sendMessage(ChatColor.RED + "Player isn't banned.");
+		}
+	}
 
-    /*
-     * Asshat Mitigation - Unban Written by: Razorcane
-     *
-     * Controls the unbanning of banned players. Name must be exact, and player
-     * must be banned, in order to be unbanned.
-     */
-    @Command(aliases = {"unban", "vunban"}, bounds = {1, -1}, help = "To unban someone, simply type\n" + "§c/unban [player]")
-    @CommandPermission("voxelguest.asshat.unban")
-    public void unban(CommandSender cs, String[] args)
-    {
-        boolean silent = false;
+	/*
+	 * Asshat Mitigation - Gag Written by: Razorcane
+	 * 
+	 * Gags a player, or prevents them from talking until they are ungagged,
+	 * there is a server restart, or they type the designated phrase.
+	 */
+	@Command(aliases = { "gag", "vgag" }, bounds = { 1, -1 }, help = "To gag someone, simply type\n" + "§c/gag [player] (reason)", playerOnly = false)
+	@CommandPermission("voxelguest.asshat.gag")
+	public void gag(final CommandSender cs, final String[] args) {
+		final String _playerName = args[0];
+		final List<Player> _players = Bukkit.matchPlayer(_playerName);
+		
+		String _reason = "";
+		boolean _silent = false;
 
-        if (args.length > 1) {
-            for (short i = 1; i < args.length; ++i) {
-                String arg = args[i];
+		if (args.length > 1) {
+			for (int i = 1; i < args.length; i++) {
+				final String arg = args[i];
 
-                if (arg.equals("-silent") || arg.equals("-si")) {
-                    silent = true;
-                }
-            }
-        }
+				if (arg.equalsIgnoreCase("-silent") || arg.equalsIgnoreCase("-si")) {
+					_silent = true;
+				} else {
+					_reason += args[i] + " ";
+				}
+			}
+		} 
 
-        if (args.length < 1) {
-            cs.sendMessage(ChatColor.RED + "Invalid arguments.");
-        } else {
-            String player = args[0];
-            if (bannedList.hasEntry(player)) {
-                bannedList.removeEntry(player);
+		if(_reason.isEmpty()){
+			_reason = getConfiguration().getString("default-asshat-reason");
+		}
 
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + player + " has been unbanned by " + cs.getName());
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + player + ChatColor.DARK_GRAY + " has been unbanned by " + ChatColor.RED + cs.getName());
-                }
+		if (_players.isEmpty()) {
+			cs.sendMessage(ChatColor.RED + "No player with the name " + _playerName + " found.");
+		} else if (_players.size() > 1) {
+			cs.sendMessage(ChatColor.RED + "Partial match:");
+			String _nameList = "";
+			for (final Player _p : _players) {
+				_nameList += _p.getName() + " | ";
+			}
+			cs.sendMessage(_nameList);
+		} else {
+			if (gagged.contains(_playerName)) {
+				gagged.remove(_playerName);
+				cs.sendMessage(ChatColor.RED + _playerName + ChatColor.WHITE + " has been ungagged.");
+			} else {
+				gagged.add(_playerName);
+				if (_silent) {
+					Bukkit.getLogger().info(String.format("Player %s has been gagged by %s for: %s", _playerName, cs.getName(), _reason));
+				} else {
+					Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + _playerName + ChatColor.DARK_GRAY + " has been gagged by "
+							+ ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
+					Bukkit.broadcastMessage(ChatColor.BLUE + _reason);
+				}
+			}
+		}
+	}
 
-                bannedList.save();
-                bannedList.load();
-            } else {
-                cs.sendMessage(ChatColor.RED + "Player isn't banned.");
-            }
-        }
-    }
+	/*
+	 * Asshat Mitigation - Kick Written by: Razorcane
+	 * 
+	 * Kicks a player from the server. Entering no reason defaults to the
+	 * default asshat reason, which is "Asshat".
+	 */
+	@Command(aliases = { "kick", "vkick" }, bounds = { 1, -1 }, help = "To kick someone, simply type\n" + "§c/kick [player] (reason)", playerOnly = false)
+	@CommandPermission("voxelguest.asshat.kick")
+	public void kick(final CommandSender cs, final String[] args) {
+		final String _playerName = args[0];
+		final List<Player> _players = Bukkit.matchPlayer(_playerName);
+		
+		String _reason = "";
+		boolean _silent = false;
 
-    /*
-     * Asshat Mitigation - Gag Written by: Razorcane
-     *
-     * Gags a player, or prevents them from talking until they are ungagged,
-     * there is a server restart, or they type the designated phrase.
-     */
-    @Command(aliases = {"gag", "vgag"}, bounds = {1, -1}, help = "To gag someone, simply type\n" + "§c/gag [player] (reason)", playerOnly = false)
-    @CommandPermission("voxelguest.asshat.gag")
-    public void gag(CommandSender cs, String[] args)
-    {
-        List<Player> l = Bukkit.matchPlayer(args[0]);
-        String reason = "";
-        boolean silent = false;
+		if (args.length > 1) {
+			for (int i = 1; i < args.length; i++) {
+				String arg = args[i];
 
-        if (args.length > 1) {
-            for (int i = 1; i < args.length; i++) {
-                String arg = args[i];
+				if (arg.equalsIgnoreCase("-silent") || arg.equalsIgnoreCase("-si")) {
+					_silent = true;
+				} else {
+					_reason += args[i] + " ";
+				}
+			}
+		}
 
-                if (arg.equals("-silent") || arg.equals("-si")) {
-                    silent = true;
-                } else {
-                    reason += args[i] + " ";
-                }
-            }
-        }
+		if (_reason.isEmpty()) {
+			_reason = getConfiguration().getString("default-asshat-reason");
+		}
 
-        if (l.size() > 1) {
-            cs.sendMessage(ChatColor.RED + "Partial match.");
-        } else if (l.isEmpty()) {
-            cs.sendMessage(ChatColor.RED + "No player to match.");
-        } else {
-            Player p = l.get(0);
+		if (_players.isEmpty()) {
+			cs.sendMessage(ChatColor.RED + "No player with the name " + _playerName + " found.");
+		} else if (_players.size() > 1) {
+			cs.sendMessage(ChatColor.RED + "Partial match:");
+			String _nameList = "";
+			for (final Player _p : _players) {
+				_nameList += _p.getName() + " | ";
+			}
+			cs.sendMessage(_nameList);
+		} else {
+			_players.get(0).kickPlayer(_reason);
+			if (_silent) {
+				Bukkit.getLogger().info(String.format("Player %s has been kicked by %s for: %s", _playerName, cs.getName(), _reason));
+			} else {
+				Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + _players.get(0).getName() + ChatColor.DARK_GRAY
+						+ " has been kicked by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
+				Bukkit.broadcastMessage(ChatColor.BLUE + _reason);
+			}
+		}
+	}
 
-            if (gagged.contains(p.getName())) {
-                gagged.remove(p.getName());
-                cs.sendMessage(ChatColor.RED + p.getName() + ChatColor.WHITE + " has been ungagged.");
-            } else {
-                gagged.add(p.getName());
-                if (args.length > 1) {
-                    if (silent) {
-                        Bukkit.getLogger().info("Player " + p.getName() + " has been gagged by " + cs.getName() + " for:");
-                        Bukkit.getLogger().info(reason);
-                    } else {
-                        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + p.getName() + ChatColor.DARK_GRAY + " has been gagged by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                        Bukkit.broadcastMessage(ChatColor.BLUE + reason);
-                    }
-                } else {
-                    if (silent) {
-                        Bukkit.getLogger().info("Player " + p.getName() + " has been gagged by " + cs.getName() + " for:");
-                        Bukkit.getLogger().info(getConfiguration().getString("default-asshat-reason"));
-                    } else {
-                        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + p.getName() + ChatColor.DARK_GRAY + " has been gagged by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                        Bukkit.broadcastMessage(getConfiguration().getString("default-asshat-reason"));
-                    }
-                }
-            }
-        }
-    }
+	@Command(aliases = { "freeze", "fr" }, bounds = { 1, 1 }, help = "Freezes the defined player in\n"
+			+ "§c/freeze [player]§f or freeze all players (except those with \"voxelguest.asshat.freeze.bypass\") with\n" + "§c/freeze --all§f or §c/freeze -a")
+	@CommandPermission("voxelguest.asshat.freeze.freeze")
+	public void freeze(final CommandSender cs, final String[] args) {
+		if (args[0].equalsIgnoreCase("--all") || args[0].equalsIgnoreCase("-a")) {
+			allFreeze = !allFreeze;
 
-    /*
-     * Asshat Mitigation - Kick Written by: Razorcane
-     *
-     * Kicks a player from the server. Entering no reason defaults to the
-     * default asshat reason, which is "Asshat".
-     */
-    @Command(aliases = {"kick", "vkick"}, bounds = {1, -1}, help = "To kick someone, simply type\n" + "§c/kick [player] (reason)", playerOnly = false)
-    @CommandPermission("voxelguest.asshat.kick")
-    public void kick(CommandSender cs, String[] args)
-    {
-        List<Player> l = Bukkit.matchPlayer(args[0]);
-        String reason = "";
-        boolean silent = false;
+			if (allFreeze) {
+				for (final Player _p : Bukkit.getOnlinePlayers()) {
+					if (!PermissionsManager.getHandler().hasPermission(_p.getName(), "voxelguest.asshat.freeze.bypass")) {
+						frozen.add(_p.getName());
+					}
+				}
 
-        if (args.length > 1) {
-            for (int i = 1; i < args.length; i++) {
-                String arg = args[i];
+				cs.sendMessage("§aEveryone §7has been §bfrozen.");
+			} else {
+				frozen.clear();
+				cs.sendMessage("§aEveryone §7has been §cthawed.");
+			}
+			
+			return;
+		}
 
-                if (arg.equals("-silent") || arg.equals("-si")) {
-                    silent = true;
-                } else {
-                    reason += args[i] + " ";
-                }
-            }
-        }
+		final String _playerName = args[0];
+		final List<Player> _players = Bukkit.matchPlayer(_playerName);
 
-        if (l.size() > 1) {
-            cs.sendMessage(ChatColor.RED + "Partial match.");
-        } else if (l.isEmpty()) {
-            cs.sendMessage(ChatColor.RED + "No player to match.");
-        } else {
-            l.get(0).kickPlayer(reason);
-            if (args.length > 1) {
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + l.get(0).getName() + " has been kicked by " + cs.getName() + " for:");
-                    Bukkit.getLogger().info(reason);
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + l.get(0).getName() + ChatColor.DARK_GRAY + " has been kicked by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                    Bukkit.broadcastMessage(ChatColor.BLUE + reason);
-                }
-            } else {
-                if (silent) {
-                    Bukkit.getLogger().info("Player " + l.get(0).getName() + " has been kicked by " + cs.getName() + " for:");
-                    Bukkit.getLogger().info(getConfiguration().getString("default-asshat-reason"));
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "Player " + ChatColor.RED + l.get(0).getName() + ChatColor.DARK_GRAY + " has been kicked by " + ChatColor.RED + cs.getName() + ChatColor.DARK_GRAY + " for:");
-                    Bukkit.broadcastMessage(getConfiguration().getString("default-asshat-reason"));
-                }
-            }
-        }
-    }
-    
-    @Command(aliases={"freeze", "fr"}, bounds={1,1}, help="Freezes the defined player in\n" + "§c/freeze [player]§f or freeze all players (except those with \"voxelguest.asshat.freeze.bypass\") with\n" + "§c/freeze --all§f or §c/freeze -a")
-    @CommandPermission("voxelguest.asshat.freeze.freeze")
-    public void freeze(CommandSender cs, String[] args)
-    {
-        if (args[0].equalsIgnoreCase("--all") || args[0].equalsIgnoreCase("-a")) {
-            allFreeze = !allFreeze;
-            
-            if (allFreeze) {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!PermissionsManager.getHandler().hasPermission(p.getName(), "voxelguest.asshat.freeze.bypass"))
-                        frozen.add(p.getName());
-                }
-                
-                cs.sendMessage("§aEveryone §7has been §bfrozen.");
-            } else {
-                frozen.clear();
-                cs.sendMessage("§aEveryone §7has been §cthawed.");
-            }
-        }
-        
-        List<Player> l = Bukkit.matchPlayer(args[0]);
-        
-        if (l.isEmpty()) {
-            cs.sendMessage("§cNo player found with that name.");
-        } else if (l.size() > 1) {
-            cs.sendMessage("§cMultiple players found with that name.");
-        } else {
-            String nameOfPlayer = l.get(0).getName();
-            
-            if (!frozen.contains(nameOfPlayer)) {
-                frozen.add(nameOfPlayer);
-                cs.sendMessage("§a" + nameOfPlayer + " §7has been §bfrozen.");
-            } else {
-                frozen.remove(nameOfPlayer);
-                cs.sendMessage("§a" + nameOfPlayer + " §7has been §cthawed.");
-            }
-        }
-    }
+		if (_players.isEmpty()) {
+			cs.sendMessage(ChatColor.RED + "No player found with that name.");
+		} else if (_players.size() > 1) {
+			cs.sendMessage(ChatColor.RED + "Partial match:");
+			String _nameList = "";
+			for (final Player _p : _players) {
+				_nameList += _p.getName() + " | ";
+			}
+			cs.sendMessage(_nameList);
+		} else {
+			if (frozen.contains(_playerName)) {
+				frozen.remove(_playerName);
+				cs.sendMessage("§a" + _playerName + " §7has been §cthawed.");
+			} else {
+				frozen.add(_playerName);
+				cs.sendMessage("§a" + _playerName + " §7has been §bfrozen.");
+			}
+		}
+	}
 
-    @ModuleEvent(event = PlayerPreLoginEvent.class, ignoreCancelledEvents = false)
-    public void onPlayerPreLogin(BukkitEventWrapper wrapper)
-    {
-        PlayerPreLoginEvent event = (PlayerPreLoginEvent) wrapper.getEvent();
-        String player = event.getName();
+	@Command(aliases = { "soapbox", "silence" }, bounds = { 0, 0 }, help = "Toggle the silence")
+	@CommandPermission("voxelguest.admin.silence")
+	public void silence(final CommandSender cs, final String[] args) {
+		silenceMode = !silenceMode;
+		getConfiguration().setBoolean("silence-mode", silenceMode);
+		cs.sendMessage(ChatColor.GOLD + "Silent mode has been " + ((silenceMode) ? "enabled" : "disabled"));
+	}
 
-        if (bannedList.hasEntry(player)) {
-            event.setResult(PlayerPreLoginEvent.Result.KICK_FULL);
-            event.disallow(PlayerPreLoginEvent.Result.KICK_FULL, "You are banned for: " + bannedList.getString(player));
-        }
-    }
+	@ModuleEvent(event = PlayerPreLoginEvent.class, ignoreCancelledEvents = false)
+	public void onPlayerPreLogin(final BukkitEventWrapper wrapper) {
+		final PlayerPreLoginEvent _event = (PlayerPreLoginEvent) wrapper.getEvent();
+		final String _playerName = _event.getName();
 
-    @ModuleEvent(event = AsyncPlayerChatEvent.class, ignoreCancelledEvents = false)
-    public void onPlayerChat(BukkitEventWrapper wrapper)
-    {
-        AsyncPlayerChatEvent event = (AsyncPlayerChatEvent) wrapper.getEvent();
-        Player p = event.getPlayer();
-        
-        if (silenceMode) {
-            if (!PermissionsManager.getHandler().hasPermission(event.getPlayer().getName(), "voxelguest.bypass.silence")) {
-                event.setCancelled(true);
-            }
-        }
+		if (isPlayerBanned(_playerName)) {
+			_event.setResult(PlayerPreLoginEvent.Result.KICK_FULL);
+			_event.disallow(PlayerPreLoginEvent.Result.KICK_FULL, "You are banned for: " + getBanReason(_playerName));
+		}
+	}
 
-        if (gagged.contains(p.getName())) {
-            if (event.getMessage().equals(getConfiguration().getString("unrestrict-chat-message"))) {
-                gagged.remove(p.getName());
+	@ModuleEvent(event = AsyncPlayerChatEvent.class, ignoreCancelledEvents = false)
+	public void onPlayerChat(final BukkitEventWrapper wrapper) {
+		final AsyncPlayerChatEvent _event = (AsyncPlayerChatEvent) wrapper.getEvent();
+		final Player _player = _event.getPlayer();
 
-                for (String str : Formatter.selectFormatter(SimpleFormatter.class).formatMessages(getConfiguration().getString("ungag-message-format"), VoxelGuest.getGuestPlayer(p))) {
-                    p.sendMessage(str);
-                }
+		if (silenceMode) {
+			if (!PermissionsManager.getHandler().hasPermission(_event.getPlayer().getName(), "voxelguest.bypass.silence")) {
+				_event.setCancelled(true);
+			}
+		}
 
-                event.setCancelled(true);
-            } else {
-                for (String str : Formatter.selectFormatter(SimpleFormatter.class).formatMessages(getConfiguration().getString("gag-message-format"), VoxelGuest.getGuestPlayer(p))) {
-                    p.sendMessage(str);
-                }
+		if (gagged.contains(_player.getName())) {
+			if (_event.getMessage().equals(getConfiguration().getString("unrestrict-chat-message"))) {
+				gagged.remove(_player.getName());
 
-                event.setCancelled(true);
-            }
-        }
-    }
-    
-    @ModuleEvent(event=PlayerMoveEvent.class)
-    public void onPlayerMove(BukkitEventWrapper wrapper)
-    {
-        PlayerMoveEvent event = (PlayerMoveEvent) wrapper.getEvent();
-        
-        if (frozen.contains(event.getPlayer().getName())) {
-            event.setTo(event.getFrom());
-            event.setCancelled(true);
-        }
-    }
-    
-    @ModuleEvent(event=PlayerTeleportEvent.class)
-    public void onPlayerTeleport(BukkitEventWrapper wrapper)
-    {
-        PlayerTeleportEvent event = (PlayerTeleportEvent) wrapper.getEvent();
-        
-        if (frozen.contains(event.getPlayer().getName())) {
-            event.setTo(event.getFrom());
-            event.setCancelled(true);
-        }
-    }
-    
-    @Command(aliases = {"soapbox", "silence"},
-        bounds = {0, 0},
-        help = "Toggle the silence")
-    @CommandPermission("voxelguest.admin.silence")
-    public void silence(CommandSender cs, String[] args)
-    {
-        silenceMode = !silenceMode;
-        Player p = (Player) cs;
-        getConfiguration().setBoolean("silence-mode", silenceMode);
-        cs.sendMessage(ChatColor.GOLD + "Silent mode has been " + ((silenceMode) ? "enabled" : "disabled"));
-    }
+				for (String str : Formatter.selectFormatter(SimpleFormatter.class).formatMessages(getConfiguration().getString("ungag-message-format"),
+						VoxelGuest.getGuestPlayer(_player))) {
+					_player.sendMessage(str);
+				}
+
+				_event.setCancelled(true);
+			} else {
+				for (String str : Formatter.selectFormatter(SimpleFormatter.class).formatMessages(getConfiguration().getString("gag-message-format"),
+						VoxelGuest.getGuestPlayer(_player))) {
+					_player.sendMessage(str);
+				}
+
+				_event.setCancelled(true);
+			}
+		}
+	}
+
+	@ModuleEvent(event = PlayerMoveEvent.class)
+	public void onPlayerMove(final BukkitEventWrapper wrapper) {
+		final PlayerMoveEvent _event = (PlayerMoveEvent) wrapper.getEvent();
+
+		if (frozen.contains(_event.getPlayer().getName())) {
+			final Location _orig = _event.getFrom();
+			final Location _dest = _event.getTo();
+			
+			// only cancel if the player actually walks; do not cancel rotation
+			if((_orig.getBlockX() != _dest.getBlockX()) || (_orig.getBlockY() != _dest.getBlockY()) || (_orig.getBlockZ() != _dest.getBlockZ())) {
+				_event.setTo(_orig);
+				_event.setCancelled(true);
+			}
+		}
+	}
+
+	@ModuleEvent(event = PlayerTeleportEvent.class)
+	public void onPlayerTeleport(final BukkitEventWrapper wrapper) {
+		final PlayerTeleportEvent event = (PlayerTeleportEvent) wrapper.getEvent();
+
+		if (frozen.contains(event.getPlayer().getName())) {
+			event.setTo(event.getFrom());
+			event.setCancelled(true);
+		}
+	}
+
+	private void banPlayer(final String playerName, final String reason) {
+		bannedList.setString(playerName.toLowerCase(), reason);
+		
+		if (getConfiguration().getBoolean("save-banlist-on ban")) {
+			bannedList.save();
+		}
+	}
+	
+	private void unbanPlayer(final String playerName) {
+		if (isPlayerBanned(playerName.toLowerCase())) {
+			bannedList.removeEntry(playerName.toLowerCase());
+		}
+		
+		bannedList.save();
+	}
+	
+	private boolean isPlayerBanned(final String playerName) {
+		return bannedList.hasEntry(playerName.toLowerCase());
+	}
+	
+	private String getBanReason(final String playerName) {
+		return bannedList.getString(playerName.toLowerCase());
+	}
 }
