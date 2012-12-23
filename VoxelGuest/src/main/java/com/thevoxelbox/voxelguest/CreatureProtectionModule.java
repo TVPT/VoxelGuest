@@ -31,6 +31,7 @@ public class CreatureProtectionModule extends Module {
 
     class CreatureProtectionConfiguration extends ModuleConfiguration {
 
+        @Setting("disable-bat-spawning") public boolean bat = false;
         @Setting("disable-blaze-spawning") public boolean blaze = false;
         @Setting("disable-cavespider-spawning") public boolean cavespider = false;
         @Setting("disable-chicken-spawning") public boolean chicken = false;
@@ -95,6 +96,10 @@ public class CreatureProtectionModule extends Module {
 
         if (reason != SpawnReason.CUSTOM) {
             switch (mob) {
+                case BAT:
+                    if (getConfiguration().getBoolean("disable-bat-spawning")) {
+                        event.setCancelled(true);
+                    }
                 case BLAZE:
                     if (getConfiguration().getBoolean("disable-blaze-spawning")) {
                         event.setCancelled(true);
