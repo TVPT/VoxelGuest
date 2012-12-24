@@ -62,9 +62,10 @@ public class WorldProtectionModule extends Module {
         @Setting("disable-block-ignite") public boolean blockignite = true;
         @Setting("disable-block-growth") public boolean blockgrow = true;
         @Setting("disable-fire-spread") public boolean firespred = false;
-        @Setting("Disable-lava-flow") public boolean lavaflow = false;
-        @Setting("Disable-water-flow") public boolean waterflow = false;
+        @Setting("disable-lava-flow") public boolean lavaflow = false;
+        @Setting("disable-water-flow") public boolean waterflow = false;
         @Setting("disable-enchanting") public boolean enchanting = false;
+        @Setting("disable-painting-pop") public boolean paintingpop = false;
         @Setting("disable-creeper-explosion") public boolean creeperexplode = false;
         @Setting("disable-dragonegg-movement") public boolean dragoneggmovement = false;
         @Setting("unplacable-blocks") public String unplacable = "8,9,10,11,46";
@@ -469,7 +470,32 @@ public class WorldProtectionModule extends Module {
             event.setCancelled(true);
         }
     }
-
+    
+    /*
+     * World Protection - PaintingBreak Event Written by: Billyyjoee
+     *
+     * Handlesh how a painting is broken
+     */
+     @ModuleEvent(event = PaintingBreakEvent.class)
+     public void onPaintingBreak(BukkitEventWrapper wrapper)
+     {
+         PaintingBreakEvent event = (PaintingBreakEvent) wrapper.getEvent();
+         
+         if (getConfiguration().getBoolean("disable-painting-pop")) {
+             event.setCancelled(true);
+         }
+     }
+     
+     @ModuleEvent(event = PaintingBreakByEntityEvent.class)
+     public void onPaintingBreakByEntity(BukkitEventWrapper wrapper)
+     {
+         PaintingBreakByEntityEvent event = (PaintingBreakByEntityEvent) wrapper.getEvent();
+         
+         if (getConfiguration().getBoolean("disable-painting-pop")) {
+             event.setCancelled(true);
+         }
+     }
+     
     class EntityPurgeThread extends Thread {
 
         private final World world;

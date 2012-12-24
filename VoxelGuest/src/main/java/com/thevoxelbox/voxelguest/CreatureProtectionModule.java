@@ -54,6 +54,7 @@ public class CreatureProtectionModule extends Module {
         @Setting("disable-spider-spawning") public boolean spider = false;
         @Setting("disable-squid-spawning") public boolean squid = false;
         @Setting("disable-villager-spawning") public boolean villager = false;
+        @Setting("disable-wither-spawning") public boolean wither = false;
         @Setting("disable-wolf-spawning") public boolean wolf = false;
         @Setting("disable-zombie-spawning") public boolean zombie = false;
 
@@ -190,6 +191,10 @@ public class CreatureProtectionModule extends Module {
                     }
                 case WOLF:
                     if (getConfiguration().getBoolean("disable-wolf-spawning")) {
+                        event.setCancelled(true);
+                    }
+                case WITHER:
+                    if (getConfiguration().getBoolean("disable-wither-spawning")) {
                         event.setCancelled(true);
                     }
                 case ZOMBIE:
