@@ -60,6 +60,7 @@ public class WorldProtectionModule extends Module {
         @Setting("disable-snow-formation") public boolean snowform = false;
         @Setting("disable-block-burning") public boolean blockburn = false;
         @Setting("disable-block-ignite") public boolean blockignite = true;
+        @Setting("disable-block-growth") public boolean blockgrow = true;
         @Setting("disable-fire-spread") public boolean firespred = false;
         @Setting("disable-enchanting") public boolean enchanting = false;
         @Setting("disable-creeper-explosion") public boolean creeperexplode = false;
@@ -254,6 +255,30 @@ public class WorldProtectionModule extends Module {
         }
     }
 
+    /*
+     * Block Growth - BlockGrow Event Written by: Billyyjoee
+     *
+     * Handles Block Growth such as;
+     * Wheat,
+     * Pumpkins,
+     * Sugar Cane,
+     * Watermelons &
+     * Cactus
+     */
+     @ModuleEvent(event = BlockGrowEvent.class, ignore CancelledEvents = true)
+     public void onBlockGrow(BukkitEventWrapper wrapper)
+    {
+        BlockGrowEvent event = (BlockGrowEvent) wrapper.getEvent();
+
+        if (!isProtectedWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
+        if (getConfiguration().getBoolean("disable-block-growth")) {
+            event.setCancelled(true);
+        }
+    }
+     
     /*
      * World Protection - BlockFade Event Written by: Razorcane
      *
