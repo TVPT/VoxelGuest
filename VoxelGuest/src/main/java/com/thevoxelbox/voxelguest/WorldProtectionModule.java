@@ -62,8 +62,11 @@ public class WorldProtectionModule extends Module {
         @Setting("disable-block-ignite") public boolean blockignite = true;
         @Setting("disable-block-growth") public boolean blockgrow = true;
         @Setting("disable-fire-spread") public boolean firespred = false;
+        @Setting("Disable-lava-flow") public boolean lavaflow = false;
+        @Setting("Disable-water-flow") public boolean waterflow = false;
         @Setting("disable-enchanting") public boolean enchanting = false;
         @Setting("disable-creeper-explosion") public boolean creeperexplode = false;
+        @Setting("disable-dragonegg-movement") public boolean dragoneggmovement = false;
         @Setting("unplacable-blocks") public String unplacable = "8,9,10,11,46";
         @Setting("unusable-items") public String unusableitems = "325,326,327";
 
@@ -177,7 +180,7 @@ public class WorldProtectionModule extends Module {
             return;
         }
 
-        if (getConfiguration().getBoolean("diable-block-drops")) {
+        if (getConfiguration().getBoolean("disable-block-drops")) {
             b.setType(Material.AIR);
             event.setCancelled(true);
         }
@@ -256,7 +259,7 @@ public class WorldProtectionModule extends Module {
     }
 
     /*
-     * Block Growth - BlockGrow Event Written by: Billyyjoee
+     * World Protection - BlockGrow Event Written by: Billyyjoee
      *
      * Handles Block Growth such as;
      * Wheat,
@@ -279,6 +282,44 @@ public class WorldProtectionModule extends Module {
         }
     }
      
+    /*
+     * World Protection - BlockFromTo Event Written by: Billyyjoee
+     *
+     * Handles Water/Lava/DragonEgg Movement
+     */
+     @ModuleEvent(event = BlockFromToEvent.class, ignoreCancelledEvents = true)
+     publc void OnBlockFromTo(BukkitEventWrapper wrapper)
+     {
+         BlockFromToEvent event = (BlockFromToEvent) wrapper.getEvent();
+         Block b = event.GetBlock();
+         
+         if (!isProtectedWorld(b.getWorld())) {
+            return;
+        }
+
+        if (b.getType().equals(Material.DRAGON_EGG) && getConfiguration().getBoolean("disable-dragonegg-movement")) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (b.getType().equals(Material.STATIONARY_LAVA) && getConfiguration().getBoolean("disable-lava-flow")) {
+            event.setCancelled(true);
+            return;
+        }
+        
+        if (b.getType().equals(Material.LAVA) && getConfiguration().getBoolean("disable-lava-flow")) {
+            event.setCancelled(true);
+            return;
+        }
+        if (b.getType().equals(Material.STATIONARY_WATER) && getConfiguration().getBoolean("disable-water-flow")) {
+            event.setCancelled(true);
+            return;
+        }    
+        if (b.getType().equals(Material.WATER) && getConfiguration().getBoolean("disable-water-flow")) {
+            event.setCancelled(true);
+        }
+    }
+         
     /*
      * World Protection - BlockFade Event Written by: Razorcane
      *
@@ -328,7 +369,7 @@ public class WorldProtectionModule extends Module {
             event.setCancelled(true);
         }
     }
-
+    
     /*
      * World Protection - BlockBurn Event Written by: Razorcane
      *
