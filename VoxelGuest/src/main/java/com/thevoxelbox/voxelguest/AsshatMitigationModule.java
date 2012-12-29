@@ -442,7 +442,9 @@ public class AsshatMitigationModule extends Module {
 	private void banPlayer(final String playerName, final String reason) {
 		Player player = Bukkit.getPlayerExact(playerName);
 		
-		player.kickPlayer(reason);
+		if (player != null) {
+			player.kickPlayer("You are banned for: " + reason);
+		}
 		
 		bannedList.setString(playerName.toLowerCase(), reason);
 		
