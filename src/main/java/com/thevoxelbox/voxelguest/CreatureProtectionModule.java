@@ -40,6 +40,7 @@ public class CreatureProtectionModule extends Module {
         @Setting("disable-enderman-spawning") public boolean enderman = false;
         @Setting("disable-enderdragon-spawning") public boolean enderdragon = false;
         @Setting("disable-ghast-spawning") public boolean ghast = false;
+        @Setting("disable-giant-spawning") public boolean giant = false;
         @Setting("disable-irongolem-spawning") public boolean irongolem = false;
         @Setting("disable-magmacube-spawning") public boolean magmacube = false;
         @Setting("disable-mushroomcow-spawning") public boolean mushroomcow = false;
@@ -54,6 +55,7 @@ public class CreatureProtectionModule extends Module {
         @Setting("disable-spider-spawning") public boolean spider = false;
         @Setting("disable-squid-spawning") public boolean squid = false;
         @Setting("disable-villager-spawning") public boolean villager = false;
+        @Setting("disable-witch-spawning") public boolean witch = false;
         @Setting("disable-wither-spawning") public boolean wither = false;
         @Setting("disable-wolf-spawning") public boolean wolf = false;
         @Setting("disable-zombie-spawning") public boolean zombie = false;
@@ -155,6 +157,12 @@ public class CreatureProtectionModule extends Module {
                         return;
                         
                     }
+                case GIANT:
+                    if (getConfiguration().getBoolean("disable-giant-spawning")) {
+                        event.setCancelled(true);
+                        return;
+                        
+                    }
                 case MAGMA_CUBE:
                     if (getConfiguration().getBoolean("disable-magmacube-spawning")) {
                         event.setCancelled(true);
@@ -229,6 +237,12 @@ public class CreatureProtectionModule extends Module {
                     }
                 case VILLAGER:
                     if (getConfiguration().getBoolean("disable-villager-spawning")) {
+                        event.setCancelled(true);
+                        return;
+                        
+                    }
+                case WITCH:
+                    if (getConfiguration().getBoolean("disable-witch-spawning")) {
                         event.setCancelled(true);
                         return;
                         
