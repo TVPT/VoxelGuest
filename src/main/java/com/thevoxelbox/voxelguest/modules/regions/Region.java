@@ -31,7 +31,7 @@ public class Region implements Serializable
 	private long id;
 
 	@Column
-	public final String regionName;
+	private final String regionName;
 	@Column
 	private Location pointOne;
 	@Column
@@ -51,7 +51,7 @@ public class Region implements Serializable
 	@Column
 	private boolean allowCreeperExplosions = false;
 	@Column
-	private boolean allowBreakingPaintings = false;
+	private boolean allowTntBreakingPaintings = false;
 	@Column
 	private boolean allowLavaFlow = false;
 	@Column
@@ -77,9 +77,39 @@ public class Region implements Serializable
 
 	//Player
 	@Column
-	private boolean allowPlayerDamage;
+	private boolean allowPvPDamage = false;
 	@Column
-	private boolean allowHunger;
+	private boolean allowLavaDamage = false;
+        @Column
+        private boolean allowCactusDamage = false;
+	@Column
+        private boolean allowTnTDamage = false;
+        @Column
+        private boolean allowDrowningDamage = false;
+        @Column
+        private boolean allowExplosiveDamage = false;
+        @Column
+        private boolean allowFallDamage = false;
+        @Column
+        private boolean allowFireDamage = false;
+        @Column
+        private boolean allowPoisonDamage = false;
+        @Column
+        private boolean allowMagicDamage = false;
+        @Column
+        private boolean allowProjectileDamage = false;
+        @Column
+	private boolean allowHungerDamage = false;
+        @Column
+        private boolean allowVoidDamage = false;
+        @Column
+        private boolean allowFireTickDamage = false;
+        @Column
+        private boolean allowLightningDamage = false;
+        @Column
+        private boolean allowSuffocationDamage = false;
+        @Column
+        private boolean allowFoodChange = false;
 
 	public Region(final String worldName, final Location pointOne, final Location pointTwo, final String regionName, final String buildPermission)
 	{
@@ -106,219 +136,392 @@ public class Region implements Serializable
 
 	}
 
-	public final Location getPointOne()
+	public Location getPointOne()
 	{
 		return pointOne;
 	}
 
-	public final void setPointOne(final Location pointOne)
+	public void setPointOne(final Location pointOne)
 	{
 		this.pointOne = pointOne;
 	}
 
-	public final Location getPointTwo()
+	public Location getPointTwo()
 	{
 		return pointTwo;
 	}
 
-	public final void setPointTwo(final Location pointTwo)
+	public void setPointTwo(final Location pointTwo)
 	{
 		this.pointTwo = pointTwo;
 	}
 
-	public final boolean isMobSpawnAllowed()
+	public boolean isMobSpawnAllowed()
 	{
 		return allowMobSpawn;
 	}
 
-	public final void setAllowMobSpawn(final boolean allowMobSpawn)
+	public void setAllowMobSpawn(final boolean allowMobSpawn)
 	{
 		this.allowMobSpawn = allowMobSpawn;
 	}
 
-	public final boolean isFireSpreadAllowed()
+	public boolean isFireSpreadAllowed()
 	{
 		return allowFireSpread;
 	}
 
-	public final void setAllowFireSpread(final boolean allowFireSpread)
+	public void setAllowFireSpread(final boolean allowFireSpread)
 	{
 		this.allowFireSpread = allowFireSpread;
 	}
 
-	public final boolean isLeafDecayAllowed()
+	public boolean isLeafDecayAllowed()
 	{
 		return allowLeafDecay;
 	}
 
-	public final void setAllowLeafDecay(final boolean allowLeafDecay)
+	public void setAllowLeafDecay(final boolean allowLeafDecay)
 	{
 		this.allowLeafDecay = allowLeafDecay;
 	}
 
-	public final boolean isBlowGrowthAllowed()
+	public boolean isBlowGrowthAllowed()
 	{
 		return allowBlockGrowth;
 	}
 
-	public final void setAllowBlockGrowth(final boolean allowBlockGrowth)
+	public void setAllowBlockGrowth(final boolean allowBlockGrowth)
 	{
 		this.allowBlockGrowth = allowBlockGrowth;
 	}
 
-	public final boolean isBlockSpreadAllowed()
+	public boolean isBlockSpreadAllowed()
 	{
 		return allowBlockSpread;
 	}
 
-	public final void setAllowBlockSpread(final boolean allowBlockSpread)
+	public void setAllowBlockSpread(final boolean allowBlockSpread)
 	{
 		this.allowBlockSpread = allowBlockSpread;
 	}
 
-	public final boolean isCreeperExplosionsAllowed()
+	public boolean isCreeperExplosionsAllowed()
 	{
 		return allowCreeperExplosions;
 	}
 
-	public final void setAllowCreeperExplosions(final boolean allowCreeperExplosions)
+	public void setAllowCreeperExplosions(final boolean allowCreeperExplosions)
 	{
 		this.allowCreeperExplosions = allowCreeperExplosions;
 	}
 
-	public final boolean isBreakingPaintingsAllowed()
+	public boolean isTntBreakingPaintingsAllowed()
 	{
-		return allowBreakingPaintings;
+		return allowTntBreakingPaintings;
 	}
 
-	public final void setAllowBreakingPaintings(boolean allowBreakingPaintings)
+	public void setAllowBreakingPaintings(boolean allowBreakingPaintings)
 	{
-		this.allowBreakingPaintings = allowBreakingPaintings;
+		this.allowTntBreakingPaintings = allowBreakingPaintings;
 	}
 
-	public final List<Material> getBannedBlocks()
+	public List<Material> getBannedBlocks()
 	{
 		return bannedBlocks;
 	}
 
-	public final void setBannedBlocks(List<Material> bannedBlocks)
+	public void setBannedBlocks(List<Material> bannedBlocks)
 	{
 		this.bannedBlocks = bannedBlocks;
 	}
 
-	public final List<Material> getBannedItems()
+	public List<Material> getBannedItems()
 	{
 		return bannedItems;
 	}
 
-	public final void setBannedItems(final List<Material> bannedItems)
+	public void setBannedItems(final List<Material> bannedItems)
 	{
 		this.bannedItems = bannedItems;
 	}
 
-	public final boolean isPlayerDamageAllowed()
+	public boolean isPlayerDamageAllowed()
 	{
-		return allowPlayerDamage;
+		return allowPvPDamage;
 	}
 
-	public final void setAllowPlayerDamage(final boolean allowPlayerDamage)
+	public void setAllowPlayerDamage(final boolean allowPlayerDamage)
 	{
-		this.allowPlayerDamage = allowPlayerDamage;
+		this.allowPvPDamage = allowPlayerDamage;
 	}
 
-	public final boolean isPlayerHungerAllowed()
-	{
-		return allowHunger;
-	}
-
-	public final void setAllowHunger(final boolean allowHunger)
-	{
-		this.allowHunger = allowHunger;
-	}
-
-	public final String getBuildPermission()
+	public String getBuildPermission()
 	{
 		return buildPermission;
 	}
 
-	public final boolean isLavaFlowAllowed()
+	public boolean isLavaFlowAllowed()
 	{
 		return allowLavaFlow;
 	}
 
-	public final void setAllowLavaFlow(final boolean allowLavaFlow)
+	public void setAllowLavaFlow(final boolean allowLavaFlow)
 	{
 		this.allowLavaFlow = allowLavaFlow;
 	}
 
-	public final boolean isWaterFlowAllowed()
+	public boolean isWaterFlowAllowed()
 	{
 		return allowWaterFlow;
 	}
 
-	public final void setAllowWaterFlow(final boolean allowWaterFlow)
+	public void setAllowWaterFlow(final boolean allowWaterFlow)
 	{
 		this.allowWaterFlow = allowWaterFlow;
 	}
 
-	public final boolean isDragonEggMovementAllowed()
+	public boolean isDragonEggMovementAllowed()
 	{
 		return allowDragonEggMovement;
 	}
 
-	public final void setAllowDragonEggMovement(final boolean allowDragonEggMovement)
+	public void setAllowDragonEggMovement(final boolean allowDragonEggMovement)
 	{
 		this.allowDragonEggMovement = allowDragonEggMovement;
 	}
 
-	public final boolean isSnowMeltingAllowed()
+	public boolean isSnowMeltingAllowed()
 	{
 		return allowSnowMelting;
 	}
 
-	public final void setAllowSnowMelting(final boolean allowSnowMelting)
+	public void setAllowSnowMelting(final boolean allowSnowMelting)
 	{
 		this.allowSnowMelting = allowSnowMelting;
 	}
 
-	public final boolean isIceMeltingAllowed()
+	public boolean isIceMeltingAllowed()
 	{
 		return allowIceMelting;
 	}
 
-	public final void setAllowIceMelting(final boolean allowIceMelting)
+	public void setAllowIceMelting(final boolean allowIceMelting)
 	{
 		this.allowIceMelting = allowIceMelting;
 	}
 
-	public final boolean isSnowFormationAllowed()
+	public boolean isSnowFormationAllowed()
 	{
 		return allowSnowFormation;
 	}
 
-	public final boolean isIceFormationAllowed()
+	public boolean isIceFormationAllowed()
 	{
 		return allowIceFormation;
 	}
 
-	public final boolean isEnchantingAllowed()
+	public boolean isEnchantingAllowed()
 	{
 		return allowEnchanting;
 	}
 
-	public final void setAllowEnchanting(final boolean allowEnchanting)
+	public void setAllowEnchanting(final boolean allowEnchanting)
 	{
 		this.allowEnchanting = allowEnchanting;
 	}
 
-	public final void setAllowSnowFormation(final boolean allowSnowFormation)
+	public void setAllowSnowFormation(final boolean allowSnowFormation)
 	{
 		this.allowSnowFormation = allowSnowFormation;
 	}
 
-	public final void setAllowIceFormation(final boolean allowIceFormation)
+	public void setAllowIceFormation(final boolean allowIceFormation)
 	{
 		this.allowIceFormation = allowIceFormation;
 	}
+
+        public boolean isAllowPvPDamage() 
+        {
+                return allowPvPDamage;
+        }
+
+        public void setAllowPvPDamage(boolean allowPvPDamage) 
+        {
+                this.allowPvPDamage = allowPvPDamage;
+        }
+
+        public boolean isAllowLavaDamage() 
+        {
+                return allowLavaDamage;
+        }
+
+        public void setAllowLavaDamage(boolean allowLavaDamage) 
+        {
+                this.allowLavaDamage = allowLavaDamage;
+        }
+
+        public boolean isAllowCactusDamage() 
+        {
+                return allowCactusDamage;
+        }
+
+        public void setAllowCactusDamage(boolean allowCactusDamage) 
+        {
+                this.allowCactusDamage = allowCactusDamage;
+        }
+
+        public boolean isAllowTnTDamage() 
+        {
+                return allowTnTDamage;
+        }
+
+        public void setAllowTnTDamage(boolean allowTnTDamage) 
+        {
+                this.allowTnTDamage = allowTnTDamage;
+        }
+
+        public boolean isAllowDrowningDamage() 
+        {
+                return allowDrowningDamage;
+        }
+
+        public void setAllowDrowningDamage(boolean allowDrowningDamage) 
+        {
+                this.allowDrowningDamage = allowDrowningDamage;
+        }
+
+        public boolean isAllowExplosiveDamage() 
+        {
+                return allowExplosiveDamage;
+        }
+
+        public void setAllowExplosiveDamage(boolean allowExplosiveDamage) 
+        {
+                this.allowExplosiveDamage = allowExplosiveDamage;
+        }
+
+        public boolean isAllowFallDamage() 
+        {
+                return allowFallDamage;
+        }
+
+        public void setAllowFallDamage(boolean allowFallDamage) 
+        {
+                this.allowFallDamage = allowFallDamage;
+        }
+
+        public boolean isAllowFireDamage() 
+        {
+                return allowFireDamage;
+        }
+
+        public void setAllowFireDamage(boolean allowFireDamage) 
+        {
+                this.allowFireDamage = allowFireDamage;
+        }
+
+        public boolean isAllowPoisonDamage() 
+        {
+                return allowPoisonDamage;
+        }
+
+        public void setAllowPoisonDamage(boolean allowPoisonDamage) 
+        {
+                this.allowPoisonDamage = allowPoisonDamage;
+        }
+
+        public boolean isAllowMagicDamage() 
+        {
+                return allowMagicDamage;
+        }
+
+        public void setAllowMagicDamage(boolean allowMagicDamage)
+        {
+                this.allowMagicDamage = allowMagicDamage;
+        }
+
+        public boolean isAllowProjectileDamage() 
+        {
+                return allowProjectileDamage;
+        }
+
+        public void setAllowProjectileDamage(boolean allowProjectileDamage) 
+        {
+                this.allowProjectileDamage = allowProjectileDamage;
+        }
+
+        public boolean isAllowHungerDamage() 
+        {
+                return allowHungerDamage;
+        }
+
+        public void setAllowHungerDamage(boolean allowHungerDamage) 
+        {
+                this.allowHungerDamage = allowHungerDamage;
+        }
+
+        public boolean isAllowVoidDamage() 
+        {
+                return allowVoidDamage;
+        }
+
+        public void setAllowVoidDamage(boolean allowVoidDamage) 
+        {
+                this.allowVoidDamage = allowVoidDamage;
+        }
+
+        public boolean isAllowFoodChange() 
+        {
+                return allowFoodChange;
+        }
+
+        public void setAllowFoodChange(boolean allowFoodChange) 
+        {
+                this.allowFoodChange = allowFoodChange;
+        }
+
+        public boolean isAllowTntBreakingPaintings() 
+        {
+                return allowTntBreakingPaintings;
+        }
+
+        public void setAllowTntBreakingPaintings(boolean allowTntBreakingPaintings) 
+        {
+                this.allowTntBreakingPaintings = allowTntBreakingPaintings;
+        }
+
+        public boolean isAllowFireTickDamage() 
+        {
+                return allowFireTickDamage;
+        }
+
+        public void setAllowFireTickDamage(boolean allowFireTickDamage) 
+        {
+                this.allowFireTickDamage = allowFireTickDamage;
+        }
+
+        public boolean isAllowLightningDamage() 
+        {
+                return allowLightningDamage;
+        }
+
+        public void setAllowLightningDamage(boolean allowLightningDamage) 
+        {
+                this.allowLightningDamage = allowLightningDamage;
+        }
+
+        public boolean isAllowSuffocationDamage() 
+        {
+                return allowSuffocationDamage;
+        }
+
+        public void setAllowSuffocationDamage(boolean allowSuffocationDamage)
+        {
+                this.allowSuffocationDamage = allowSuffocationDamage;
+        }
+
+        
+        
 
 }

@@ -82,7 +82,7 @@ public class BlockEventListener implements Listener
 			event.setCancelled(true);
 		}
 	}
-
+        
 	@EventHandler
 	public final void onPlayerInteract(final PlayerInteractEvent event)
 	{
@@ -310,7 +310,7 @@ public class BlockEventListener implements Listener
 
 		if (event.getEntity() instanceof Painting)
 		{
-			if (!region.isBreakingPaintingsAllowed())
+			if (!region.isTntBreakingPaintingsAllowed())
 			{
 				event.setCancelled(true);
 			}
