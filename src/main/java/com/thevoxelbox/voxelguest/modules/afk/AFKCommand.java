@@ -1,6 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.afk;
 
-import org.apache.commons.lang.StringUtils;or;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
