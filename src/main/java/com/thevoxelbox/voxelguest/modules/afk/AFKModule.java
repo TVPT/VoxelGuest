@@ -8,7 +8,6 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 /**
@@ -19,8 +18,11 @@ public class AFKModule extends GuestModule
 {
     private AFKCommand afkCommand;
     private PlayerListener afkListener;
-    private static Set<Player> afkPlayers = new HashSet<>();
+    private static Set<String> afkPlayers = new HashSet<>();
     
+    /**
+     *
+     */
     public AFKModule() 
     {
 	setName("AFK");
@@ -55,30 +57,48 @@ public class AFKModule extends GuestModule
     @Override
     public final Set<Listener> getListeners()
     {
-	final HashSet<Listener> listeners = new HashSet<>();
+	final Set<Listener> listeners = new HashSet<>();
 	listeners.add(afkListener);
 
 	return listeners;
     }
     
-    public final void toggleAFK(Player player) {
-	if (isAFK(player))
+    /**
+     * Toggles a users AFK status
+     * @param name Name of the player to check
+     * @param message AFK message
+     */
+    public final void toggleAFK(String name, String message) 
+    {
+	if (isAFK(name))
 	{
-	    afkPlayers.remove(player);
+	    afkPlayers.remove(name);
 	}
 	else
 	{
-	    afkPlayers.add(player);
+	    afkPlayers.add(name);
 	}
+	
+	broadcastAFKMessage(name, message);
     }
 
-    public final boolean isAFK(Player player) {
-	return afkPlayers.contains(player);
+    /**
+     * Checks if a player is AFK
+     * @param name Name of the player to check
+     * @return Whether the player is AFK
+     */
+    public final boolean isAFK(String name) 
+    {
+	return afkPlayers.contains(name);
     }
     
-    public final void broadcastAFKMessage(Player player, String message)
+    /**
+     * Broadcasts a formatted AFK message
+     * @param name Name of the player
+     * @param message Message to broadcast, if empty, defaults to "has gone AFK"
+     */
+    public final void broadcastAFKMessage(String name, String message)
     {
-	String name = player.getName();
 	String reason = message;
 	
 	if (reason.equalsIgnoreCase("") || reason.equalsIgnoreCase(" "))

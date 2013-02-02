@@ -24,29 +24,26 @@ public class PlayerListener implements Listener
     @EventHandler
     public final void onPlayerQuit(PlayerQuitEvent event)
     {
-        checkAFK(event.getPlayer());
+        checkAFK(event.getPlayer().getName());
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
     public final void onPlayerChat(AsyncPlayerChatEvent event)
     {
-	checkAFK(event.getPlayer());
+	checkAFK(event.getPlayer().getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public final void onPlayerMove(PlayerMoveEvent event)
     {
-	checkAFK(event.getPlayer());
+	checkAFK(event.getPlayer().getName());
     }
     
-    private void checkAFK(Player player)
+    private void checkAFK(String name)
     {
-	if (afkModule.isAFK(player))
+	if (afkModule.isAFK(name))
 	{
-	    afkModule.toggleAFK(player);
-	    
-	    afkModule.broadcastAFKMessage(player, "returned");
-	    
+	    afkModule.toggleAFK(name, "has returned");
 	}
     }	  
 }

@@ -14,23 +14,30 @@ public class AFKCommand implements CommandExecutor
 {
     private AFKModule afkModule;
     
-    public AFKCommand(AFKModule afkModule) {
+    /**
+     *
+     * @param afkModule
+     */
+    public AFKCommand(AFKModule afkModule) 
+    {
 	this.afkModule = afkModule;
     }
 
+    /**
+     * @see org.bukkit.command.CommandExecutor
+     */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) 
+    {
 	if (!(sender instanceof Player))
 	{
 	    sender.sendMessage("You can't go afk in the console!");
 	    return true;
 	}
 	
-	Player player = (Player) sender;
+	String name = sender.getName();
 	
-	afkModule.broadcastAFKMessage(player, (afkModule.isAFK(player) ? "has returned" : StringUtils.join(args, " ")));
-	
-	afkModule.toggleAFK(player);
+	afkModule.toggleAFK(name, (afkModule.isAFK(name) ? "has returned" : StringUtils.join(args, " ")));
 	
 	return true;
 
