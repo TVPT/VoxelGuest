@@ -25,6 +25,11 @@ public class UnmuteCommandExecutor implements CommandExecutor
 	@Override
 	public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
 	{
+		if(!commandSender.hasPermission("voxelguest.asshat.unmute")) {
+			commandSender.sendMessage("You don't have permissions.");
+			return true;
+		}
+
 		if (args.length < 1)
 		{
 			commandSender.sendMessage("You need to specify the name of the player to unmute.");

@@ -38,18 +38,14 @@ public class Persistence
                 .setProperty("hibernate.connection.driver_class", "org.sqlite.JDBC")
                 .setProperty("hibernate.connection.url", "jdbc:sqlite:" + file.getPath())
                 .setProperty("hibernate.hbm2ddl.auto", "update");
-
-        rebuildSessionFactory();
     }
 
     public void registerPersistentClass(Class<?> persistentClass)
     {
         configuration.addAnnotatedClass(persistentClass);
-
-        rebuildSessionFactory();
     }
 
-    private void rebuildSessionFactory()
+    public void rebuildSessionFactory()
     {
         ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);
@@ -68,7 +64,7 @@ public class Persistence
 
     public void saveAll(List<Object> objects)
     {
-        Session session = sessionFactory.openSession();
+	    Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         for (Object object : objects)
@@ -76,13 +72,13 @@ public class Persistence
             session.saveOrUpdate(object);
         }
 
-        session.getTransaction().commit();
+	    session.getTransaction().commit();
         session.close();
     }
 
     public Object load(Class<?> clazz, Serializable id)
     {
-        Session session = sessionFactory.openSession();
+	    Session session = sessionFactory.openSession();
 
         Object result = session.load(clazz, id);
 
@@ -93,7 +89,7 @@ public class Persistence
 
     public List<Object> loadAll(Class<?> clazz)
     {
-        Session session = sessionFactory.openSession();
+	    Session session = sessionFactory.openSession();
 
         final List result = session.createCriteria(clazz).list();
 
@@ -104,7 +100,7 @@ public class Persistence
 
     public List<Object> loadAll(Class<?> clazz, Criterion... criterion)
     {
-        Session session = sessionFactory.openSession();
+	    Session session = sessionFactory.openSession();
 
         final Criteria criteria = session.createCriteria(clazz);
         for (Criterion currentCriterion : criterion)
@@ -120,7 +116,7 @@ public class Persistence
 
     public void delete(final Object greylistee)
     {
-        Session session = sessionFactory.openSession();
+	    Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         session.delete(greylistee);

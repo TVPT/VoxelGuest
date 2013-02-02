@@ -3,7 +3,6 @@ package com.thevoxelbox.voxelguest.modules.greylist;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.configuration.annotations.ConfigurationGetter;
@@ -36,13 +35,21 @@ public class GreylistModule extends GuestModule
         greylistListener = new GreylistListener(this);
         greylistCommandExecutor = new GreylistCommandExecutor(this);
         ungreylistCommandExecutor = new UngreylistCommandExecutor(this);
+
+	    Persistence.getInstance().registerPersistentClass(Greylistee.class);
+    }
+
+    @Override
+    public Object getConfiguration()
+    {
+        return this;
     }
 
     @Override
     public void onEnable()
     {
+
         super.onEnable();
-        Persistence.getInstance().registerPersistentClass(Greylistee.class);
     }
 
     @Override
@@ -54,10 +61,11 @@ public class GreylistModule extends GuestModule
     }
 
     @Override
-    public Map<String, CommandExecutor> getCommandMappings()
+    public HashMap<String, CommandExecutor> getCommandMappings()
     {
         HashMap<String, CommandExecutor> commandMapping = new HashMap<>();
-        commandMapping.put("greylist", null);
+        commandMapping.put("greylist", greylistCommandExecutor);
+        commandMapping.put("ungreylist", ungreylistCommandExecutor);
         return commandMapping;
     }
 

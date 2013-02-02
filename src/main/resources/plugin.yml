@@ -4,3 +4,33 @@ authors: [MikeMatrix, Monofraps, thedeadlybutter]
 version: ${project.version}
 website: ${project.url}
 description: ${project.description}
+commands:
+  greylist:
+    aliases: [graylist]
+    permission: voxelguest.greylist.greylist
+  ungreylist:
+    aliases: [ungraylist]
+    permission: voxelguest.greylist.ungreylist
+  vgregion:
+    permission: voxelguest.regions.modifyregion
+  ban:
+    aliases: [vban]
+    permission: voxelguest.asshat.ban
+  freeze:
+    aliases: [vfreeze]
+    permission: voxelguest.asshat.freeze
+  kick:
+    aliases: [vkick]
+    permission: voxelguest.asshat.kick
+  mute:
+    aliases: [vmute]
+    permission: voxelguest.asshat.mute
+  soapbox:
+    aliases: [vsoapbox]
+    permission: voxelguest.asshat.soapbox
+  unban:
+    aliases: [vunban]
+    permission: voxelguest.asshat.unban
+  unmute:
+    aliases: [vunmute]
+    permission: voxelguest.asshat.unmute

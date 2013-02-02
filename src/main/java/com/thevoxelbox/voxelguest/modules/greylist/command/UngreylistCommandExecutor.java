@@ -27,7 +27,7 @@ public class UngreylistCommandExecutor implements CommandExecutor
         Preconditions.checkNotNull(command);
         Preconditions.checkNotNull(args);
 
-        if (sender.hasPermission("voxelguest.greylist.greylist"))
+        if (sender.hasPermission("voxelguest.greylist.ungreylist"))
         {
             if (args.length == 1)
             {

@@ -25,6 +25,11 @@ public class UnbanCommandExecutor implements CommandExecutor
 	@Override
 	public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
 	{
+		if(!commandSender.hasPermission("voxelguest.asshat.unban")) {
+			commandSender.sendMessage("You don't have permissions.");
+			return true;
+		}
+
 		if (args.length < 1)
 		{
 			commandSender.sendMessage("You need to specify the name of the player to unban.");

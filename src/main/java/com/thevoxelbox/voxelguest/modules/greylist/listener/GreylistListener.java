@@ -6,7 +6,7 @@ import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 /**
  * @author MikeMatrix
@@ -21,7 +21,7 @@ public class GreylistListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent event)
+    public void onPlayerLogin(final PlayerLoginEvent event)
     {
         Preconditions.checkNotNull(event);
 
@@ -33,7 +33,7 @@ public class GreylistListener implements Listener
         final Player player = event.getPlayer();
         if(!player.hasPermission("voxelguest.greylist.override") && !greylistModule.isOnPersistentGreylist(player.getName()))
         {
-            player.kickPlayer(greylistModule.getNotGreylistedKickMessage());
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, greylistModule.getNotGreylistedKickMessage());
         }
     }
 }

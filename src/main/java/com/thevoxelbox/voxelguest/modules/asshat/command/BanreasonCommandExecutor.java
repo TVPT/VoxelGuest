@@ -24,6 +24,11 @@ public class BanreasonCommandExecutor implements CommandExecutor
 	@Override
 	public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
 	{
+		if(!commandSender.hasPermission("voxelguest.asshat.banreason")) {
+			commandSender.sendMessage("You don't have permissions.");
+			return true;
+		}
+
 		if (args.length < 1)
 		{
 			commandSender.sendMessage("Invalid number of parameters.");
