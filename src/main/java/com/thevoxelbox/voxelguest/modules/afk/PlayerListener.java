@@ -5,9 +5,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
  *
@@ -45,7 +49,31 @@ public class PlayerListener implements Listener
     {
 	checkAFK(event.getPlayer().getName(), true);
     }
-
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public final void onPlayerInteract(PlayerInteractEvent event)
+    {
+	checkAFK(event.getPlayer().getName(), true);
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public final void onPlayerDropEvent(PlayerDropItemEvent event)
+    {
+	checkAFK(event.getPlayer().getName(), true);
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public final void onEggThrowEvent(PlayerEggThrowEvent event)
+    {
+	checkAFK(event.getPlayer().getName(), true);
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public final void onPlayerRespawnEvent(PlayerRespawnEvent event)
+    {
+	checkAFK(event.getPlayer().getName(), true);
+    }
+    
     private void checkAFK(String name, boolean broadcast)
     {
 	if (afkModule.isAFK(name))
