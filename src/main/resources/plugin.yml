@@ -37,3 +37,9 @@ commands:
   unmute:
     aliases: [vunmute]
     permission: voxelguest.asshat.unmute
+  spawn:
+    aliases: [gotospawn, spawnpoint]
+    permission: voxelguest.spawn
+  setspawn:
+    aliases: [spawnset, spawnpointset, setspawnpoint]
+    permission: voxelguest.spawn.set
