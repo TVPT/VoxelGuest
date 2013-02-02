@@ -8,6 +8,8 @@ commands:
   greylist:
     aliases: [graylist]
     permission: voxelguest.greylist.greylist
+  afk:
+    aliases: [awayfromkeyboard]
   ungreylist:
     aliases: [ungraylist]
     permission: voxelguest.greylist.ungreylist
