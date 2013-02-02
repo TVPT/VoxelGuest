@@ -1,6 +1,6 @@
 name: ${project.name}
 main: com.thevoxelbox.voxelguest.VoxelGuest
-authors: [MikeMatrix, Monofraps, thedeadlybutter]
+authors: [MikeMatrix, Monofraps, thedeadlybutter, keto23]
 version: ${project.version}
 website: ${project.url}
 description: ${project.description}
@@ -8,6 +8,9 @@ commands:
   greylist:
     aliases: [graylist, gl]
     permission: voxelguest.greylist.greylist
+  afk:
+    aliases: [awayfromkeyboard]
+    permission: voxelguest.afk
   ungreylist:
     aliases: [ungraylist, ugl]
     permission: voxelguest.greylist.ungreylist
