@@ -65,7 +65,7 @@ public class AFKModule extends GuestModule
     
     /**
      * Toggles a users AFK status
-     * @param name Name of the player to check
+     * @param name Name of the player to toggle AFK status on
      * @param message AFK message
      */
     public final void toggleAFK(String name, String message) 
@@ -82,6 +82,24 @@ public class AFKModule extends GuestModule
 	broadcastAFKMessage(name, message);
     }
 
+    
+    /**
+     * Toggles a players AFK status without broadcasting it
+     * @param name Name of the player to toggle AFK status on
+     */
+    public final void silentToggleAFK(String name)
+    {
+	if (isAFK(name))
+	{
+	    afkPlayers.remove(name);
+	}
+	else
+	{
+	    afkPlayers.add(name);
+	}
+    }
+    
+    
     /**
      * Checks if a player is AFK
      * @param name Name of the player to check
