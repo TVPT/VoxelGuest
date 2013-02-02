@@ -1,7 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.afk;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,33 +24,29 @@ public class PlayerListener implements Listener
     @EventHandler
     public final void onPlayerQuit(PlayerQuitEvent event)
     {
-        if (afkModule.isAFK(event.getPlayer()))
-	{
-	    afkModule.toggleAFK(event.getPlayer());
-	}
+        checkAFK(event.getPlayer());
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
     public final void onPlayerChat(AsyncPlayerChatEvent event)
     {
-	if (afkModule.isAFK(event.getPlayer()))
-	{
-	    afkModule.toggleAFK(event.getPlayer());
-	    
-	    Bukkit.getServer().broadcastMessage(ChatColor.DARK_AQUA + event.getPlayer().getName() + ChatColor.DARK_GRAY + " has returned");
-	}
+	checkAFK(event.getPlayer());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public final void onPlayerMove(PlayerMoveEvent event)
     {
-	if (afkModule.isAFK(event.getPlayer()))
-	{
-	    afkModule.toggleAFK(event.getPlayer());
-	    
-	    Bukkit.getServer().broadcastMessage(ChatColor.DARK_AQUA + event.getPlayer().getName() + ChatColor.DARK_GRAY + " has returned");
-	}
+	checkAFK(event.getPlayer());
     }
     
-    
+    private void checkAFK(Player player)
+    {
+	if (afkModule.isAFK(player))
+	{
+	    afkModule.toggleAFK(player);
+	    
+	    afkModule.broadcastAFKMessage(player, "returned");
+	    
+	}
+    }	  
 }

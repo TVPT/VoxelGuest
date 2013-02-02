@@ -1,8 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.afk;
 
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.apache.commons.lang.StringUtils;or;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,21 +28,7 @@ public class AFKCommand implements CommandExecutor
 	
 	Player player = (Player) sender;
 	
-	if (!afkModule.isAFK(player))
-	{
-	    if (args.length == 0)
-	    {
-		afkModule.broadcastAFKMessage(player, "");
-	    }
-	    else
-	    {
-		afkModule.broadcastAFKMessage(player, StringUtils.join(args, " "));
-	    }
-	}
-	else
-	{
-	    afkModule.broadcastAFKMessage(player, "has returned");
-	}
+	afkModule.broadcastAFKMessage(player, (afkModule.isAFK(player) ? "has returned" : StringUtils.join(args, " ")));
 	
 	afkModule.toggleAFK(player);
 	

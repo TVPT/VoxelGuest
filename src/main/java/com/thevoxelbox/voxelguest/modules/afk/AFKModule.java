@@ -19,7 +19,7 @@ public class AFKModule extends GuestModule
 {
     private AFKCommand afkCommand;
     private PlayerListener afkListener;
-    private Set<Player> afkPlayers = new HashSet<>();
+    private static Set<Player> afkPlayers = new HashSet<>();
     
     public AFKModule() 
     {
@@ -81,7 +81,7 @@ public class AFKModule extends GuestModule
 	String name = player.getName();
 	String reason = message;
 	
-	if (reason.equalsIgnoreCase(""))
+	if (reason.equalsIgnoreCase("") || reason.equalsIgnoreCase(" "))
 	{
 	    reason = "has gone AFK";
 	}
