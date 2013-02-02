@@ -13,11 +13,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
  *
  * @author keto23
  */
-public class AFKListener implements Listener
+public class PlayerListener implements Listener
 {
     private AFKModule afkModule; 
 	    
-    public AFKListener(AFKModule afkModule)
+    public PlayerListener(AFKModule afkModule)
     {
 	this.afkModule = afkModule;
     }
@@ -25,18 +25,18 @@ public class AFKListener implements Listener
     @EventHandler
     public final void onPlayerQuit(PlayerQuitEvent event)
     {
-        if (afkModule.afkList.isAFK(event.getPlayer()))
+        if (afkModule.isAFK(event.getPlayer()))
 	{
-	    afkModule.afkList.toggleAFK(event.getPlayer());
+	    afkModule.toggleAFK(event.getPlayer());
 	}
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
     public final void onPlayerChat(AsyncPlayerChatEvent event)
     {
-	if (afkModule.afkList.isAFK(event.getPlayer()))
+	if (afkModule.isAFK(event.getPlayer()))
 	{
-	    afkModule.afkList.toggleAFK(event.getPlayer());
+	    afkModule.toggleAFK(event.getPlayer());
 	    
 	    Bukkit.getServer().broadcastMessage(ChatColor.DARK_AQUA + event.getPlayer().getName() + ChatColor.DARK_GRAY + " has returned");
 	}
@@ -45,9 +45,9 @@ public class AFKListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public final void onPlayerMove(PlayerMoveEvent event)
     {
-	if (afkModule.afkList.isAFK(event.getPlayer()))
+	if (afkModule.isAFK(event.getPlayer()))
 	{
-	    afkModule.afkList.toggleAFK(event.getPlayer());
+	    afkModule.toggleAFK(event.getPlayer());
 	    
 	    Bukkit.getServer().broadcastMessage(ChatColor.DARK_AQUA + event.getPlayer().getName() + ChatColor.DARK_GRAY + " has returned");
 	}

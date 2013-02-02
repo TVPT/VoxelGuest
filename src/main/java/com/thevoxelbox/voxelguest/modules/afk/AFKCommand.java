@@ -30,23 +30,23 @@ public class AFKCommand implements CommandExecutor
 	
 	Player player = (Player) sender;
 	
-	if (!afkModule.afkList.isAFK(player))
+	if (!afkModule.isAFK(player))
 	{
 	    if (args.length == 0)
 	    {
-		Bukkit.broadcastMessage(ChatColor.DARK_AQUA + player.getName() + ChatColor.DARK_GRAY + " has gone AFK");
+		afkModule.broadcastAFKMessage(player, "");
 	    }
 	    else
 	    {
-		Bukkit.broadcastMessage(ChatColor.DARK_AQUA + player.getName() + ChatColor.DARK_GRAY + " " + ChatColor.translateAlternateColorCodes('&', StringUtils.join(args, " ")));
+		afkModule.broadcastAFKMessage(player, StringUtils.join(args, " "));
 	    }
 	}
 	else
 	{
-	    Bukkit.broadcastMessage(ChatColor.DARK_AQUA + player.getName() + ChatColor.DARK_GRAY + " has returned");
+	    afkModule.broadcastAFKMessage(player, "has returned");
 	}
 	
-	afkModule.afkList.toggleAFK(player);
+	afkModule.toggleAFK(player);
 	
 	return true;
 

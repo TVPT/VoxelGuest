@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 /**
@@ -14,9 +17,9 @@ import org.bukkit.event.Listener;
  */
 public class AFKModule extends GuestModule 
 {
-    public AFKList afkList;
     private AFKCommand afkCommand;
-    private AFKListener afkListener;
+    private PlayerListener afkListener;
+    private Set<Player> afkPlayers = new HashSet<>();
     
     public AFKModule() 
     {
@@ -26,9 +29,8 @@ public class AFKModule extends GuestModule
     @Override
     public final void onEnable()
     {
-	afkList = new AFKList();
 	afkCommand = new AFKCommand(this);
-	afkListener = new AFKListener(this);
+	afkListener = new PlayerListener(this);
 	
 	super.onEnable();
     }
@@ -36,7 +38,7 @@ public class AFKModule extends GuestModule
     @Override
     public final void onDisable()
     {
-	afkList.clear();
+	afkPlayers.clear();
 	
 	super.onDisable();
     }
@@ -57,5 +59,33 @@ public class AFKModule extends GuestModule
 	listeners.add(afkListener);
 
 	return listeners;
+    }
+    
+    public final void toggleAFK(Player player) {
+	if (isAFK(player))
+	{
+	    afkPlayers.remove(player);
+	}
+	else
+	{
+	    afkPlayers.add(player);
+	}
+    }
+
+    public final boolean isAFK(Player player) {
+	return afkPlayers.contains(player);
+    }
+    
+    public final void broadcastAFKMessage(Player player, String message)
+    {
+	String name = player.getName();
+	String reason = message;
+	
+	if (reason.equalsIgnoreCase(""))
+	{
+	    reason = "has gone AFK";
+	}
+	
+	Bukkit.broadcastMessage(String.format(ChatColor.DARK_AQUA + "%s" + ChatColor.DARK_GRAY + "%s", name, reason));
     }
 }
