@@ -49,6 +49,12 @@ public class AFKModule extends GuestModule
 	
 		super.onDisable();
     }
+
+	@Override
+	public String getConfigFileName()
+	{
+		return "afk";
+	}
    
     @Override
     public final Object getConfiguration()
@@ -86,7 +92,7 @@ public class AFKModule extends GuestModule
 
 	/**
 	 *
-	 * @return Leave afk format    .
+	 * @return Leave afk format.
 	 */
     @ConfigurationGetter("leave-afk-format")
     public final String getLeaveAfkFormat()

@@ -35,6 +35,6 @@ public class SetSpawnCommand implements CommandExecutor
 		spawnModule.setSpawnLocation(player.getLocation());
 
 		player.sendMessage(ChatColor.AQUA + "Spawn location set");
-		return false;
+		return true;
 	}
 }
