@@ -25,7 +25,7 @@ public class SetSpawnCommand implements CommandExecutor
 	{
 		if (!(commandSender instanceof Player))
 		{
-			commandSender.sendMessage("You can't set the spawn location from the console! Silly :P");
+			commandSender.sendMessage("You can't set the spawn location from the console!");
 			return true;
 		}
 

@@ -29,7 +29,7 @@ public class SpawnCommand implements CommandExecutor
 	{
 		if (!(commandSender instanceof Player))
 		{
-			commandSender.sendMessage("You can't teleport to spawn from the console! Derp!");
+			commandSender.sendMessage("You can't set the spawn location from the console!");
 			return true;
 		}
 
