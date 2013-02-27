@@ -48,12 +48,12 @@ public class LagMeterHelperThread extends Thread
         if (this.activePlayers.contains(player))
         {
             this.setPlayerWatchState(player, false);
-            player.sendMessage(ChatColor.GRAY + "Your experence bar will nolonger reperesnts the servers TPS.");
+            player.sendMessage(ChatColor.GRAY + "Your experience bar will no longer represent the server's TPS.");
         }
         else
         {
             this.setPlayerWatchState(player, true);
-            player.sendMessage(ChatColor.GRAY + "Your experence bar will now reperesnt the servers TPS.");
+            player.sendMessage(ChatColor.GRAY + "Your experience bar will now represent the server's TPS.");
         }
     }
     
