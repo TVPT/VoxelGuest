@@ -509,6 +509,27 @@ public class BlockEventListener implements Listener
             }
             return;
         }
+        
+    @EventHandler
+    public final void onPaintingBreak(final HangingBreakEvent event)
+    {
+        final Location eventLoc = event.getEntity().getLocation();
+        final Region region = this.regionModule.getRegionManager().getRegionAtLoc(eventLoc);
+
+        if (region != null)
+        {
+            if (!region.isBuildingRestricted())
+            {
+                if (event.getRemover() instanceof Player)
+                {
+                    if (!this.regionModule.getRegionManager().canPlayerModify((Player) event.getRemover(), event.getEntity().getLocation()))
+                    {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+            return;
+        }
         event.setCancelled(true);
         return;
     }
