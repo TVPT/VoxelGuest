@@ -387,6 +387,8 @@ public class BlockEventListener implements Listener
             return;
         case LEVER:
             return;
+        case PAINTING:
+            return;
         case STONE_BUTTON:
             return;
         case WATER:
@@ -507,7 +509,7 @@ public class BlockEventListener implements Listener
                     }
                 }
             }
-            return;
+        return;
         }
         
     @EventHandler
@@ -528,7 +530,7 @@ public class BlockEventListener implements Listener
                     }
                 }
             }
-            return;
+        return;
         }
         event.setCancelled(true);
         return;
