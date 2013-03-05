@@ -394,8 +394,6 @@ public class BlockEventListener implements Listener
             return;
         case LEVER:
             return;
-        case PAINTING:
-            return;
         case STONE_BUTTON:
             return;
         case WATER:
@@ -510,11 +508,10 @@ public class BlockEventListener implements Listener
     if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_BLOCK))
     {
       if ((event.getClickedBlock().getType() != null) && (event.getClickedBlock().getType() == Material.DRAGON_EGG))
-      {
-        if (!p.hasPermission("VoxelGuest.Regions.Eggport"))
-      }
+        {
         event.setCancelled(true);
         return;
+        }
     }
 
     @EventHandler
