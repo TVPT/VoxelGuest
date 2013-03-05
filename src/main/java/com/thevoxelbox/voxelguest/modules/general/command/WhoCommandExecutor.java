@@ -112,7 +112,7 @@ public class WhoCommandExecutor implements CommandExecutor
                             continue;
                         }
                     }
-                    if (perms.playerInGroup(player, groupName))
+                    if (perms.getPrimaryGroup(player).equals(groupName))
                     {
                         groupCount.put(groupName, groupCount.get(groupName) + 1);
                     }
@@ -199,9 +199,9 @@ public class WhoCommandExecutor implements CommandExecutor
             for (Player player : Bukkit.getOnlinePlayers())
             {
                 final String groupName = perms.getPrimaryGroup(player);
-                if (groupPlayerMap.containsKey(groupName))
+                if (!groupPlayerMap.containsKey(groupName))
                 {
-                    List<Player> newGroupList = new ArrayList<>();
+                    final List<Player> newGroupList = new ArrayList<>();
                     newGroupList.add(player);
                     groupPlayerMap.put(groupName, newGroupList);
                 }

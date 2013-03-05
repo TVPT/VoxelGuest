@@ -1,14 +1,18 @@
 package com.thevoxelbox.voxelguest.modules.helper;
 
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.thevoxelbox.voxelguest.VoxelGuest;
 
 /**
  *
  * @author TheCryoknight
  */
 @DatabaseTable(tableName = "helpers")
-public final class Helper
+public final class Helper implements MetadataValue
 {
     @DatabaseField(generatedId = true)
     private long id;
@@ -76,6 +80,71 @@ public final class Helper
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Object value()
+    {
+        return null;
+    }
+
+    @Override
+    public int asInt()
+    {
+        return 0;
+    }
+
+    @Override
+    public float asFloat()
+    {
+        return 0;
+    }
+
+    @Override
+    public double asDouble()
+    {
+        return 0;
+    }
+
+    @Override
+    public long asLong()
+    {
+        return 0;
+    }
+
+    @Override
+    public short asShort()
+    {
+        return 0;
+    }
+
+    @Override
+    public byte asByte()
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean asBoolean()
+    {
+        return true;
+    }
+
+    @Override
+    public String asString()
+    {
+        return "This player is a helper";
+    }
+
+    @Override
+    public Plugin getOwningPlugin()
+    {
+        return VoxelGuest.getPluginInstance();
+    }
+
+    @Override
+    public void invalidate()
+    {
     }
 }
 

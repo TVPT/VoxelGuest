@@ -35,7 +35,7 @@ public class HelperReviewCommand implements TabExecutor
                     if (args[0].equalsIgnoreCase("-c"))
                     {
                         String comment = "";
-                        for (int i = 1; i > args.length; i++)
+                        for (int i = 1; i < args.length; i++)
                         {
                             comment += args[i];
                             comment += " ";
@@ -81,10 +81,31 @@ public class HelperReviewCommand implements TabExecutor
                         final ReviewRequest review = this.module.getManager().getReview(guest);
                         if (review != null)
                         {
-                            player.teleport(review.getLoc());
-                            guest.teleport(player);
-                            this.module.getManager().closeReview(player, review);
-                            this.module.getManager().sendHelperGuestHistory(player, guest.getName());
+                            if (args.length > 2)
+                            {
+                                if (args[1].equalsIgnoreCase("-f"))
+                                {
+                                    player.teleport(review.getLoc());
+                                    if (guest.isOnline())
+                                    {
+                                        guest.teleport(player);
+                                    }
+                                    this.module.getManager().closeReview(player, review);
+                                    this.module.getManager().sendHelperGuestHistory(player, guest.getName());
+                                    return true;
+                                }
+                            }
+                            if (guest.isOnline())
+                            {
+                                player.teleport(review.getLoc());
+                                guest.teleport(player);
+                                this.module.getManager().closeReview(player, review);
+                                this.module.getManager().sendHelperGuestHistory(player, guest.getName());
+                            }
+                            else
+                            {
+                                player.sendMessage(ChatColor.GRAY + "Guest is not online, please append a -f to force close the ticket.");
+                            }
                             return true;
                         }
                         else

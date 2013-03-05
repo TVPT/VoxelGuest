@@ -59,7 +59,7 @@ public final class HelperManager
     {
         for (ReviewRequest review : this.activeReviews)
         {
-            if (review.getGuest().equals(guest))
+            if (review.getGuest().getName().equals(guest.getName()))
             {
                 return review;
             }
@@ -219,17 +219,18 @@ public final class HelperManager
         }
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
-        stringBuilder.append(ChatColor.DARK_AQUA + "Whitelist Requests\n");
+        stringBuilder.append(ChatColor.GOLD + "Whitelist Requests\n");
         for (ReviewRequest request : this.activeReviews)
         {
-            if (request.getGuest().isOnline())
+            if (!request.getGuest().isOnline())
             {
-                stringBuilder.append(ChatColor.GREEN + "Name" + ChatColor.WHITE + ": "
-                        + ChatColor.DARK_AQUA + request.getGuest().getName()
-                        + ChatColor.DARK_GRAY + "(" + ChatColor.GOLD
-                        + this.getGuestHistory(request.getGuest().getName()).size()
-                        + ChatColor.DARK_GRAY + ")\n");
+                stringBuilder.append(ChatColor.STRIKETHROUGH);
             }
+            stringBuilder.append(ChatColor.DARK_AQUA + "Name" + ChatColor.WHITE + ": "
+                    + ChatColor.DARK_AQUA + request.getGuest().getName()
+                    + ChatColor.DARK_GRAY + "(" + ChatColor.GOLD
+                    + this.getGuestHistory(request.getGuest().getName()).size()
+                    + ChatColor.DARK_GRAY + ")\n");
         }
         stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
         return stringBuilder.toString();
@@ -372,7 +373,7 @@ public final class HelperManager
         }
         if (this.isNonAdminHelper(player))
         {
-            player.setMetadata("isHelper", null);
+            player.setMetadata("isHelper", this.getHelper(player));
         }
     }
 }

@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
  *
  * @author TheCryoknight
  */
-@DatabaseTable(tableName = "afk-messages")
+@DatabaseTable(tableName = "afkMessages")
 public class AfkMessage
 {
     @DatabaseField(generatedId = true)

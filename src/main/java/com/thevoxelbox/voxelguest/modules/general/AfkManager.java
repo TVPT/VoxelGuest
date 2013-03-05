@@ -44,14 +44,15 @@ public class AfkManager
     /**
      * Toggles the specified players afk state.
      *
-     * @param player
+     * @param player Player toggleing their state
+     * @param message the message to provide if player is going afk
      */
     public void toggleAfk(final Player player, final String message)
     {
         if (this.playersAfk.contains(player.getName()))
         {
             this.setPlayerAfk(player, false);
-            Bukkit.broadcastMessage(ChatColor.DARK_AQUA + player.getName() + ChatColor.DARK_GRAY + " has returned");
+            this.broadcastAfk(player.getName(), "", false);
             return;
         }
         this.setPlayerAfk(player, true);
@@ -73,7 +74,7 @@ public class AfkManager
     {
         if(isAfk)
         {
-            if (message.equals(""))
+            if (!message.isEmpty())
             {
                 Bukkit.broadcastMessage(ChatColor.DARK_AQUA + pName + ChatColor.DARK_GRAY + message);
                 return;

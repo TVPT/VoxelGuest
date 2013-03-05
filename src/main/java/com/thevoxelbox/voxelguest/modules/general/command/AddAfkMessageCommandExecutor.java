@@ -16,7 +16,7 @@ public class AddAfkMessageCommandExecutor implements CommandExecutor
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args)
     {
-        if (args.length <= 1)
+        if (args.length >= 1)
         {
             Persistence.getInstance().save(new AfkMessage(this.compileArgs(args)));
             sender.sendMessage(ChatColor.GRAY + "Message sucessfully added!");

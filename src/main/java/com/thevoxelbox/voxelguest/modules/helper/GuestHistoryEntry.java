@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
  *
  * @author TheCryoknight
  */
-@DatabaseTable(tableName = "review-history")
+@DatabaseTable(tableName = "reviewHistory")
 public final class GuestHistoryEntry implements Comparable<GuestHistoryEntry>
 {
     @DatabaseField(generatedId = true)

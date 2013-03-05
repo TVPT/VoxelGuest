@@ -29,7 +29,7 @@ public class HelperCommand implements TabExecutor
     public boolean onCommand(final CommandSender sender, final Command command,
             final String label, final String[] args)
     {
-        if (args.length <= 2)
+        if (args.length >= 2)
         {
             if (args[0].equalsIgnoreCase("-add"))
             {
@@ -65,7 +65,7 @@ public class HelperCommand implements TabExecutor
                     if (oldHelper != null)
                     {
                         this.module.getManager().removeHelper(oldHelper);
-                        sender.sendMessage(ChatColor.GRAY + "Sucessfully added!");
+                        sender.sendMessage(ChatColor.GRAY + "Sucessfully removed!");
                         return true;
                     }
                     else
@@ -91,7 +91,7 @@ public class HelperCommand implements TabExecutor
         }
         else
         {
-            sender.sendMessage(ChatColor.DARK_RED + "Invalid Syntax!");
+            sender.sendMessage(ChatColor.RED + "Invalid Syntax!");
             return true;
         }
         return false;

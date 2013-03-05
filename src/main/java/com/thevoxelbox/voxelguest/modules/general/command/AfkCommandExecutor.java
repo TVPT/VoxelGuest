@@ -29,21 +29,18 @@ public class AfkCommandExecutor implements CommandExecutor
         if (sender instanceof Player)
         {
             Player player = (Player) sender;
-            if (this.module.getAfkManager().isPlayerAfk(player))
+            if (args.length != 0)
             {
-                if (args.length != 0)
+                String afkMsg = "";
+                for (final String arg : args)
                 {
-                    String afkMsg = "";
-                    for (final String arg : args)
-                    {
-                        afkMsg += " ";
-                        afkMsg += arg;
-                    }
-                    this.module.getAfkManager().toggleAfk(player, afkMsg);
-                    return true;
+                    afkMsg += " ";
+                    afkMsg += arg;
                 }
-                this.module.getAfkManager().toggleAfk(player, "");
+                this.module.getAfkManager().toggleAfk(player, afkMsg);
+                return true;
             }
+            this.module.getAfkManager().toggleAfk(player, "");
             return true;
         }
         return false;

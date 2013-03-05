@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelguest.modules.regions.listener;
 
 import java.util.List;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.modules.regions.Region;
@@ -13,6 +14,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
@@ -490,6 +498,24 @@ public class BlockEventListener implements Listener
         }
         return;
     }
+    @EventHandler
+    public void onPlayerInteractEvent(PlayerInteractEvent event)
+    {
+    final Location eventLoc = event.getLocation();
+    final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+    if (regions.isEmpty())
+    Player p = event.getPlayer();
+    
+    if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_BLOCK))
+    {
+      if ((event.getClickedBlock().getType() != null) && (event.getClickedBlock().getType() == Material.DRAGON_EGG))
+      {
+        if (!p.hasPermission("VoxelGuest.Regions.Eggport"))
+      }
+        event.setCancelled(true);
+        return;
+    }
+  }
 
     @EventHandler
     public final void onPaintingBreak(final HangingBreakByEntityEvent event)

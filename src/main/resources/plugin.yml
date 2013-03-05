@@ -50,7 +50,7 @@ commands:
     permission: voxelguest.asshat.unban
     description: Unbans a player
   unmute:
-    aliases: [vunmute]
+    aliases: [vunmute, ungag, vungag]
     permission: voxelguest.asshat.unmute
     description: Unmutes a player
   who:

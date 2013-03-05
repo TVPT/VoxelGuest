@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelguest;
 
+import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
@@ -8,6 +9,8 @@ import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -54,6 +57,11 @@ public class VoxelGuest extends JavaPlugin
         VoxelGuest.moduleManagerInstance = moduleManagerInstance;
     }
 
+    /**
+     * Gets the permission manager provided by vault.
+     *
+     * @return permission manager
+     */
     public static Permission getPerms()
     {
         return perms;
@@ -111,6 +119,15 @@ public class VoxelGuest extends JavaPlugin
         VoxelGuest.getModuleManagerInstance().enableModuleByType(GreylistModule.class);
         VoxelGuest.getModuleManagerInstance().enableModuleByType(GeneralModule.class);
         VoxelGuest.getModuleManagerInstance().enableModuleByType(HelperModule.class);
+    }
+
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command,
+            final String label, final String[] args)
+    {
+        Preconditions.checkNotNull(sender);
+        sender.sendMessage("Command disabled or unimplemented!");
+        return true;
     }
 
     private boolean setupPermissions()
