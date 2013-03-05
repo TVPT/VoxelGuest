@@ -1,7 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.regions.listener;
 
 import java.util.List;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.modules.regions.Region;
