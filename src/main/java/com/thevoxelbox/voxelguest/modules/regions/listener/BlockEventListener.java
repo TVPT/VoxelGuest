@@ -498,14 +498,15 @@ public class BlockEventListener implements Listener
         }
         return;
     }
+    
     @EventHandler
-    public void onPlayerInteractEvent(PlayerInteractEvent event)
+    public final void onPlayerInteractEvent(PlayerInteractEvent event)
     {
     final Location eventLoc = event.getLocation();
     final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
     if (regions.isEmpty())
     Player p = event.getPlayer();
-    
+    }
     if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_BLOCK))
     {
       if ((event.getClickedBlock().getType() != null) && (event.getClickedBlock().getType() == Material.DRAGON_EGG))
@@ -515,7 +516,6 @@ public class BlockEventListener implements Listener
         event.setCancelled(true);
         return;
     }
-  }
 
     @EventHandler
     public final void onPaintingBreak(final HangingBreakByEntityEvent event)
@@ -537,6 +537,7 @@ public class BlockEventListener implements Listener
             }
         return;
         }
+    }    
         
     @EventHandler
     public final void onPaintingBreak(final HangingBreakEvent event)
