@@ -504,6 +504,7 @@ public class BlockEventListener implements Listener
     {
     final Location eventLoc = event.getLocation();
     final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+    
     if (regions.isEmpty())
     Player p = event.getPlayer();
     }
