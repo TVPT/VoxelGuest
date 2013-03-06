@@ -22,7 +22,7 @@ commands:
     aliases: [vgregion, vregion]
     permission: voxelguest.regions.modifyregion
   ban:
-    aliases: [vban]
+    aliases: [vban, ban]
     permission: voxelguest.asshat.ban
     description: Bans a player from logging on to the server
   banreason:
@@ -34,7 +34,7 @@ commands:
     permission: voxelguest.asshat.freeze
     description: Prevents everyone on the server from moving unless they have the exclusion permishion.
   kick:
-    aliases: [vkick]
+    aliases: [vkick, kick]
     permission: voxelguest.asshat.kick
     description: Forces a player to disconnect from the server
   mute:
@@ -46,7 +46,7 @@ commands:
     permission: voxelguest.asshat.soapbox
     description: Perevents everyone that dose not have the exclusion permishion from chatting
   unban:
-    aliases: [vunban]
+    aliases: [vunban, unban]
     permission: voxelguest.asshat.unban
     description: Unbans a player
   unmute:
