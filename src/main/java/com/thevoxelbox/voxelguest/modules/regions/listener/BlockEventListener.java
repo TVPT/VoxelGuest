@@ -335,6 +335,8 @@ public class BlockEventListener implements Listener
             return;
         case DISPENSER:
             return;
+        case DRAGON_EGG:
+            return;
         case GLOWING_REDSTONE_ORE:
             return;
         case IRON_DOOR:
