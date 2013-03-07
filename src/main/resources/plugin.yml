@@ -30,11 +30,11 @@ commands:
     permission: voxelguest.asshat.ban
     description: Bans a player from logging on to the server
   banreason:
-    aliases: [vbanreason]
+    aliases: [vbanreason, banreason]
     permission: voxelguest.asshat.banreason
     description: Displays the ban reason for the player described
   freeze:
-    aliases: [vfreeze]
+    aliases: [vfreeze, freeze]
     permission: voxelguest.asshat.freeze
     description: Prevents everyone on the server from moving unless they have the exclusion permission
   kick:
@@ -46,7 +46,7 @@ commands:
     permission: voxelguest.asshat.mute
     description: prevents a player from speaking
   soapbox:
-    aliases: [vsoapbox]
+    aliases: [vsoapbox, soapbox]
     permission: voxelguest.asshat.soapbox
     description: Prevents everyone that does not have the exclusion permission from chatting
   unban:
