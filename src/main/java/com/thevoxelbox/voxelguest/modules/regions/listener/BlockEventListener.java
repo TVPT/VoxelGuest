@@ -1,5 +1,5 @@
 package com.thevoxelbox.voxelguest.modules.regions.listener;
-
+ 
 import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.modules.regions.Region;
 import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
@@ -25,23 +25,23 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
+ 
 import java.util.List;
-
+ 
 /**
  * @author Butters
  */
 public final class BlockEventListener implements Listener
 {
-
+ 
     private static final String CANT_BUILD_HERE = "§cYou cannot build here";
     private RegionModule regionModule;
-
+ 
     public BlockEventListener(final RegionModule regionModule)
     {
         this.regionModule = regionModule;
     }
-
+ 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent event)
     {
@@ -53,7 +53,7 @@ public final class BlockEventListener implements Listener
             event.getPlayer().sendMessage(CANT_BUILD_HERE);
         }
     }
-
+ 
     /**
      * Prevents block drops.
      *
@@ -69,7 +69,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isBlockDropAllowed())
@@ -79,7 +79,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockPlace(final BlockPlaceEvent event)
     {
@@ -91,7 +91,7 @@ public final class BlockEventListener implements Listener
             event.getPlayer().sendMessage(CANT_BUILD_HERE);
         }
     }
-
+ 
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event)
     {
@@ -105,7 +105,7 @@ public final class BlockEventListener implements Listener
             event.getPlayer().sendMessage(CANT_BUILD_HERE);
         }
     }
-
+ 
     @EventHandler
     public void onLeafDecay(final LeavesDecayEvent event)
     {
@@ -116,7 +116,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isBlockSpreadAllowed())
@@ -126,7 +126,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockGrow(final BlockGrowEvent event)
     {
@@ -137,7 +137,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isBlockGrowthAllowed())
@@ -147,7 +147,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onFromTo(final BlockFromToEvent event)
     {
@@ -158,7 +158,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isBlockSpreadAllowed())
@@ -168,7 +168,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockFade(final BlockFadeEvent event)
     {
@@ -179,7 +179,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (event.getBlock().getType().equals(Material.SNOW))
@@ -200,7 +200,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockForm(final BlockFormEvent event)
     {
@@ -211,7 +211,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (event.getBlock().getType().equals(Material.SNOW))
@@ -232,7 +232,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockIgnite(final BlockIgniteEvent event)
     {
@@ -243,7 +243,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isFireSpreadAllowed())
@@ -253,7 +253,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockSpread(final BlockSpreadEvent event)
     {
@@ -263,7 +263,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isBlockSpreadAllowed())
@@ -273,7 +273,7 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onBlockPhysics(final BlockPhysicsEvent event)
     {
@@ -291,6 +291,8 @@ public final class BlockEventListener implements Listener
             case DIODE_BLOCK_ON:
                 return;
             case DISPENSER:
+                return;
+            case DRAGON_EGG:
                 return;
             case GLOWING_REDSTONE_ORE:
                 return;
@@ -363,14 +365,14 @@ public final class BlockEventListener implements Listener
             default:
                 break;
         }
-
+ 
         final Location eventLoc = event.getBlock().getLocation();
         final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
         if (regions.isEmpty())
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isPhysicsAllowed())
@@ -380,12 +382,12 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onEnchant(final EnchantItemEvent event)
     {
         final Region region = this.regionModule.getRegionManager().getRegionAtLoc(event.getEnchantBlock().getLocation());
-
+ 
         if (region != null)
         {
             if (!region.isEnchantingAllowed())
@@ -394,10 +396,10 @@ public final class BlockEventListener implements Listener
             }
             return;
         }
-
+ 
         event.setCancelled(true);
     }
-
+ 
     @EventHandler
     public void onEntityExplode(final EntityExplodeEvent event)
     {
@@ -407,7 +409,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isCreeperExplosionAllowed())
@@ -417,7 +419,25 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+    
+    @EventHandler
+    public void onPlayerInteractEvent(PlayerInteractEvent event)
+    {
+        final Location eventLoc = event.getLocation();
+        final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+    
+        if (regions.isEmpty())
+        Player p = event.getPlayer();
+    }
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_BLOCK))
+        {
+        if ((event.getClickedBlock().getType() != null) && (event.getClickedBlock().getType() == Material.DRAGON_EGG))
+        {
+        event.setCancelled(true);
+        return;
+        }
+    }
+ 
     @EventHandler
     public void onCreatureSpawn(final CreatureSpawnEvent event)
     {
@@ -427,7 +447,7 @@ public final class BlockEventListener implements Listener
         {
             event.setCancelled(true);
         }
-
+ 
         for (Region region : regions)
         {
             if (!region.isCreatureSpawnAllowed())
@@ -437,13 +457,13 @@ public final class BlockEventListener implements Listener
             }
         }
     }
-
+ 
     @EventHandler
     public void onPaintingBreak(final HangingBreakByEntityEvent event)
     {
         final Location eventLoc = event.getEntity().getLocation();
         final Region region = this.regionModule.getRegionManager().getRegionAtLoc(eventLoc);
-
+ 
         if (region != null)
         {
             if (!region.isBuildingRestricted())
@@ -460,5 +480,27 @@ public final class BlockEventListener implements Listener
         }
         event.setCancelled(true);
     }
-
+    @EventHandler
+    public void onPaintingBreak(final HangingBreakEvent event)
+    {
+        final Location eventLoc = event.getEntity().getLocation();
+        final Region region = this.regionModule.getRegionManager().getRegionAtLoc(eventLoc);
+ 
+        if (region != null)
+        {
+            if (!region.isBuildingRestricted())
+            {
+                if (event.getRemover() instanceof Player)
+                {
+                    if (!this.regionModule.getRegionManager().canPlayerModify((Player) event.getRemover(), event.getEntity().getLocation()))
+                    {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        return;
+        }
+        event.setCancelled(true);
+        return;
+    }
 }

@@ -4,10 +4,10 @@ authors: [MikeMatrix, Monofraps, thedeadlybutter, TheCryoknight]
 version: ${project.build.version}
 website: ${project.url}
 description: ${project.description}
-
+ 
 commands:
-  vmodules:
-    aliases: [vgmodules]
+  vmodule:
+    aliases: [vgmodule]
     permission: voxelguest.mannagemodules
     description: Handles all module management
   greylist:
@@ -26,19 +26,19 @@ commands:
     aliases: [vgregion, vregion]
     permission: voxelguest.regions.modifyregion
   ban:
-    aliases: [vban]
+    aliases: [vban, ban]
     permission: voxelguest.asshat.ban
     description: Bans a player from logging on to the server
   banreason:
-    aliases: [vbanreason]
+    aliases: [vbanreason, banreason]
     permission: voxelguest.asshat.banreason
     description: Displays the ban reason for the player described
   freeze:
-    aliases: [vfreeze]
+    aliases: [vfreeze, freeze]
     permission: voxelguest.asshat.freeze
-    description: Prevents everyone on the server from moving unless they have the exclusion permishion.
+    description: Prevents everyone on the server from moving unless they have the exclusion permission
   kick:
-    aliases: [vkick]
+    aliases: [vkick, kick]
     permission: voxelguest.asshat.kick
     description: Forces a player to disconnect from the server
   mute:
@@ -46,11 +46,11 @@ commands:
     permission: voxelguest.asshat.mute
     description: prevents a player from speaking
   soapbox:
-    aliases: [vsoapbox]
+    aliases: [vsoapbox, soapbox]
     permission: voxelguest.asshat.soapbox
-    description: Perevents everyone that dose not have the exclusion permishion from chatting
+    description: Prevents everyone that does not have the exclusion permission from chatting
   unban:
-    aliases: [vunban]
+    aliases: [vunban, unban]
     permission: voxelguest.asshat.unban
     description: Unbans a player
   unmute:
@@ -88,7 +88,7 @@ commands:
   afk:
     aliases: [afk, vafk]
     permission: voxelguest.general.afk
-    description: Tells the server the the player is away from their keyboard.
+    description: Tells the server that the player is away from their keyboard.
   addafkmessage:
     aliases: [addafkmessage, addafkmsg, vaddafkmsg]
     permission: voxelguest.general.createafkmsg
@@ -99,12 +99,12 @@ commands:
     description: Makes the exp bar a lag meter
   wlreview:
     aliases: [wlreview, vwlreview]
-    description: Submits a Whitelist review ticket
+    description: Submits a whitelist review ticket
   helper:
     aliases: [helper, vhelper]
     permission: voxelguest.helper.control
-    description: Helps mannage helpers
+    description: Helps manage helpers
   helperreview:
     aliases: [helperreview, hreview]
     permission: voxelguest.helper.review
-    description: Reviews a Whitelist review ticket    
+    description: Reviews a whitelist review ticket    
