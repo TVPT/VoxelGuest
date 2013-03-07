@@ -6,6 +6,10 @@ website: ${project.url}
 description: ${project.description}
  
 commands:
+  vmodule:
+    aliases: [vgmodule]
+    permission: voxelguest.mannagemodules
+    description: Handles all module management
   greylist:
     aliases: [graylist, gl]
     permission: voxelguest.greylist.greylist
