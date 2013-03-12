@@ -266,7 +266,7 @@ public class VoxelGuest extends JavaPlugin
 
         try
         {
-            Persistence.getInstance().initialize(new File(getDataFolder(), "persistence2.db"));
+            Persistence.getInstance().initialize(new File(getDataFolder(), "persistence.db"));
         }
         catch (SQLException e)
         {
