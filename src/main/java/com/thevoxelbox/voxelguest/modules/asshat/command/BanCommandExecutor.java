@@ -34,12 +34,6 @@ public class BanCommandExecutor implements TabExecutor
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
     {
-        if (!commandSender.hasPermission("voxelguest.asshat.ban"))
-        {
-            commandSender.sendMessage("You don't have permissions.");
-            return true;
-        }
-
         if (args.length < 1)
         {
             commandSender.sendMessage("You must at least specify the name of the player to ban.");

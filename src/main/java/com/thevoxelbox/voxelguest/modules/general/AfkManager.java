@@ -77,7 +77,7 @@ public final class AfkManager
     }
 
     /**
-     * Handles all events used to signify that the player has returned.
+     * Handles all events used to signify that the player may have returned.
      *
      * @param player The player involved in the event
      */

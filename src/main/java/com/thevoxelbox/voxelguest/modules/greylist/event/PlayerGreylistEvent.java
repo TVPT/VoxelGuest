@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.greylist.event;
 
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -8,7 +9,7 @@ import org.bukkit.event.HandlerList;
  *
  * @author Monofraps
  */
-public final class PlayerGreylistEvent extends Event
+public final class PlayerGreylistEvent extends Event implements Cancellable
 {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private String playerName;
@@ -46,11 +47,13 @@ public final class PlayerGreylistEvent extends Event
         this.playerName = playerName;
     }
 
+    @Override
     public boolean isCancelled()
     {
         return cancelled;
     }
 
+    @Override
     public void setCancelled(final boolean cancelled)
     {
         this.cancelled = cancelled;

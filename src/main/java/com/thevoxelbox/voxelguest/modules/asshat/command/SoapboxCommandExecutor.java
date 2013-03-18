@@ -30,12 +30,6 @@ public class SoapboxCommandExecutor implements TabExecutor
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] strings)
     {
-        if (!commandSender.hasPermission("voxelguest.asshat.soapbox"))
-        {
-            commandSender.sendMessage("You don't have permissions.");
-            return true;
-        }
-
         module.setSilenceEnabled(!module.isSilenceEnabled());
         commandSender.sendMessage(String.format("Soapbox is %s", module.isSilenceEnabled() ? "enabled" : "disabled"));
 

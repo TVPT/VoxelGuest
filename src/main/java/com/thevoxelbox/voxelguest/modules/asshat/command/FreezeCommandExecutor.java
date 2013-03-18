@@ -30,12 +30,6 @@ public class FreezeCommandExecutor implements TabExecutor
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] strings)
     {
-        if (!commandSender.hasPermission("voxelguest.asshat.freeze"))
-        {
-            commandSender.sendMessage("You don't have permissions.");
-            return true;
-        }
-
         module.setFreezeEnabled(!module.isFreezeEnabled());
         commandSender.sendMessage("Freeze mode has been " + (module.isFreezeEnabled() ? "enabled" : "disabled"));
 

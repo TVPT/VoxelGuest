@@ -106,7 +106,7 @@ public final class VanishFakequitHandler
      *
      * @param player The player who disconnects.
      *
-     * @return Returns ?
+     * @return Returns false if a disconnect message should be sent.
      */
     public boolean handleDisconnect(final Player player)
     {

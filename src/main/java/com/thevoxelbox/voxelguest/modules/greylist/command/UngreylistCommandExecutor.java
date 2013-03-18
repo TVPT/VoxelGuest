@@ -36,12 +36,12 @@ public final class UngreylistCommandExecutor implements CommandExecutor
             if (args.length == 1)
             {
                 final String greylistee = Strings.nullToEmpty(args[0]);
-                if (!greylistModule.isOnPersistentGreylist(greylistee))
+                if (!greylistModule.getGreylistHelper().isOnPersistentGreylist(greylistee))
                 {
                     sender.sendMessage(String.format("%s is not already on the greylist.", greylistee));
                     return true;
                 }
-                greylistModule.ungreylist(greylistee);
+                greylistModule.getGreylistHelper().ungreylist(greylistee);
                 sender.sendMessage(String.format("Removed %s from greylist.", greylistee));
                 return true;
             }

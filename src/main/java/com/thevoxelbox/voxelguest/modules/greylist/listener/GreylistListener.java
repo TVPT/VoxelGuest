@@ -42,7 +42,7 @@ public final class GreylistListener implements Listener
         }
 
         final Player player = event.getPlayer();
-        if (!player.hasPermission("voxelguest.greylist.override") && !greylistModule.isOnPersistentGreylist(player.getName()))
+        if (!player.hasPermission("voxelguest.greylist.override") && !greylistModule.getGreylistHelper().isOnPersistentGreylist(player.getName()))
         {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, moduleConfiguration.getNotGreylistedKickMessage());
         }

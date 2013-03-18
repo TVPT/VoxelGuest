@@ -56,7 +56,7 @@ final class StreamReader extends Thread
 
             for (String name : list)
             {
-                this.module.greylist(name);
+                this.module.getGreylistHelper().greylist(name);
             }
 
         }
