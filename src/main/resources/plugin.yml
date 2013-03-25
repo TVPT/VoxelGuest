@@ -28,39 +28,39 @@ commands:
   ban:
     aliases: [vban]
     permission: voxelguest.asshat.ban
-    description: Bans a player from logging on to the server
+    description: Bans a player from logging on to the server.
   banreason:
     aliases: [vbanreason]
     permission: voxelguest.asshat.banreason
-    description: Displays the ban reason for the player described
+    description: Displays the ban reason for the player described.
   freeze:
     aliases: [vfreeze]
     permission: voxelguest.asshat.freeze
-    description: Prevents everyone on the server from moving unless they have the exclusion permishion.
+    description: Prevents everyone on the server from moving unless they have the exclusion permission.
   kick:
     aliases: [vkick]
     permission: voxelguest.asshat.kick
-    description: Forces a player to disconnect from the server
+    description: Forces a player to disconnect from the server.
   mute:
     aliases: [vmute, gag, vgag]
     permission: voxelguest.asshat.mute
-    description: prevents a player from speaking
+    description: Prevents a player from speaking.
   soapbox:
     aliases: [vsoapbox]
     permission: voxelguest.asshat.soapbox
-    description: Perevents everyone that dose not have the exclusion permishion from chatting
+    description: Prevents everyone that does not have the exclusion permission from chatting.
   unban:
     aliases: [vunban]
     permission: voxelguest.asshat.unban
-    description: Unbans a player
+    description: Unbans a player.
   unmute:
     aliases: [vunmute, ungag, vungag]
     permission: voxelguest.asshat.unmute
-    description: Unmutes a player
+    description: Unmutes a player.
   who:
     aliases: [who, vwho, list]
     permission: voxelguest.general.who
-    description: Lists all the players online
+    description: Lists all the players online.
   fakequit:
     aliases: [fakequit, fq, vfq]
     permission: voxelguest.general.fakequit
@@ -84,7 +84,7 @@ commands:
   vtp:
     aliases: [vtp, vteleport]
     permission: voxelguest.general.vtp
-    description: Teleport command
+    description: Teleport command.
   afk:
     aliases: [afk, vafk]
     permission: voxelguest.general.afk
@@ -92,22 +92,22 @@ commands:
   addafkmessage:
     aliases: [addafkmessage, addafkmsg, vaddafkmsg]
     permission: voxelguest.general.createafkmsg
-    description: adds a new afk message for the random afk message system.
+    description: Adds a new afk message for the random afk message system.
   watchtps:
     aliases: [watchtps, vwatchtps]
     permission: voxelguest.general.watchtps
-    description: Makes the exp bar a lag meter
+    description: Makes the exp bar a lag meter.
   wlreview:
     aliases: [wlreview, vwlreview]
-    description: Submits a Whitelist review ticket
+    description: Submits a whitelist review ticket.
   helper:
     aliases: [helper, vhelper]
     permission: voxelguest.helper.control
-    description: Helps mannage helpers
+    description: Helps manage helpers
   helperreview:
     aliases: [helperreview, hreview]
     permission: voxelguest.helper.review
-    description: Reviews a Whitelist review ticket
+    description: Reviews a whitelist review ticket.
   vgimport:
     alias: [voxelguestimport, guestimport, import]
     permissions: voxelguest.manage.import

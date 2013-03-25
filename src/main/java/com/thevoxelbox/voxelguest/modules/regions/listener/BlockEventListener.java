@@ -34,7 +34,7 @@ import java.util.List;
 public final class BlockEventListener implements Listener
 {
 
-    private static final String CANT_BUILD_HERE = "§cYou cannot build here";
+    private static final String CANT_BUILD_HERE = "§cYou may not modify this area.";
     private RegionModule regionModule;
 
     /**
