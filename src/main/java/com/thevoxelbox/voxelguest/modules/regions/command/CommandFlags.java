@@ -40,7 +40,6 @@ public enum CommandFlags
     EXPLOSIVE_DAMMAGE_ALLOWED("-exd", "Explosives player damage"),
     FALL_DAMMAGE_ALLOWED("-fad", "Fall damage"),
     FIRE_DAMMAGE_ALLOWED("-fid", "Fire damage"),
-    SUFFOCATION_DAMMAGE_ALLOWED("-sud", "Suffocation damage"),
     POISON_DAMMAGE_ALLOWED("-poid", "Poison damage"),
     MAGIC_DAMMAGE_ALLOWED("-mad", "Magic damage"),
     PROJECTILE_DAMMAGE_ALLOWED("-prod", "Projectile damage"),
@@ -48,7 +47,7 @@ public enum CommandFlags
     VOID_DAMMAGE_ALLOWED("-void", "Void Dammage"),
     FIRETICK_DAMMAGE_ALLOWED("-ftd", "Fire tick dammage"),
     LIGHTNING_DAMMAGE_ALLOWED("-lid", "Lightning dammage"),
-    SUFFOCATION_DAMMAGE_ALLOWED("-sud", ""),
+    SUFFOCATION_DAMMAGE_ALLOWED("-sud", "Suffocation damage"),
     FOOD_CHANGE_ALLOWED("-flc", "Food change");
 
     private final String cmdFlag;
