@@ -161,6 +161,14 @@ public final class RegionCommand implements TabExecutor
                 case SOIL_DEHYDRATION_ALLOWED:
                     region.setSoilDehydrationAllowed(RegionCommand.parseCommandBool(flag.getValue()));
                     break;
+
+                case CREATURE_SPAWN_ALLOWED:
+                    region.setCreatureSpawnAllowed(RegionCommand.parseCommandBool(flag.getValue()));
+                    break;
+
+                case MOB_SPAWN_ALLOWED:
+                    region.setMobSpawnAllowed(RegionCommand.parseCommandBool(flag.getValue()));
+                    break;
                 default:
                     break;
             }
@@ -194,7 +202,8 @@ public final class RegionCommand implements TabExecutor
      */
     private static boolean parseCommandBool(final String str)
     {
-        return str.toLowerCase().startsWith("t") || str.toLowerCase().startsWith("y");
+        // `true`, `yes`, `on` and `1` will result in true
+        return str.toLowerCase().startsWith("t") || str.toLowerCase().startsWith("y") || str.equals("1") || str.toLowerCase().startsWith("o");
     }
 
     @Override

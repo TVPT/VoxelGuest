@@ -31,6 +31,9 @@ public enum CommandFlags
     BANNED_ITEMS("-bi", "Banned items"),
     SOIL_DEHYDRATION_ALLOWED("-sd", "Soil dehydration"),
 
+    MOB_SPAWN_ALLOWED("-ms", "Mob Spawn"),
+    CREATURE_SPAWN_ALLOWED("-cs", "Creature Spawn"),
+
     //Player
     PVP_DAMMAGE_ALLOWED("-pvp", "Player vs. Player dammage"),
     LAVA_DAMMAGE_ALLOWED("-lad", "Lava damage"),
