@@ -3,6 +3,7 @@ package com.thevoxelbox.voxelguest;
 
 import com.thevoxelbox.voxelguest.configuration.Configuration;
 import com.thevoxelbox.voxelguest.modules.Module;
+import com.thevoxelbox.voxelguest.persistence.Persistence;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -115,6 +117,12 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
                 pluginCommand.setExecutor(commandExecutors.get(command));
             }
         }
+
+        final ModuleMeta moduleMeta = new ModuleMeta();
+        moduleMeta.setModuleName(module.getName());
+        moduleMeta.setEnabled(true);
+
+        Persistence.getInstance().save(moduleMeta);
     }
 
     /**
@@ -214,6 +222,12 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
             Bukkit.getLogger().severe(String.format("Exception while disabling module: %s", ex.getMessage()));
             ex.printStackTrace();
         }
+
+        final ModuleMeta moduleMeta = new ModuleMeta();
+        moduleMeta.setModuleName(module.getName());
+        moduleMeta.setEnabled(false);
+
+        Persistence.getInstance().save(moduleMeta);
     }
 
     /**
@@ -301,5 +315,47 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
     public HashMap<Module, HashSet<Listener>> getRegisteredModules()
     {
         return registeredModules;
+    }
+
+    public void loadFromPersistence()
+    {
+        final List<ModuleMeta> moduleMetas = Persistence.getInstance().loadAll(ModuleMeta.class);
+        Bukkit.getLogger().info(String.valueOf(moduleMetas.size()));
+        if (moduleMetas.isEmpty())
+        {
+            for (final Module registeredModule : this.registeredModules.keySet())
+            {
+
+                try
+                {
+                    enableModuleByInstance(registeredModule);
+                }
+                catch (Exception ex)
+                {
+                    Bukkit.getLogger().severe(String.format("Exception while enabling module: %s", ex.getMessage()));
+                    ex.printStackTrace();
+                }
+            }
+            return;
+        }
+
+        for (final Module registeredModule : this.registeredModules.keySet())
+        {
+            for (final ModuleMeta moduleMeta : moduleMetas)
+            {
+                if ((registeredModule.getName().equals(moduleMeta.getModuleName()) && moduleMeta.isEnabled()))
+                {
+                    try
+                    {
+                        enableModuleByInstance(registeredModule);
+                    }
+                    catch (Exception ex)
+                    {
+                        Bukkit.getLogger().severe(String.format("Exception while enabling module: %s", ex.getMessage()));
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }

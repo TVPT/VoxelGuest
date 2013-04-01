@@ -92,6 +92,10 @@ public class VoxelGuest extends JavaPlugin
     @Override
     public final void onDisable()
     {
+        getCommand("vmodules").setExecutor(null);
+        getCommand("vgimport").setExecutor(null);
+        VoxelGuest.getModuleManagerInstance().shutdown();
+
         try
         {
             Persistence.getInstance().shutdown();
@@ -101,16 +105,38 @@ public class VoxelGuest extends JavaPlugin
             Bukkit.getLogger().severe("Failed to finalize persistence system.");
             e.printStackTrace();
         }
-
-        getCommand("vmodules").setExecutor(null);
-        getCommand("vgimport").setExecutor(null);
-        VoxelGuest.getModuleManagerInstance().shutdown();
-
     }
 
     @Override
     public final void onEnable()
     {
+        VoxelGuest.setPluginInstance(this);
+        VoxelGuest.setModuleManagerInstance(new ModuleManager());
+
+        try
+        {
+            Persistence.getInstance().initialize(new File(getDataFolder(), "persistence.db"));
+        }
+        catch (SQLException e)
+        {
+            Bukkit.getLogger().severe("Failed to initialize persistence system.");
+            e.printStackTrace();
+        }
+
+        if (!setupPermissions())
+        {
+            Bukkit.getLogger().severe("Failed to setup Vault, due to no dependency found!"); //Should stop?
+        }
+
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new RegionModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new AsshatModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GreylistModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GeneralModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new HelperModule(), false);
+
+        getCommand("vmodules").setExecutor(new ModulesCommandExecutor());
+        getCommand("vgimport").setExecutor(new ImportCommandExecutor());
+
         try
         {
             Metrics metrics = new Metrics(this);
@@ -263,39 +289,7 @@ public class VoxelGuest extends JavaPlugin
             e.printStackTrace();
         }
 
-
-        try
-        {
-            Persistence.getInstance().initialize(new File(getDataFolder(), "persistence.db"));
-        }
-        catch (SQLException e)
-        {
-            Bukkit.getLogger().severe("Failed to initialize persistence system.");
-            e.printStackTrace();
-        }
-
-        if (!setupPermissions())
-        {
-            Bukkit.getLogger().severe("Failed to setup Vault, due to no dependency found!"); //Should stop?
-        }
-
-        VoxelGuest.setPluginInstance(this);
-        VoxelGuest.setModuleManagerInstance(new ModuleManager());
-
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new RegionModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new AsshatModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GreylistModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GeneralModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new HelperModule(), false);
-
-        getCommand("vmodules").setExecutor(new ModulesCommandExecutor());
-        getCommand("vgimport").setExecutor(new ImportCommandExecutor());
-
-        VoxelGuest.getModuleManagerInstance().enableModuleByType(RegionModule.class);
-        VoxelGuest.getModuleManagerInstance().enableModuleByType(AsshatModule.class);
-        VoxelGuest.getModuleManagerInstance().enableModuleByType(GreylistModule.class);
-        VoxelGuest.getModuleManagerInstance().enableModuleByType(GeneralModule.class);
-        VoxelGuest.getModuleManagerInstance().enableModuleByType(HelperModule.class);
+        VoxelGuest.getModuleManagerInstance().loadFromPersistence();
     }
 
     private boolean setupPermissions()
