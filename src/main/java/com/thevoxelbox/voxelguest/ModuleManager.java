@@ -320,7 +320,6 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
     public void loadFromPersistence()
     {
         final List<ModuleMeta> moduleMetas = Persistence.getInstance().loadAll(ModuleMeta.class);
-        Bukkit.getLogger().info(String.valueOf(moduleMetas.size()));
         if (moduleMetas.isEmpty())
         {
             for (final Module registeredModule : this.registeredModules.keySet())
