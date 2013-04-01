@@ -156,7 +156,7 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
      *
      * @param module The instance of the module to disable.
      */
-    public void disableModuleByInstance(final Module module)
+    public void disableModuleByInstance(final Module module, final boolean isShutdown)
     {
         checkNotNull(module, "Parameter module must not be null.");
         checkState(this.registeredModules.containsKey(module), "Module must be registered.");
@@ -223,11 +223,18 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
             ex.printStackTrace();
         }
 
+        if(!isShutdown) {
         final ModuleMeta moduleMeta = new ModuleMeta();
         moduleMeta.setModuleName(module.getName());
         moduleMeta.setEnabled(false);
 
         Persistence.getInstance().save(moduleMeta);
+        }
+    }
+
+    public void disableModuleByInstance(final Module module)
+    {
+         disableModuleByInstance(module, false);
     }
 
     /**
@@ -235,7 +242,7 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
      *
      * @param module The type of the modules to disable.
      */
-    public void disableModuleByType(final Class<? extends Module> module)
+    public void disableModuleByType(final Class<? extends Module> module, final boolean isShutdown)
     {
         checkNotNull(module, "Parameter module must not be null.");
 
@@ -245,7 +252,7 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
             {
                 try
                 {
-                    disableModuleByInstance(registeredModule);
+                    disableModuleByInstance(registeredModule, isShutdown);
                 }
                 catch (Exception ex)
                 {
@@ -255,6 +262,12 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
             }
         }
     }
+
+    public void disableModuleByType(final Class<? extends Module> module)
+    {
+         disableModuleByType(module, false);
+    }
+
 
     /**
      * Restarts or just enables a give module. It calls disableModuleByInstance and enableModuleByInstance internally.
@@ -294,7 +307,7 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
             {
                 try
                 {
-                    disableModuleByInstance(module);
+                    disableModuleByInstance(module, true);
                 }
                 catch (Exception ex)
                 {
