@@ -57,11 +57,13 @@ public final class SystemCommandExecutor implements TabExecutor
             if (args[0].equalsIgnoreCase("mem"))
             {
                 printMemInfo(sender, true);
+                return true;
             }
 
             if (args[0].equalsIgnoreCase("lag"))
             {
                 sender.sendMessage("§7TPS§f: " + DisplayUtils.renderTPSBar(TPSTicker.calculateTPS(), TPS_PER_SECOND_THRESHOLD));
+                return true;
             }
         }
 
@@ -84,8 +86,10 @@ public final class SystemCommandExecutor implements TabExecutor
                 sender.sendMessage("§8==============================");
                 sender.sendMessage("§7Name§f: §a" + memData.getName());
                 sender.sendMessage("§7Type§f: §a" + memData.getType());
-                sender.sendMessage("§7Usage§f: §a" + (memData.getUsage().getUsed() / SystemCommandExecutor.BYTES_PER_MB));
-                sender.sendMessage("§7Max usage§f: §a" + (memData.getUsage().getMax() / SystemCommandExecutor.BYTES_PER_MB));
+                sender.sendMessage("§7Usage§f: §a" + (memData.getUsage().getUsed() / SystemCommandExecutor.BYTES_PER_MB) + "MB");
+                sender.sendMessage("§7Peak usage§f: §a" + (memData.getPeakUsage().getUsed() / SystemCommandExecutor.BYTES_PER_MB) + "MB");
+                sender.sendMessage("§7Max usage§f: §a" + (memData.getUsage().getMax() / SystemCommandExecutor.BYTES_PER_MB) + "MB");
+
                 if (memData.isUsageThresholdSupported())
                 {
                     sender.sendMessage("§7Threshold§f: §a" + memData.getUsageThreshold());
@@ -146,6 +150,7 @@ public final class SystemCommandExecutor implements TabExecutor
 
         sender.sendMessage("§8==============================");
         sender.sendMessage("§bBukkit Specs");
+        sender.sendMessage("§7CraftBukkit Version§f: §a" + Bukkit.getVersion());
 
         final List<World> loadedWorlds = Bukkit.getWorlds();
         sender.sendMessage("§7Loaded Worlds§f:");

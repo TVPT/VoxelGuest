@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public final class AfkManager
 {
-    private static final long MAX_AFK_THRESHOLD = 2500;
+    private static final long MAX_AFK_THRESHOLD = 2500L;
     private final GeneralModule module;
     private final Map<String, Long> playersAfk = Collections.synchronizedMap(new HashMap<String, Long>());
 
@@ -106,7 +106,7 @@ public final class AfkManager
         {
             if (!message.isEmpty())
             {
-                Bukkit.broadcastMessage(ChatColor.DARK_AQUA + pName + ChatColor.DARK_GRAY + message);
+                Bukkit.broadcastMessage(ChatColor.DARK_AQUA + pName + " " + ChatColor.DARK_GRAY + message);
                 return;
             }
             if (((GeneralModuleConfiguration) this.module.getConfiguration()).isRandomAfkMsgs())

@@ -1,5 +1,8 @@
 package com.thevoxelbox.voxelguest.modules.helper;
 
+import com.thevoxelbox.voxelguest.modules.helper.model.GuestHistoryEntry;
+import com.thevoxelbox.voxelguest.modules.helper.model.Helper;
+import com.thevoxelbox.voxelguest.modules.helper.model.ReviewRequest;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -312,7 +315,7 @@ public final class HelperManager
             final Calendar date = new GregorianCalendar();
             date.setTimeInMillis(entry.getReviewTime());
 
-            final String dateStr = date.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US) + ". "
+            final String dateStr = date.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + ". "
                     + date.get(Calendar.DAY_OF_MONTH) + ", " + date.get(Calendar.YEAR) + " at "
                     + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
 

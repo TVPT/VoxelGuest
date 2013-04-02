@@ -44,7 +44,7 @@ public final class WhoCommandExecutor implements CommandExecutor
         sender.sendMessage(ChatColor.DARK_GRAY + "------------------------------");
         sender.sendMessage(this.getHeader(canSeeFQ));
 
-        for (Entry<String, List<Player>> entry : this.createGroupPlayerMap().entrySet())
+        for (Entry<String, List<Player>> entry : this.createGroupPlayerMap(canSeeFQ).entrySet())
         {
             final String groupName = entry.getKey();
             final StringBuilder groupStrBuilder = new StringBuilder();
@@ -192,9 +192,11 @@ public final class WhoCommandExecutor implements CommandExecutor
      * Non-OPs will be listed under players and OPs will be listed under
      * Players.
      *
+     * @param canSeeFQ determines if fake-quit players should be in
+     *
      * @return Map with represented groups as the key and players in the group as the values
      */
-    public Map<String, List<Player>> createGroupPlayerMap()
+    public Map<String, List<Player>> createGroupPlayerMap(final boolean canSeeFQ)
     {
         final Map<String, List<Player>> groupPlayerMap = new HashMap<>();
         try
@@ -207,6 +209,13 @@ public final class WhoCommandExecutor implements CommandExecutor
                 if (!groupPlayerMap.containsKey(groupName))
                 {
                     final List<Player> newGroupList = new ArrayList<>();
+                    if (this.module.getVanishFakequitHandler().isPlayerFakequit(player))
+                    {
+                        if (!canSeeFQ)
+                        {
+                            continue;
+                        }
+                    }
                     newGroupList.add(player);
                     groupPlayerMap.put(groupName, newGroupList);
                 }
@@ -216,7 +225,7 @@ public final class WhoCommandExecutor implements CommandExecutor
                 }
             }
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             groupPlayerMap.clear();
             groupPlayerMap.put("OPs", new ArrayList<Player>());
@@ -226,10 +235,24 @@ public final class WhoCommandExecutor implements CommandExecutor
             {
                 if (player.isOp())
                 {
+                    if (this.module.getVanishFakequitHandler().isPlayerFakequit(player))
+                    {
+                        if (!canSeeFQ)
+                        {
+                            continue;
+                        }
+                    }
                     groupPlayerMap.get("OPs").add(player);
                 }
                 else
                 {
+                    if (this.module.getVanishFakequitHandler().isPlayerFakequit(player))
+                    {
+                        if (!canSeeFQ)
+                        {
+                            continue;
+                        }
+                    }
                     groupPlayerMap.get("Players").add(player);
                 }
             }

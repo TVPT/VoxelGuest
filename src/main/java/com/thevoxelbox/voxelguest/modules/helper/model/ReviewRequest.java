@@ -1,4 +1,4 @@
-package com.thevoxelbox.voxelguest.modules.helper;
+package com.thevoxelbox.voxelguest.modules.helper.model;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
