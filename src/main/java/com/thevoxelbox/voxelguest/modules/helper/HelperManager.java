@@ -231,9 +231,12 @@ public final class HelperManager
         {
             if (!request.getGuest().isOnline())
             {
-                stringBuilder.append(ChatColor.STRIKETHROUGH);
+                stringBuilder.append(ChatColor.DARK_AQUA.toString()).append(ChatColor.STRIKETHROUGH + "Name" + ChatColor.WHITE).append(ChatColor.STRIKETHROUGH + ": " + ChatColor.DARK_AQUA).append(ChatColor.STRIKETHROUGH).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append(ChatColor.STRIKETHROUGH).append("(").append(ChatColor.GOLD).append(ChatColor.STRIKETHROUGH).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(ChatColor.STRIKETHROUGH).append(")\n");
             }
-            stringBuilder.append(ChatColor.DARK_AQUA + "Name" + ChatColor.WHITE + ": " + ChatColor.DARK_AQUA).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append("(").append(ChatColor.GOLD).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(")\n");
+            else
+            {
+                stringBuilder.append(ChatColor.DARK_AQUA + "Name" + ChatColor.WHITE + ": " + ChatColor.DARK_AQUA).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append("(").append(ChatColor.GOLD).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(")\n");
+            }
         }
         stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
         return stringBuilder.toString();
