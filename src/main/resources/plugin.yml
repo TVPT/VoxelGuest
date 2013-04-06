@@ -40,9 +40,9 @@ commands:
   kick:
     aliases: [vkick]
     permission: voxelguest.asshat.kick
-    description: Forces a player to disconnect from the server.
-  mute:
-    aliases: [vmute, gag, vgag]
+    description: Forces a player to disconnect from the server
+  gag:
+    aliases: [gag, vgag]
     permission: voxelguest.asshat.mute
     description: Prevents a player from speaking.
   soapbox:
@@ -53,8 +53,8 @@ commands:
     aliases: [vunban]
     permission: voxelguest.asshat.unban
     description: Unbans a player.
-  unmute:
-    aliases: [vunmute, ungag, vungag]
+  ungag:
+    aliases: [ungag, vungag]
     permission: voxelguest.asshat.unmute
     description: Unmutes a player.
   who:

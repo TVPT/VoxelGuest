@@ -96,8 +96,8 @@ public class AsshatModule extends GuestModule
         commandMappings.put("ban", banCommandExecutor);
         commandMappings.put("unban", unbanCommandExecutor);
         commandMappings.put("banreason", banreasonCommandExecutor);
-        commandMappings.put("mute", muteCommandExecutor);
-        commandMappings.put("unmute", unmuteCommandExecutor);
+        commandMappings.put("gag", muteCommandExecutor);
+        commandMappings.put("ungag", unmuteCommandExecutor);
         commandMappings.put("kick", kickCommandExecutor);
         commandMappings.put("soapbox", soapboxCommandExecutor);
         commandMappings.put("freeze", freezeCommandExecutor);

@@ -59,7 +59,7 @@ public final class BlockEventListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockDrop(final BlockBreakEvent event)
     {
         Preconditions.checkNotNull(event);
@@ -70,8 +70,7 @@ public final class BlockEventListener implements Listener
         {
             if (!region.isBlockDropAllowed())
             {
-                event.setCancelled(true);
-                event.getBlock().setType(Material.AIR);
+                event.getBlock().setTypeId(Material.AIR.getId(), false);
                 break;
             }
         }

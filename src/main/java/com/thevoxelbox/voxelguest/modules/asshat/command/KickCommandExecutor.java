@@ -99,7 +99,7 @@ public class KickCommandExecutor implements TabExecutor
         }
 
         final List<Player> players = Bukkit.matchPlayer(playerName);
-        if (players.size() < 0)
+        if (players.size() < 1)
         {
             commandSender.sendMessage("Could not find any player named like " + playerName);
             return true;
