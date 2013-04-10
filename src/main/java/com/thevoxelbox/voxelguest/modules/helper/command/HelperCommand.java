@@ -40,7 +40,7 @@ public final class HelperCommand implements TabExecutor
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args)
     {
-        if (args.length >= 1 && args.length <= 2)
+        if (args.length >= 1 && args.length <= 3)
         {
             if (args[0].equalsIgnoreCase("-add"))
             {
