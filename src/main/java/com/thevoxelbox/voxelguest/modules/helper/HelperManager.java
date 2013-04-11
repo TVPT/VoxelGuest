@@ -176,7 +176,7 @@ public final class HelperManager
      */
     public boolean removeHelper(final Helper oldHelper)
     {
-        if (this.helpers.containsKey(oldHelper.getName()))
+        if (!this.helpers.containsKey(oldHelper.getName()))
         {
             return false;
         }
