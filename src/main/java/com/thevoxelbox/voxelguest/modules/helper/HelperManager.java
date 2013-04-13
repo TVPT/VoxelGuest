@@ -127,8 +127,8 @@ public final class HelperManager
         if (helperObj != null)
         {
             helperObj.review();
+            Persistence.getInstance().save(helperObj);
         }
-        Persistence.getInstance().save(helperObj);
     }
 
     /**
