@@ -1,315 +1,307 @@
-/*
- * Copyright (C) 2011 - 2012, psanker and contributors
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification, are 
- * permitted provided that the following conditions are met:
- * * Redistributions of source code must retain the above copyright notice, this list of 
- *   conditions and the following 
- * * Redistributions in binary form must reproduce the above copyright notice, this list of 
- *   conditions and the following disclaimer in the documentation and/or other materials 
- *   provided with the distribution.
- * * Neither the name of The VoxelPlugineering Team nor the names of its contributors may be 
- *   used to endorse or promote products derived from this software without specific prior 
- *   written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS 
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
- * COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
- * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package com.thevoxelbox.voxelguest;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Random;
-
-import com.thevoxelbox.voxelguest.commands.CommandManager;
-import com.thevoxelbox.voxelguest.commands.MiscellaneousCommands;
-import com.thevoxelbox.voxelguest.commands.ServerAdministrationCommands;
-import com.thevoxelbox.voxelguest.management.ConfigurationManager;
+import com.thevoxelbox.voxelguest.commands.ImportCommandExecutor;
+import com.thevoxelbox.voxelguest.commands.ModulesCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.Module;
-import com.thevoxelbox.voxelguest.modules.ModuleManager;
-import com.thevoxelbox.voxelguest.permissions.PermissionsManager;
-import com.thevoxelbox.voxelguest.players.GroupManager;
-import com.thevoxelbox.voxelguest.players.GuestPlayer;
-
+import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
+import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
+import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
+import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
+import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
+import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
+import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
+import com.thevoxelbox.voxelguest.persistence.Persistence;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
-public class VoxelGuest extends JavaPlugin {
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
 
-    private static VoxelGuest instance;
-    protected static CommandManager commandsManager;
-    protected static SystemListener listener = new SystemListener();
-    protected static List<GuestPlayer> guestPlayers = new LinkedList<GuestPlayer>();
-    protected static Map<Plugin, String> pluginIds = new HashMap<Plugin, String>();
-    protected static GroupManager groupManager;
-    protected static PermissionsManager perms;
-    protected static ModuleManager moduleManager;
-    protected static final ConfigurationManager config = new ConfigurationManager("/VoxelGuest");
-    public static int ONLINE_MEMBERS = 0;
-    
-    protected Class<? extends Module>[] availableModules = new Class[]{
-        AFKModule.class,
-        SpawnModule.class,
-        AsshatMitigationModule.class,
-        CreatureProtectionModule.class,
-        GreylistModule.class,
-        OfflineModeModule.class,
-        PlayerProtectionModule.class,
-        RegionModule.class,
-        VanishModule.class,
-        SignLoggerModule.class,
-        WorldProtectionModule.class
-    };
+/**
+ * @author MikeMatrix
+ * @author Monofraps
+ */
+public class VoxelGuest extends JavaPlugin
+{
+    private static VoxelGuest pluginInstance = null;
+    private static ModuleManager moduleManagerInstance = null;
+    private static Permission perms = null;
 
-    @Override
-    public void onDisable()
+    /**
+     * Returns the VoxelGuest plugin instance.
+     *
+     * @return Returns the VoxelGuest plugin class instance.
+     */
+    public static VoxelGuest getPluginInstance()
     {
-        ListIterator<GuestPlayer> it = guestPlayers.listIterator();
-
-        while (it.hasNext()) {
-            GuestPlayer gp = it.next();
-            gp.saveData(getPluginId(this));
-        }
-
-        guestPlayers.clear();
-        groupManager.saveGroupConfigurations();
-
-        moduleManager.shutDownModules();
-
-        getConfigData().save();
-    }
-    
-    @Override
-    public void onLoad()
-    {   
-        instance = this;
-        
-        config.load();
-
-        commandsManager = new CommandManager(this);
-        moduleManager = new ModuleManager(this, commandsManager);
-        ModuleManager.setActiveModuleManager(moduleManager);
-
-        if ((getConfigData().getString("reset") == null) || (getConfigData().getString("reset").equalsIgnoreCase("yes"))) {
-            loadFactorySettings();
-        }
+        return VoxelGuest.pluginInstance;
     }
 
-    @Override
-    public void onEnable()
+    private static void setPluginInstance(final VoxelGuest pluginInstance)
     {
-        perms = new PermissionsManager(this.getServer(), "[VoxelGuest]", config);
-        groupManager = new GroupManager();
-        registerPluginIds();
-
-        // Register system / miscellaneous commands
-        commandsManager.registerCommands(MiscellaneousCommands.class);
-        commandsManager.registerCommands(ServerAdministrationCommands.class);
-        
-        // Load system event listeners
-        Bukkit.getPluginManager().registerEvents(listener, this);
-        Bukkit.getPluginManager().registerEvents(perms, this);
-
-        // Load permissions system
-        perms.registerActiveHandler();
-
-        // Load players
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            GuestPlayer gp = new GuestPlayer(player);
-
-            if (isPlayerRegistered(gp)) {
-                continue;
-            }
-
-            groupManager.verifyPlayerGroupExistence(player);
-            guestPlayers.add(gp); // KEEP THIS LAST
-            ONLINE_MEMBERS++;
+        if (VoxelGuest.pluginInstance != null)
+        {
+            throw new RuntimeException("Guest Plugin Instance already set.");
         }
 
-        // Load modules
-        ModuleManager.setActiveModuleManager(moduleManager);
-        moduleManager.loadModules(availableModules);
+        VoxelGuest.pluginInstance = pluginInstance;
+    }
 
-        // Load module events into the system listener
-        listener.registerModuleEvents();
-        
-        if (getConfigData().getString("reset") == null || getConfigData().getString("reset").equalsIgnoreCase("yes")) {
-            loadFactorySettings();
+    /**
+     * Returns the module manager instance.
+     *
+     * @return Returns the module manager instance.
+     */
+    public static ModuleManager getModuleManagerInstance()
+    {
+        return moduleManagerInstance;
+    }
+
+    private static void setModuleManagerInstance(final ModuleManager moduleManagerInstance)
+    {
+        if (VoxelGuest.moduleManagerInstance != null)
+        {
+            throw new RuntimeException("Guest Module Manger Instance already set.");
+        }
+
+        VoxelGuest.moduleManagerInstance = moduleManagerInstance;
+    }
+
+    /**
+     * Gets the permission manager provided by Vault.
+     *
+     * @return permission manager
+     */
+    public static Permission getPerms()
+    {
+        return perms;
+    }
+
+    private static void setPerms(final Permission perms)
+    {
+        VoxelGuest.perms = perms;
+    }
+
+    @Override
+    public final void onDisable()
+    {
+        getCommand("vmodules").setExecutor(null);
+        getCommand("vgimport").setExecutor(null);
+        VoxelGuest.getModuleManagerInstance().shutdown();
+
+        try
+        {
+            Persistence.getInstance().shutdown();
+        }
+        catch (SQLException e)
+        {
+            Bukkit.getLogger().severe("Failed to finalize persistence system.");
+            e.printStackTrace();
         }
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command command, String label, String[] args)
-    {   
-        return commandsManager.executeCommandProcessErrors(command, cs, args, this);
-    }
-
-    public static ConfigurationManager getConfigData()
+    public final void onEnable()
     {
-        return config;
-    }
+        VoxelGuest.setPluginInstance(this);
+        VoxelGuest.setModuleManagerInstance(new ModuleManager());
 
-    public static GuestPlayer getGuestPlayer(Player player)
-    {
-        Iterator<GuestPlayer> it = guestPlayers.listIterator();
-
-        while (it.hasNext()) {
-            GuestPlayer gp = it.next();
-
-            if (player.equals(gp.getPlayer())) {
-                return gp;
-            }
+        try
+        {
+            Persistence.getInstance().initialize(new File(getDataFolder(), "persistence.db"));
+        }
+        catch (SQLException e)
+        {
+            Bukkit.getLogger().severe("Failed to initialize persistence system.");
+            e.printStackTrace();
         }
 
-        return new GuestPlayer(player);
-    }
-
-    public static GuestPlayer registerPlayer(Player player)
-    {
-        GuestPlayer gp = new GuestPlayer(player);
-
-        if (!isPlayerRegistered(gp)) {
-            guestPlayers.add(gp);
+        if (!setupPermissions())
+        {
+            Bukkit.getLogger().severe("Failed to setup Vault, due to no dependency found!"); //Should stop?
         }
 
-        return gp;
-    }
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new RegionModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new AsshatModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GreylistModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GeneralModule(), false);
+        VoxelGuest.getModuleManagerInstance().registerGuestModule(new HelperModule(), false);
 
-    public static void unregsiterPlayer(GuestPlayer gp)
-    {
-        if (isPlayerRegistered(gp)) {
-            guestPlayers.remove(gp);
-        }
-    }
+        getCommand("vmodules").setExecutor(new ModulesCommandExecutor());
+        getCommand("vgimport").setExecutor(new ImportCommandExecutor());
 
-    public static GuestPlayer[] getRegisteredPlayers()
-    {
-        GuestPlayer[] gps = new GuestPlayer[guestPlayers.size()];
-        return guestPlayers.toArray(gps);
-    }
+        try
+        {
+            Metrics metrics = new Metrics(this);
 
-    public static boolean isPlayerRegistered(GuestPlayer gp)
-    {
-        return guestPlayers.contains(gp);
-    }
+            Metrics.Graph asshatGraph = metrics.createGraph("Asshat Statistics");
+            asshatGraph.addPlotter(new Metrics.Plotter("Banned Players")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (!(module instanceof AsshatModule))
+                        {
+                            continue;
+                        }
 
-    private void registerPluginIds()
-    {
-        if (pluginIds.isEmpty()) {
-            for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-                if (pluginIds.containsKey(plugin)) {
-                    VoxelGuest.log("Attempted to register multiple IDs for plugin \"" + plugin.getDescription().getName() + "\"", 1);
-                    continue;
+                        final AsshatModule asshatModule = (AsshatModule) module;
+                        if (!asshatModule.isEnabled())
+                        {
+                            return 0;
+                        }
+
+                        final Banlist banlist = asshatModule.getBanlist();
+                        return banlist.getBanCount();
+                    }
+
+                    return 0;
                 }
+            });
 
-                String sample = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-                char[] key = new char[16];
-                Random rand = new Random();
+            asshatGraph.addPlotter(new Metrics.Plotter("Muted Players")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (!(module instanceof AsshatModule))
+                        {
+                            continue;
+                        }
 
-                for (int i = 0; i < 16; i++) {
-                    key[i] = sample.charAt(rand.nextInt(sample.length()));
+                        final AsshatModule asshatModule = (AsshatModule) module;
+                        if (!asshatModule.isEnabled())
+                        {
+                            return 0;
+                        }
+
+                        final Mutelist mutelist = asshatModule.getMutelist();
+                        return mutelist.getMuteCount();
+                    }
+
+                    return 0;
                 }
+            });
 
-                String id = new String(key);
-                pluginIds.put(plugin, id);
-            }
+            Metrics.Graph moduleGraph = metrics.createGraph("Enabled Modules");
+            moduleGraph.addPlotter(new Metrics.Plotter("Asshat Module")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (module instanceof AsshatModule)
+                        {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                }
+            });
+
+            moduleGraph.addPlotter(new Metrics.Plotter("General Module")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (module instanceof GeneralModule)
+                        {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                }
+            });
+
+            moduleGraph.addPlotter(new Metrics.Plotter("Greylist Module")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (module instanceof GreylistModule)
+                        {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                }
+            });
+
+            moduleGraph.addPlotter(new Metrics.Plotter("Helper Module")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (module instanceof HelperModule)
+                        {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                }
+            });
+
+            moduleGraph.addPlotter(new Metrics.Plotter("Region Module")
+            {
+                @Override
+                public int getValue()
+                {
+                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                    for (Module module : modules.keySet())
+                    {
+                        if (module instanceof RegionModule)
+                        {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                }
+            });
+
+            metrics.start();
         }
-    }
-
-    public static String getPluginId(Plugin plugin)
-    {
-        if (pluginIds.containsKey(plugin)) {
-            return pluginIds.get(plugin);
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
 
-        return null;
+        VoxelGuest.getModuleManagerInstance().loadFromPersistence();
     }
 
-    public static VoxelGuest getInstance()
+    private boolean setupPermissions()
     {
-        return instance;
-    }
-
-    public static CommandManager getCommandsManager()
-    {
-        return commandsManager;
-    }
-
-    public static GroupManager getGroupManager()
-    {
-        return groupManager;
-    }
-
-    public void loadFactorySettings()
-    {
-        getConfigData().setString("join-message-format", "&8(&6$nonline&8) &3$n &7joined");
-        getConfigData().setString("leave-message-format", "&8(&6$nonline&8) &3$n &7left");
-        getConfigData().setString("kick-message-format", "&8(&6$nonline&8) &3$n &4was kicked out");
-
-        getConfigData().setBoolean("permissions-multigroup", false);
-        getConfigData().setBoolean("permissions-multiworld", false);
-        getConfigData().setBoolean("permissions-default-op", false);
-
-        getConfigData().setBoolean("enable-ram-clear-cycle", false);
-        getConfigData().setInt("ram-clear-cycle-time", 60);
-
-        for (Module module : ModuleManager.getManager().getModules()) {
-            if (module.getConfiguration() != null) {
-                module.getConfiguration().reset();
-            }
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        if (rsp == null)
+        {
+            Bukkit.getLogger().severe("Cannot find permission service provider. Check that a permission system and Vault are installed.");
+            return false;
         }
 
-        getConfigData().setString("reset", "no");
-        log("| ========================================== |");
-        log("| * VOXELGUEST 4                             |");
-        log("| *                                          |");
-        log("| * The premiere server adminstration suite  |");
-        log("| *                                          |");
-        log("| * Built by: psanker & VoxelPlugineering    |");
-        log("| * Licensed by the BSD License - 2012       |");
-        log("| ========================================== |");
-        log("Factory settings loaded");
-    }
-
-    public static void log(String str)
-    {
-        Bukkit.getLogger().info(str);
-    }
-
-    public static void log(String str, int importance)
-    {
-    	if(!(str.startsWith("[VoxelGuest]"))) str = "[VoxelGuest] " + str;
-    	switch(importance) {
-    	case 0: Bukkit.getLogger().info(str);
-    	case 1: Bukkit.getLogger().warning(str);
-    	case 2: Bukkit.getLogger().severe(str);
-    	}
-    
-    }
-
-    public static void log(String module, String str, int importance)
-    {
-    	if(!(str.startsWith("[VoxelGuest:"))) str = "[VoxelGuest:" + module + "] " + str;
-    	switch(importance) {
-    	case 0: Bukkit.getLogger().info(str);
-    	case 1: Bukkit.getLogger().warning(str);
-    	case 2: Bukkit.getLogger().severe(str);
-    	}
+        setPerms(rsp.getProvider());
+        return VoxelGuest.getPerms() != null;
     }
 }

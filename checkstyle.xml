@@ -101,7 +101,7 @@
     <module name="Translation"/>
     <module name="FileLength"/>
     <module name="FileTabCharacter">
-        <property name="severity" value="ignore"/>
+        <property name="severity" value="warning"/>
         <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="RegexpSingleline">

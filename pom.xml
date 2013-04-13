@@ -4,21 +4,51 @@
 
     <groupId>com.thevoxelbox</groupId>
     <artifactId>VoxelGuest</artifactId>
-    <version>4.2.6</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>VoxelGuest</name>
     <url>http://voxelwiki.com/minecraft/VoxelGuest</url>
     <description>A server administration suite from The Voxel Box</description>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <scm>
-        <connection>scm:git:git://github.com/TVPT/VoxelGuest.git</connection>
         <url>https://github.com/TVPT/VoxelGuest</url>
+        <connection>scm:git:git://github.com/TVPT/VoxelGuest.git</connection>
         <developerConnection>scm:git:git@github.com:TVPT/VoxelGuest.git</developerConnection>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>TVPT Nexus Releases</name>
+            <url>http://repo.thevoxelbox.com/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>TVPT Nexus Snapshots</name>
+            <url>http://repo.thevoxelbox.com/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.number>UNKNOWN</project.build.number>
+        <project.build.version>${project.version}</project.build.version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
+                <project.build.version>${project.version}-jnks${project.build.number}</project.build.version>
+            </properties>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
@@ -27,62 +57,82 @@
         </repository>
 
         <repository>
-            <id>TVPT-repo</id>
-            <url>http://jenkins.thevoxelbox.com/plugin/repository/everything/</url>
+            <id>tvpt-repo</id>
+            <url>http://repo.thevoxelbox.com/content/repositories/public</url>
         </repository>
 
+        <repository>
+            <id>vault-repo</id>
+            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+        </repository>
+
+        <repository>
+            <id>metrics-repo</id>
+            <url>http://repo.mcstats.org/content/repositories/public</url>
+        </repository>
     </repositories>
 
     <dependencies>
-
-        <!-- Bukkit -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.4.7-R0.1</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.4.6-R0.3</version>
+            <version>1.4.7-R0.1</version>
             <type>jar</type>
         </dependency>
-
-        <!--  Gson: Java to Json conversion -->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.1</version>
-            <scope>compile</scope>
+            <groupId>net.sf.morph</groupId>
+            <artifactId>morph</artifactId>
+            <version>1.1.1</version>
         </dependency>
-
-        <!-- bPermissions -->
         <dependency>
-            <groupId>de.bananaco</groupId>
-            <artifactId>bPermissions</artifactId>
-            <version>dev-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/bpermissions.jar</systemPath>
-            <type>jar</type>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0-rc1</version>
         </dependency>
-
-        <!-- Since PEX's repo sucks from time to time -->
         <dependency>
-            <groupId>ru.tehkode</groupId>
-            <artifactId>PermissionsEx</artifactId>
-            <version>1.19.1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/PermissionsEx.jar</systemPath>
-            <type>jar</type>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.2.23-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-core</artifactId>
+            <version>4.42</version>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>4.42</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mcstats</groupId>
+            <artifactId>metrics</artifactId>
+            <version>R6</version>
         </dependency>
     </dependencies>
 
     <build>
-        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
-
-        <!-- Resources -->
         <resources>
             <resource>
                 <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
             </resource>
             <resource>
                 <filtering>false</filtering>
@@ -93,83 +143,21 @@
             </resource>
         </resources>
 
-        <!-- Plugins -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <addMavenDescriptor>true</addMavenDescriptor>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.thevoxelbox.voxelguest.VoxelGuest</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-2</version>
-                <configuration>
-                    <descriptor>${basedir}/src/main/assembly/default.xml</descriptor>
-                    <finalName>VoxelGuest</finalName>
-                    <outputDirectory>${basedir}/dist</outputDirectory>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.2</version>
-                <configuration>
-                    <preparationGoals>assembly:assembly</preparationGoals>
-                    <goals>assembly:assembly</goals>
-                    <tagNameFormat>@{project.version}</tagNameFormat>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.bukkit:craftbukkit</exclude>
-                                    <exclude>org.bukkit:bukkit</exclude>
-                                    <exclude>com.patrickanker:libpsanker</exclude>
-                                    <exclude>junit:junit</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.google.gson</pattern>
-                                    <shadedPattern>com.thevoxelbox.voxelguest.libs.com.google.gson</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
+                <version>2.4</version>
             </plugin>
 
             <plugin>
@@ -187,6 +175,41 @@
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>false</minimizeJar>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.bukkit:craftbukkit</exclude>
+                                    <exclude>org.bukkit:bukkit</exclude>
+                                    <exclude>com.google.guava:guava</exclude>
+                                    <exclude>org.xerial:sqlite-jdbc</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google.gson</pattern>
+                                    <shadedPattern>com.thevoxelbox.voxelguest.libs.com.google.gson</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>javax.persistence</pattern>
+                                    <shadedPattern>com.thevoxelbox.voxelguest.libs.javax.persistence</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

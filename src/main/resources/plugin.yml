@@ -1,6 +1,113 @@
 name: ${project.name}
 main: com.thevoxelbox.voxelguest.VoxelGuest
-author: VoxelPlugineering
-version: ${project.version}
+authors: [MikeMatrix, Monofraps, thedeadlybutter, TheCryoknight]
+version: ${project.build.version}
 website: ${project.url}
 description: ${project.description}
+
+commands:
+  vmodules:
+    aliases: [vgmodules]
+    permission: voxelguest.manage.modules
+    description: Handles all module management
+  greylist:
+    aliases: [graylist, gl]
+    permission: voxelguest.greylist.greylist
+    description: Adds a player name to the graylist
+  ungreylist:
+    aliases: [ungraylist, ugl]
+    permission: voxelguest.greylist.ungreylist
+    description: Removes a player name to the graylist
+  whitelist:
+    aliases: [whitelist, wl]
+    permission: voxelguest.greylist.whitelist
+    description: Whitelists a player.
+  vgregion:
+    aliases: [vgregion, vregion]
+    permission: voxelguest.regions.modifyregion
+  ban:
+    aliases: [vban]
+    permission: voxelguest.asshat.ban
+    description: Bans a player from logging on to the server.
+  banreason:
+    aliases: [vbanreason]
+    permission: voxelguest.asshat.banreason
+    description: Displays the ban reason for the player described.
+  freeze:
+    aliases: [vfreeze]
+    permission: voxelguest.asshat.freeze
+    description: Prevents everyone on the server from moving unless they have the exclusion permission.
+  kick:
+    aliases: [vkick]
+    permission: voxelguest.asshat.kick
+    description: Forces a player to disconnect from the server
+  gag:
+    aliases: [gag, vgag]
+    permission: voxelguest.asshat.mute
+    description: Prevents a player from speaking.
+  soapbox:
+    aliases: [vsoapbox]
+    permission: voxelguest.asshat.soapbox
+    description: Prevents everyone that does not have the exclusion permission from chatting.
+  unban:
+    aliases: [vunban]
+    permission: voxelguest.asshat.unban
+    description: Unbans a player.
+  ungag:
+    aliases: [ungag, vungag]
+    permission: voxelguest.asshat.unmute
+    description: Unmutes a player.
+  who:
+    aliases: [who, vwho, list]
+    permission: voxelguest.general.who
+    description: Lists all the players online.
+  fakequit:
+    aliases: [fakequit, fq, vfq]
+    permission: voxelguest.general.fakequit
+    description: Vanishes you from other players, and removes you from the /who list, making it seem like you are offline.
+  vanish:
+    aliases: [vanish, vvanish, van]
+    permission: voxelguest.general.vanish
+    description: Vanishes you from other players, removing you from their view.
+  ep:
+    aliases: [ep, vep]
+    permission: voxelguest.general.ep
+    description: Runs an entity purge and clears entities in a defined world.
+  sys:
+    aliases: [sys, system, vsys]
+    permission: voxelguest.general.sys
+    description: Helps you can inspect your server's CPU performance, memory management, and Bukkit management.
+  vpg:
+    aliases: [vpg, vpromote]
+    permission: voxelguest.general.vpg
+    description: Allows the command sender to change a defined player's group.
+  vtp:
+    aliases: [vtp, vteleport]
+    permission: voxelguest.general.vtp
+    description: Teleport command.
+  afk:
+    aliases: [afk, vafk]
+    permission: voxelguest.general.afk
+    description: Tells the server the the player is away from their keyboard.
+  addafkmessage:
+    aliases: [addafkmessage, addafkmsg, vaddafkmsg]
+    permission: voxelguest.general.createafkmsg
+    description: Adds a new afk message for the random afk message system.
+  watchtps:
+    aliases: [watchtps, vwatchtps]
+    permission: voxelguest.general.watchtps
+    description: Makes the exp bar a lag meter.
+  wlreview:
+    aliases: [wlreview, vwlreview]
+    description: Submits a whitelist review ticket.
+  helper:
+    aliases: [helper, vhelper]
+    permission: voxelguest.helper.control
+    description: Helps manage helpers
+  helperreview:
+    aliases: [helperreview, hreview]
+    permission: voxelguest.helper.review
+    description: Reviews a whitelist review ticket.
+  vgimport:
+    alias: [voxelguestimport, guestimport, import]
+    permissions: voxelguest.manage.import
