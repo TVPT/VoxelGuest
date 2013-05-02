@@ -40,11 +40,17 @@ public final class WhoCommandExecutor implements CommandExecutor
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args)
     {
+        if (!VoxelGuest.hasPermissionProvider())
+        {
+            sender.sendMessage(ChatColor.RED + "Cannot execute command because I couldn't find any permission provider. Check the console for more information.");
+            return true;
+        }
+
         final boolean canSeeFQ = sender.hasPermission(GeneralModule.FAKEQUIT_PERM);
         sender.sendMessage(ChatColor.DARK_GRAY + "------------------------------");
         sender.sendMessage(this.getHeader(canSeeFQ));
 
-        for (Entry<String, List<Player>> entry : this.createGroupPlayerMap(canSeeFQ).entrySet())
+        for (Entry<String, List<Player>> entry : this.makeGroupPlayerMap(canSeeFQ).entrySet())
         {
             final String groupName = entry.getKey();
             final StringBuilder groupStrBuilder = new StringBuilder();
@@ -196,7 +202,7 @@ public final class WhoCommandExecutor implements CommandExecutor
      *
      * @return Map with represented groups as the key and players in the group as the values
      */
-    public Map<String, List<Player>> createGroupPlayerMap(final boolean canSeeFQ)
+    private Map<String, List<Player>> makeGroupPlayerMap(final boolean canSeeFQ)
     {
         final Map<String, List<Player>> groupPlayerMap = new HashMap<>();
         try

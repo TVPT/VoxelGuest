@@ -51,7 +51,7 @@ public final class GreylistListener implements Listener
     @EventHandler
     public void onPlayerGreylisted(final PlayerGreylistedEvent event)
     {
-        if (moduleConfiguration.isSetGroupOnGreylist())
+        if (moduleConfiguration.isSetGroupOnGreylist() && VoxelGuest.hasPermissionProvider())
         {
             if (VoxelGuest.getPerms().playerAddGroup(Bukkit.getWorlds().get(0), event.getPlayerName(), moduleConfiguration.getGreylistGroupName()))
             {

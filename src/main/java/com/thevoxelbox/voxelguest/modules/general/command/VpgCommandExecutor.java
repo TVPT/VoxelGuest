@@ -18,6 +18,12 @@ public final class VpgCommandExecutor implements CommandExecutor
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args)
     {
+        if (!VoxelGuest.hasPermissionProvider())
+        {
+            sender.sendMessage(ChatColor.RED + "Cannot execute command because I couldn't find any permission provider. Check the console for more information.");
+            return true;
+        }
+
         if (args.length >= 2)
         {
             List<Player> matchPlayer = Bukkit.matchPlayer(args[0]);

@@ -34,6 +34,12 @@ public final class WhitelistCommandExecutor implements TabExecutor
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args)
     {
+        if (!VoxelGuest.hasPermissionProvider())
+        {
+            sender.sendMessage(ChatColor.RED + "Cannot execute command because I couldn't find any permission provider. Check the console for more information.");
+            return true;
+        }
+
         if (args.length == 1)
         {
             final List<Player> matchPlayer = Bukkit.matchPlayer(args[0]);

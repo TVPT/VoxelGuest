@@ -302,6 +302,10 @@ public class VoxelGuest extends JavaPlugin
         }
 
         setPerms(rsp.getProvider());
-        return VoxelGuest.getPerms() != null;
+        return VoxelGuest.hasPermissionProvider();
+    }
+
+    public static boolean hasPermissionProvider() {
+        return VoxelGuest.perms != null;
     }
 }
