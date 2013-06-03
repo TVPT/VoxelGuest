@@ -55,7 +55,7 @@ Some rough guidelines for now:
 - Give us a good description to what you've done.
 - Try to submit one change in one pull request and try to link it to the issue in the tracker if possible.
 
-[VoxelWiki]: http://voxelwiki.com/minecraft/VoxelGuest/
+[VoxelWiki]: http://voxelwiki.com/minecraft/VoxelGuest
 [JenkinsJob]: http://ci.thevoxelbox.com/job/VoxelGuest/
 [Bukkit]: http://bukkit.org/
 [Maven]: http://maven.apache.org/
