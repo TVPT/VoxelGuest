@@ -225,20 +225,20 @@ public final class HelperManager
             return null;
         }
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
-        stringBuilder.append(ChatColor.GOLD + "Whitelist Requests\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("========================\n");
+        stringBuilder.append(ChatColor.GOLD).append("Whitelist Requests\n");
         for (ReviewRequest request : this.activeReviews)
         {
             if (!request.getGuest().isOnline())
             {
-                stringBuilder.append(ChatColor.DARK_AQUA.toString()).append(ChatColor.STRIKETHROUGH + "Name" + ChatColor.WHITE).append(ChatColor.STRIKETHROUGH + ": " + ChatColor.DARK_AQUA).append(ChatColor.STRIKETHROUGH).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append(ChatColor.STRIKETHROUGH).append("(").append(ChatColor.GOLD).append(ChatColor.STRIKETHROUGH).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(ChatColor.STRIKETHROUGH).append(")\n");
+                stringBuilder.append(ChatColor.DARK_AQUA.toString()).append(ChatColor.STRIKETHROUGH).append("Name").append(ChatColor.WHITE).append(ChatColor.STRIKETHROUGH).append(": ").append(ChatColor.DARK_AQUA).append(ChatColor.STRIKETHROUGH).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append(ChatColor.STRIKETHROUGH).append("(").append(ChatColor.GOLD).append(ChatColor.STRIKETHROUGH).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(ChatColor.STRIKETHROUGH).append(")\n");
             }
             else
             {
-                stringBuilder.append(ChatColor.DARK_AQUA + "Name" + ChatColor.WHITE + ": " + ChatColor.DARK_AQUA).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append("(").append(ChatColor.GOLD).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(")\n");
+                stringBuilder.append(ChatColor.DARK_AQUA).append("Name").append(ChatColor.WHITE).append(": ").append(ChatColor.DARK_AQUA).append(request.getGuest().getName()).append(ChatColor.DARK_GRAY).append("(").append(ChatColor.GOLD).append(this.getGuestHistory(request.getGuest().getName()).size()).append(ChatColor.DARK_GRAY).append(")\n");
             }
         }
-        stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("========================\n");
         return stringBuilder.toString();
     }
 
@@ -250,10 +250,10 @@ public final class HelperManager
     public void notifyForNewReview(final ReviewRequest review)
     {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
-        stringBuilder.append(ChatColor.DARK_AQUA + "New Whitelist Review\n");
-        stringBuilder.append(ChatColor.DARK_AQUA + "Name" + ChatColor.GRAY + ": " + ChatColor.GOLD).append(review.getGuest().getName()).append("\n");
-        stringBuilder.append(ChatColor.DARK_GRAY + "========================\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("========================\n");
+        stringBuilder.append(ChatColor.DARK_AQUA).append("New Whitelist Review\n");
+        stringBuilder.append(ChatColor.DARK_AQUA).append("Name").append(ChatColor.GRAY).append(": ").append(ChatColor.GOLD).append(review.getGuest().getName()).append("\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("========================\n");
 
         this.notifyHelpers(stringBuilder.toString());
     }
@@ -306,9 +306,9 @@ public final class HelperManager
         }
         Collections.sort(history);
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ChatColor.DARK_GRAY + "=====================================\n");
-        stringBuilder.append(ChatColor.DARK_AQUA + "Whitelist Review History for" + ChatColor.DARK_GRAY + ": " + ChatColor.GOLD).append(guestName).append("\n");
-        stringBuilder.append(ChatColor.DARK_GRAY + "=====================================\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("=====================================\n");
+        stringBuilder.append(ChatColor.DARK_AQUA).append("Whitelist Review History for").append(ChatColor.DARK_GRAY).append(": ").append(ChatColor.GOLD).append(guestName).append("\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("=====================================\n");
 
         final ListIterator<GuestHistoryEntry> reviewListItr = history.listIterator();
         while (reviewListItr.hasNext())
@@ -322,7 +322,7 @@ public final class HelperManager
                     + date.get(Calendar.DAY_OF_MONTH) + ", " + date.get(Calendar.YEAR) + " at "
                     + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
 
-            stringBuilder.append(ChatColor.DARK_AQUA + "(" + ChatColor.GOLD).append(reviewListItr.previousIndex() + 1).append(ChatColor.DARK_AQUA).append(")").append(ChatColor.GRAY).append(" by ").append(ChatColor.GOLD).append(entry.getReviewerName()).append(ChatColor.GRAY).append(" on ").append(ChatColor.DARK_AQUA).append(dateStr);
+            stringBuilder.append(ChatColor.DARK_AQUA).append("(").append(ChatColor.GOLD).append(reviewListItr.previousIndex() + 1).append(ChatColor.DARK_AQUA).append(")").append(ChatColor.GRAY).append(" by ").append(ChatColor.GOLD).append(entry.getReviewerName()).append(ChatColor.GRAY).append(" on ").append(ChatColor.DARK_AQUA).append(dateStr);
 
             if (!entry.getComment().equals(""))
             {
@@ -333,7 +333,7 @@ public final class HelperManager
                 stringBuilder.append("\n");
             }
         }
-        stringBuilder.append(ChatColor.DARK_GRAY + "=====================================\n");
+        stringBuilder.append(ChatColor.DARK_GRAY).append("=====================================\n");
 
         helper.sendMessage(stringBuilder.toString());
     }

@@ -3,7 +3,6 @@ package com.thevoxelbox.voxelguest.modules.helper.command;
 import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
 import com.thevoxelbox.voxelguest.modules.helper.model.Helper;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -193,10 +192,11 @@ public final class HelperCommand implements TabExecutor
                         matches.add(flag);
                     }
                 }
+                return matches;
             }
             else if (args.length == 0)
             {
-                Arrays.asList(HelperCommand.COMMAND_FLAGS);
+                return Arrays.asList(HelperCommand.COMMAND_FLAGS);
             }
         }
         return null;

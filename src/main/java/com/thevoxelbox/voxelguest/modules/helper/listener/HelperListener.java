@@ -1,13 +1,12 @@
 package com.thevoxelbox.voxelguest.modules.helper.listener;
 
+import com.thevoxelbox.voxelguest.modules.helper.HelperManager;
+import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import com.thevoxelbox.voxelguest.modules.helper.HelperManager;
-import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
 
 /**
  * @author TheCryoknight
@@ -26,6 +25,10 @@ public final class HelperListener implements Listener
         manager = module.getManager();
     }
 
+    /**
+     * Handles player join events.
+     * @param event The Bukkit event.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(final PlayerJoinEvent event)
     {
