@@ -3,8 +3,7 @@ package com.thevoxelbox.voxelguest.modules;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,12 +68,12 @@ public abstract class GuestModule implements Module
     @Override
     public Set<Listener> getListeners()
     {
-        return new HashSet<>();
+        return Collections.emptySet();
     }
 
     @Override
     public Map<String, CommandExecutor> getCommandMappings()
     {
-        return new HashMap<>();
+        return Collections.emptyMap();
     }
 }
