@@ -57,7 +57,7 @@ public class MutelistTest
     @Test
     public void testMutereason() throws Exception
     {
-        assertEquals(mutelist.whyIsPlayerMuted(TEST_BAN_PLAYER), TEST_BAN_REASON);
+        assertEquals(mutelist.getPlayerMutereason(TEST_BAN_PLAYER), TEST_BAN_REASON);
     }
 
     @Test

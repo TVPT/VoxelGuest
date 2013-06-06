@@ -22,7 +22,7 @@ public final class Mutelist
      *
      * @return Returns true if the mute operation was successful. False indicates that the player is already muted.
      */
-    public boolean mute(final String playerName, final String muteReason)
+    public static boolean mute(final String playerName, final String muteReason)
     {
         if (isPlayerMuted(playerName))
         {
@@ -40,7 +40,7 @@ public final class Mutelist
      *
      * @return Returns true if the unmute operation was successful. False indicates that the player is not muted.
      */
-    public boolean unmute(final String playerName)
+    public static boolean unmute(final String playerName)
     {
         if (!isPlayerMuted(playerName))
         {
@@ -56,7 +56,7 @@ public final class Mutelist
      *
      * @return Returns a list of names of people muted
      */
-    public List<String> getMutedNames()
+    public static List<String> getMutedNames()
     {
         final List<MutedPlayer> mutedPlayers = Persistence.getInstance().loadAll(MutedPlayer.class);
         final List<String> mutedNames = new ArrayList<>();
@@ -67,7 +67,7 @@ public final class Mutelist
         return mutedNames;
     }
 
-    private MutedPlayer getMutedPlayer(final String playerName)
+    private static MutedPlayer getMutedPlayer(final String playerName)
     {
         HashMap<String, Object> selectRestrictions = new HashMap<>();
         selectRestrictions.put("playerName", playerName.toLowerCase());
@@ -92,7 +92,7 @@ public final class Mutelist
      *
      * @return Returns true if the player is muted, otherwise false.
      */
-    public boolean isPlayerMuted(final String playerName)
+    public static boolean isPlayerMuted(final String playerName)
     {
         return getMutedPlayer(playerName) != null;
     }
@@ -104,7 +104,7 @@ public final class Mutelist
      *
      * @return Returns the reason a player is banned for.
      */
-    public String whyIsPlayerMuted(final String playerName)
+    public static String getPlayerMutereason(final String playerName)
     {
         Preconditions.checkState(isPlayerMuted(playerName), "Player %s must be muted in order to get the mute reason.", playerName);
         return getMutedPlayer(playerName).getMuteReason();
@@ -112,9 +112,10 @@ public final class Mutelist
 
     /**
      * Returns the number of muted players.
+     *
      * @return Returns the number of muted players.
      */
-    public int getMuteCount()
+    public static int getMuteCount()
     {
         return getMutedNames().size();
     }

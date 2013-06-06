@@ -37,7 +37,7 @@ public class SoapboxCommandExecutor implements TabExecutor
     }
 
     @Override
-    public final List<String> onTabComplete(final CommandSender commandSender, final Command command, final String s, final String[] strings)
+    public final List<String> onTabComplete(final CommandSender commandSender, final Command command, final String s, final String[] args)
     {
         return Collections.emptyList();
     }

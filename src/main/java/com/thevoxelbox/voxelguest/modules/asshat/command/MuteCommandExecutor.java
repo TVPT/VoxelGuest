@@ -2,12 +2,18 @@ package com.thevoxelbox.voxelguest.modules.asshat.command;
 
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
+import com.thevoxelbox.voxelguest.modules.asshat.command.argument.CommonAsshatCommandArguments;
+import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,7 +24,6 @@ import java.util.List;
 public class MuteCommandExecutor implements TabExecutor
 {
     private final AsshatModuleConfiguration configuration;
-    private final AsshatModule module;
 
     /**
      * Create a new mute/gag command executor.
@@ -27,64 +32,43 @@ public class MuteCommandExecutor implements TabExecutor
      */
     public MuteCommandExecutor(final AsshatModule module)
     {
-        this.module = module;
         configuration = (AsshatModuleConfiguration) module.getConfiguration();
     }
 
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
     {
-        if (args.length < 1)
+        final CommonAsshatCommandArguments arguments = new CommonAsshatCommandArguments();
+        final CmdLineParser parser = new CmdLineParser(arguments);
+        try
         {
-            commandSender.sendMessage("You must at least specify the name of the player to mute.");
+            parser.parseArgument(args);
+        }
+        catch (CmdLineException e)
+        {
+            e.printStackTrace();
+            commandSender.sendMessage(ChatColor.RED + e.getMessage());
             return false;
         }
 
-        final String playerName = args[0].toLowerCase();
-        boolean forceNameFlag = false;
-        boolean silentFlag = false;
-        String muteReason = "";
+        final String muteReason = arguments.getReason().isEmpty() ? configuration.getDefaultAsshatReason() : arguments.getReason();
 
-        for (int i = 1; i < args.length; i++)
+        if (arguments.isForceName())
         {
-            final String arg = args[i];
-
-            if (arg.equalsIgnoreCase("-force") || arg.equalsIgnoreCase("-f"))
-            {
-                forceNameFlag = true;
-                continue;
-            }
-
-            if (arg.equalsIgnoreCase("-silent") || arg.equalsIgnoreCase("-si") || arg.equalsIgnoreCase("-s"))
-            {
-                silentFlag = true;
-                continue;
-            }
-
-            muteReason += arg + " ";
-        }
-
-        if (muteReason.isEmpty())
-        {
-            muteReason = configuration.getDefaultAsshatReason();
-        }
-
-        if (forceNameFlag)
-        {
-            safeMute(playerName, muteReason, commandSender, silentFlag);
+            safeMute(arguments.getPlayerName(), muteReason, commandSender, arguments.isSilent());
             return true;
         }
 
-        final List<Player> players = Bukkit.matchPlayer(playerName);
+        final List<Player> players = Bukkit.matchPlayer(arguments.getPlayerName());
         if (players.size() < 1)
         {
-            commandSender.sendMessage(String.format("Could not find any player named like %s. Append the -force parameter to mute offline players.", playerName));
+            commandSender.sendMessage(String.format("Could not find any player named like %s. Append the -force parameter to mute offline players.", arguments.getPlayerName()));
             return true;
         }
 
         if (players.size() > 1)
         {
-            commandSender.sendMessage("Found multiple players matching the name (use the -force flag if you entered the exact player name)" + playerName);
+            commandSender.sendMessage("Found multiple players matching the name (use the -force flag if you entered the exact player name)" + arguments.getPlayerName());
             String list = "";
             for (Player player : players)
             {
@@ -96,14 +80,13 @@ public class MuteCommandExecutor implements TabExecutor
             return true;
         }
 
-        safeMute(players.get(0).getName(), muteReason, commandSender, silentFlag);
-
+        safeMute(players.get(0).getName(), muteReason, commandSender, arguments.isSilent());
         return true;
     }
 
     private void safeMute(final String playerName, final String muteReason, final CommandSender commandSender, final boolean silentFlag)
     {
-        if (module.getMutelist().isPlayerMuted(playerName))
+        if (Mutelist.isPlayerMuted(playerName))
         {
             commandSender.sendMessage(String.format("Player %s is already gagged.", playerName));
             return;
@@ -111,11 +94,11 @@ public class MuteCommandExecutor implements TabExecutor
 
         try
         {
-            module.getMutelist().mute(playerName, muteReason);
-            Bukkit.getLogger().info(String.format("%s got gagged for %s by %s", playerName, muteReason, commandSender.getName()));
+            Mutelist.mute(playerName, muteReason);
+            Bukkit.getLogger().info(String.format("%s gagged by %s for %s", playerName, commandSender.getName(), muteReason));
             if (!silentFlag)
             {
-                Bukkit.broadcastMessage(this.module.formatBroadcastMessage(configuration.getGagBroadcastMsg(), playerName, commandSender.getName(), muteReason));
+                Bukkit.broadcastMessage(AsshatModule.formatBroadcastMessage(configuration.getGagBroadcastMsg(), playerName, commandSender.getName(), muteReason));
             }
         }
         catch (Exception ex)
@@ -128,6 +111,6 @@ public class MuteCommandExecutor implements TabExecutor
     @Override
     public final List<String> onTabComplete(final CommandSender commandSender, final Command command, final String s, final String[] strings)
     {
-        return null;
+        return Collections.emptyList();
     }
 }

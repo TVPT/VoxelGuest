@@ -14,6 +14,11 @@ import java.util.List;
  */
 public final class Banlist
 {
+    private Banlist()
+    {
+
+    }
+
     /**
      * Bans the player named playerName and stores the ban reason.
      *
@@ -22,7 +27,7 @@ public final class Banlist
      *
      * @return Returns true if the ban operation was successful. False indicates that the player is already banned.
      */
-    public boolean ban(final String playerName, final String banReason)
+    public static boolean ban(final String playerName, final String banReason)
     {
         if (isPlayerBanned(playerName))
         {
@@ -40,7 +45,7 @@ public final class Banlist
      *
      * @return Returns true if the unban operation was successful. False indicates that the player is not banned.
      */
-    public boolean unban(final String playerName)
+    public static boolean unban(final String playerName)
     {
         if (!isPlayerBanned(playerName))
         {
@@ -56,11 +61,11 @@ public final class Banlist
      *
      * @return Returns a list of the names of all banned players.
      */
-    public List<String> getBannedNames()
+    public static List<String> getBannedNames()
     {
         final List<BannedPlayer> bannedPlayers = Persistence.getInstance().loadAll(BannedPlayer.class);
         final List<String> bannedNames = new ArrayList<>();
-        for (BannedPlayer bannedPlayer : bannedPlayers)
+        for (final BannedPlayer bannedPlayer : bannedPlayers)
         {
             bannedNames.add(bannedPlayer.getPlayerName());
         }
@@ -72,19 +77,19 @@ public final class Banlist
      *
      * @return Returns the number of banned players.
      */
-    public int getBanCount()
+    public static int getBanCount()
     {
         return getBannedNames().size();
     }
 
-    private BannedPlayer getBannedPlayer(final String playerName)
+    private static BannedPlayer getBannedPlayer(final String playerName)
     {
         HashMap<String, Object> selectRestrictions = new HashMap<>();
         selectRestrictions.put("playerName", playerName.toLowerCase());
 
         final List<BannedPlayer> bannedPlayers = Persistence.getInstance().loadAll(BannedPlayer.class, selectRestrictions);
 
-        for (BannedPlayer bannedPlayer : bannedPlayers)
+        for (final BannedPlayer bannedPlayer : bannedPlayers)
         {
             if (bannedPlayer.getPlayerName().equalsIgnoreCase(playerName))
             {
@@ -102,7 +107,7 @@ public final class Banlist
      *
      * @return Returns true if the player is banned, otherwise false.
      */
-    public boolean isPlayerBanned(final String playerName)
+    public static boolean isPlayerBanned(final String playerName)
     {
         return getBannedPlayer(playerName) != null;
     }
@@ -114,7 +119,7 @@ public final class Banlist
      *
      * @return Returns the reason the player is banned for.
      */
-    public String whyIsPlayerBanned(final String playerName)
+    public static String getPlayerBanreason(final String playerName)
     {
         Preconditions.checkState(isPlayerBanned(playerName), "Player %s must be banned in order to get the ban reason.", playerName);
         return getBannedPlayer(playerName).getBanReason();

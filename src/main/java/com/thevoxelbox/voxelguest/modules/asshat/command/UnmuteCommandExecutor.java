@@ -2,6 +2,7 @@ package com.thevoxelbox.voxelguest.modules.asshat.command;
 
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
+import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,7 +20,6 @@ import java.util.List;
 public class UnmuteCommandExecutor implements TabExecutor
 {
     private final AsshatModuleConfiguration configuration;
-    private final AsshatModule module;
 
     /**
      * Creates a new unmute command executor.
@@ -28,7 +28,6 @@ public class UnmuteCommandExecutor implements TabExecutor
      */
     public UnmuteCommandExecutor(final AsshatModule module)
     {
-        this.module = module;
         configuration = (AsshatModuleConfiguration) module.getConfiguration();
     }
 
@@ -52,7 +51,7 @@ public class UnmuteCommandExecutor implements TabExecutor
             }
         }
 
-        if (!module.getMutelist().isPlayerMuted(playerName))
+        if (!Mutelist.isPlayerMuted(playerName))
         {
             commandSender.sendMessage(String.format("Player %s is not muted.", playerName));
             return true;
@@ -67,11 +66,11 @@ public class UnmuteCommandExecutor implements TabExecutor
     {
         try
         {
-            module.getMutelist().unmute(playerName);
-            Bukkit.getLogger().info(String.format("%s got unmuted by %s", playerName, commandSender.getName()));
+            Mutelist.unmute(playerName);
+            Bukkit.getLogger().info(String.format("%s unmuted by %s", playerName, commandSender.getName()));
             if (!silentFlag)
             {
-                Bukkit.broadcastMessage(this.module.formatBroadcastMessage(configuration.getUngagBroadcastMsg(), playerName, commandSender.getName(), ""));
+                Bukkit.broadcastMessage(AsshatModule.formatBroadcastMessage(configuration.getUngagBroadcastMsg(), playerName, commandSender.getName(), ""));
             }
         }
         catch (Exception ex)
@@ -86,7 +85,7 @@ public class UnmuteCommandExecutor implements TabExecutor
     {
         if (sender.hasPermission("voxelguest.asshat.unmute"))
         {
-            final List<String> mutedNamesList = this.module.getMutelist().getMutedNames();
+            final List<String> mutedNamesList = Mutelist.getMutedNames();
             if (args.length == 0)
             {
                 return mutedNamesList;

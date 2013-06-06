@@ -1,6 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.asshat.command;
 
-import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
+import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -16,18 +16,6 @@ import java.util.List;
  */
 public class BanreasonCommandExecutor implements TabExecutor
 {
-    private final AsshatModule module;
-
-    /**
-     * Creates a new banreason command executor.
-     *
-     * @param module The owning module.
-     */
-    public BanreasonCommandExecutor(final AsshatModule module)
-    {
-        this.module = module;
-    }
-
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
     {
@@ -37,15 +25,15 @@ public class BanreasonCommandExecutor implements TabExecutor
             return false;
         }
 
-        final String playerName = args[0];
+        final String playerName = args[0].toLowerCase();
 
-        if (!module.getBanlist().isPlayerBanned(playerName))
+        if (!Banlist.isPlayerBanned(playerName))
         {
-            commandSender.sendMessage(String.format("Player %s is not even banned.", playerName));
+            commandSender.sendMessage(String.format("Player %s is not banned.", playerName));
             return true;
         }
 
-        commandSender.sendMessage(String.format("%s is banned for %s", playerName, module.getBanlist().whyIsPlayerBanned(playerName)));
+        commandSender.sendMessage(String.format("%s is banned for %s", playerName, Banlist.getPlayerBanreason(playerName)));
         return true;
     }
 
@@ -54,7 +42,7 @@ public class BanreasonCommandExecutor implements TabExecutor
     {
         if (commandSender.hasPermission("voxelguest.asshat.banreason"))
         {
-            final List<String> bannedNamesList = this.module.getBanlist().getBannedNames();
+            final List<String> bannedNamesList = Banlist.getBannedNames();
             if (args.length == 0)
             {
                 return bannedNamesList;

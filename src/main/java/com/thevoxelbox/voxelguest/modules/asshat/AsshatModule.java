@@ -1,7 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.asshat;
 
 import com.thevoxelbox.voxelguest.modules.GuestModule;
-import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.asshat.command.BanCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.BanreasonCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.FreezeCommandExecutor;
@@ -38,7 +37,6 @@ public class AsshatModule extends GuestModule
     private SoapboxCommandExecutor soapboxCommandExecutor;
     private FreezeCommandExecutor freezeCommandExecutor;
     private Mutelist mutelist = new Mutelist();
-    private Banlist banlist = new Banlist();
     private boolean silenceEnabled = false;
     private boolean freezeEnabled = false;
 
@@ -53,14 +51,12 @@ public class AsshatModule extends GuestModule
 
         banCommandExecutor = new BanCommandExecutor(this);
         unbanCommandExecutor = new UnbanCommandExecutor(this);
-        banreasonCommandExecutor = new BanreasonCommandExecutor(this);
+        banreasonCommandExecutor = new BanreasonCommandExecutor();
         muteCommandExecutor = new MuteCommandExecutor(this);
         unmuteCommandExecutor = new UnmuteCommandExecutor(this);
         kickCommandExecutor = new KickCommandExecutor(this);
         soapboxCommandExecutor = new SoapboxCommandExecutor(this);
         freezeCommandExecutor = new FreezeCommandExecutor(this);
-
-
     }
 
     @Override
@@ -103,14 +99,6 @@ public class AsshatModule extends GuestModule
         commandMappings.put("freeze", freezeCommandExecutor);
 
         return commandMappings;
-    }
-
-    /**
-     * @return Returns the banlist instance.
-     */
-    public final Banlist getBanlist()
-    {
-        return banlist;
     }
 
     /**
@@ -167,7 +155,7 @@ public class AsshatModule extends GuestModule
      *
      * @return Returns the formatted and replaced string.
      */
-    public final String formatBroadcastMessage(final String msg, final String target, final String adminName, final String reason)
+    public static String formatBroadcastMessage(final String msg, final String target, final String adminName, final String reason)
     {
         return msg.replace("%playername%", target).replace("%admin%", adminName)
                 .replace("%reason%", reason);

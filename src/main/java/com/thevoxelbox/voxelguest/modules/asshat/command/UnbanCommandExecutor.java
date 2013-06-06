@@ -2,6 +2,7 @@ package com.thevoxelbox.voxelguest.modules.asshat.command;
 
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
+import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,7 +20,6 @@ import java.util.List;
 public class UnbanCommandExecutor implements TabExecutor
 {
     private final AsshatModuleConfiguration configuration;
-    private final AsshatModule module;
 
     /**
      * Creates a new unban command executor.
@@ -28,7 +28,6 @@ public class UnbanCommandExecutor implements TabExecutor
      */
     public UnbanCommandExecutor(final AsshatModule module)
     {
-        this.module = module;
         configuration = (AsshatModuleConfiguration) module.getConfiguration();
     }
 
@@ -52,7 +51,7 @@ public class UnbanCommandExecutor implements TabExecutor
             }
         }
 
-        if (!module.getBanlist().isPlayerBanned(playerName))
+        if (!Banlist.isPlayerBanned(playerName))
         {
             commandSender.sendMessage(String.format("Player %s is not banned.", playerName));
             return true;
@@ -67,11 +66,11 @@ public class UnbanCommandExecutor implements TabExecutor
     {
         try
         {
-            module.getBanlist().unban(playerName);
-            Bukkit.getLogger().info(String.format("%s got unbanned by %s", playerName, commandSender.getName()));
+            Banlist.unban(playerName);
+            Bukkit.getLogger().info(String.format("%s unbanned by %s", playerName, commandSender.getName()));
             if (!silentFlag)
             {
-                Bukkit.broadcastMessage(this.module.formatBroadcastMessage(configuration.getUnbanBroadcastMsg(), playerName, commandSender.getName(), ""));
+                Bukkit.broadcastMessage(AsshatModule.formatBroadcastMessage(configuration.getUnbanBroadcastMsg(), playerName, commandSender.getName(), ""));
             }
         }
         catch (Exception ex)
@@ -84,9 +83,9 @@ public class UnbanCommandExecutor implements TabExecutor
     @Override
     public final List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args)
     {
-        if (sender.hasPermission("voxelguest.asshat.unmute"))
+        if (sender.hasPermission("voxelguest.asshat.unban"))
         {
-            final List<String> bannedNamesList = this.module.getBanlist().getBannedNames();
+            final List<String> bannedNamesList = Banlist.getBannedNames();
             if (args.length == 0)
             {
                 return bannedNamesList;

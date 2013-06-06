@@ -2,12 +2,18 @@ package com.thevoxelbox.voxelguest.modules.asshat.command;
 
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
+import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
+import com.thevoxelbox.voxelguest.modules.asshat.command.argument.CommonAsshatCommandArguments;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +23,6 @@ import java.util.List;
  */
 public class BanCommandExecutor implements TabExecutor
 {
-    private final AsshatModule module;
     private final AsshatModuleConfiguration configuration;
 
     /**
@@ -27,64 +32,43 @@ public class BanCommandExecutor implements TabExecutor
      */
     public BanCommandExecutor(final AsshatModule module)
     {
-        this.module = module;
         configuration = (AsshatModuleConfiguration) module.getConfiguration();
     }
 
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
     {
-        if (args.length < 1)
+        final CommonAsshatCommandArguments arguments = new CommonAsshatCommandArguments();
+        final CmdLineParser parser = new CmdLineParser(arguments);
+        try
         {
-            commandSender.sendMessage("You must at least specify the name of the player to ban.");
+            parser.parseArgument(args);
+        }
+        catch (CmdLineException e)
+        {
+            e.printStackTrace();
+            commandSender.sendMessage(ChatColor.RED + e.getMessage());
             return false;
         }
 
-        final String playerName = args[0].toLowerCase();
-        boolean forceNameFlag = false;
-        boolean silentFlag = false;
-        String banReason = "";
+        final String banReason = arguments.getReason().isEmpty() ? configuration.getDefaultAsshatReason() : arguments.getReason();
 
-        for (int i = 1; i < args.length; i++)
+        if (arguments.isForceName())
         {
-            final String arg = args[i];
-
-            if (arg.equalsIgnoreCase("-force") || arg.equalsIgnoreCase("-f"))
-            {
-                forceNameFlag = true;
-                continue;
-            }
-
-            if (arg.equalsIgnoreCase("-silent") || arg.equalsIgnoreCase("-si") || arg.equalsIgnoreCase("-s"))
-            {
-                silentFlag = true;
-                continue;
-            }
-
-            banReason += arg + " ";
-        }
-
-        if (banReason.isEmpty())
-        {
-            banReason = configuration.getDefaultAsshatReason();
-        }
-
-        if (forceNameFlag)
-        {
-            safeBan(playerName, banReason, commandSender, silentFlag);
+            safeBan(arguments.getPlayerName(), banReason, commandSender, arguments.isSilent());
             return true;
         }
 
-        final List<Player> players = Bukkit.matchPlayer(playerName);
+        final List<Player> players = Bukkit.matchPlayer(arguments.getPlayerName());
         if (players.size() < 1)
         {
-            commandSender.sendMessage(String.format("Could not find any online player named like %s. Append the -force parameter to the command to ban offline players.", playerName));
+            commandSender.sendMessage(String.format("Could not find any online player named like %s. Append the -force parameter to the command to ban offline players.", arguments.getPlayerName()));
             return true;
         }
 
         if (players.size() > 1)
         {
-            commandSender.sendMessage("Found multiple players matching the name (use the -force flag if you entered the exact player name)" + playerName);
+            commandSender.sendMessage("Found multiple players matching the name (use the -force flag if you entered the exact player name) " + arguments.getPlayerName());
             String list = "";
             for (Player player : players)
             {
@@ -97,14 +81,14 @@ public class BanCommandExecutor implements TabExecutor
         }
 
         players.get(0).kickPlayer(banReason);
-        safeBan(players.get(0).getName(), banReason, commandSender, silentFlag);
+        safeBan(players.get(0).getName(), banReason, commandSender, arguments.isSilent());
 
         return true;
     }
 
     private void safeBan(final String playerName, final String banReason, final CommandSender commandSender, final boolean silentFlag)
     {
-        if (module.getBanlist().isPlayerBanned(playerName))
+        if (Banlist.isPlayerBanned(playerName))
         {
             commandSender.sendMessage(String.format("Player %s is already banned.", playerName));
             return;
@@ -112,11 +96,11 @@ public class BanCommandExecutor implements TabExecutor
 
         try
         {
-            module.getBanlist().ban(playerName, banReason);
-            Bukkit.getLogger().info(String.format("%s got banned for %s by %s", playerName, banReason, commandSender.getName()));
+            Banlist.ban(playerName, banReason);
+            Bukkit.getLogger().info(String.format("%s banned by %s for %s", playerName, commandSender.getName(), banReason));
             if (!silentFlag)
             {
-                Bukkit.broadcastMessage(this.module.formatBroadcastMessage(configuration.getBanBroadcastMsg(), playerName, commandSender.getName(), banReason));
+                Bukkit.broadcastMessage(AsshatModule.formatBroadcastMessage(configuration.getBanBroadcastMsg(), playerName, commandSender.getName(), banReason));
             }
         }
         catch (Exception ex)
@@ -129,6 +113,6 @@ public class BanCommandExecutor implements TabExecutor
     @Override
     public final List<String> onTabComplete(final CommandSender commandSender, final Command command, final String s, final String[] strings)
     {
-        return null;
+        return Collections.emptyList();
     }
 }

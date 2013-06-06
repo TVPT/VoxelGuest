@@ -73,27 +73,36 @@
     </repositories>
 
     <dependencies>
+        <!-- Bukkit -->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>LATEST</version>
             <type>jar</type>
         </dependency>
+
+        <!-- Object serialisation/morphing -->
         <dependency>
-            <groupId>net.sf.morph</groupId>
-            <artifactId>morph</artifactId>
-            <version>1.1.1</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>RELEASE</version>
         </dependency>
+
+        <!-- Generic libraries -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>14.0-rc1</version>
         </dependency>
+
+        <!-- Vault -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <version>1.2.23-SNAPSHOT</version>
         </dependency>
+
+        <!-- ORM -->
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-core</artifactId>
@@ -109,16 +118,27 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.7.2</version>
         </dependency>
+
+        <!-- MC Stats -->
+        <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics</artifactId>
+            <version>R6</version>
+        </dependency>
+
+        <!-- Argument Parsing -->
+        <dependency>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
+            <version>2.0.23</version>
+        </dependency>
+
+        <!-- Unit testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats</groupId>
-            <artifactId>metrics</artifactId>
-            <version>R6</version>
         </dependency>
     </dependencies>
 
@@ -127,13 +147,6 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources/</directory>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>${basedir}</directory>
-                <includes>
-                    <include>LICENSE.txt</include>
-                </includes>
             </resource>
         </resources>
 

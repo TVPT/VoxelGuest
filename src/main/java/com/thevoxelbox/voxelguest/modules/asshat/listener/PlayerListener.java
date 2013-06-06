@@ -1,6 +1,8 @@
 package com.thevoxelbox.voxelguest.modules.asshat.listener;
 
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
+import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
+import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,12 +35,12 @@ public class PlayerListener implements Listener
     {
         final Player player = event.getPlayer();
 
-        if (module.getMutelist().isPlayerMuted(player.getName()))
+        if (Mutelist.isPlayerMuted(player.getName()))
         {
             event.setCancelled(true);
 
             player.sendMessage("You are muted for: ");
-            player.sendMessage(module.getMutelist().whyIsPlayerMuted(player.getName()));
+            player.sendMessage(Mutelist.getPlayerMutereason(player.getName()));
         }
 
         if (module.isSilenceEnabled())
@@ -46,6 +48,7 @@ public class PlayerListener implements Listener
             if (!player.hasPermission(AsshatModule.SILENCE_BYPASS_PERM))
             {
                 event.setCancelled(true);
+                player.sendMessage("Be quiet! Global silence is enabled.");
             }
         }
     }
@@ -60,9 +63,9 @@ public class PlayerListener implements Listener
     {
         final String playerName = event.getName();
 
-        if (module.getBanlist().isPlayerBanned(playerName))
+        if (Banlist.isPlayerBanned(playerName))
         {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, module.getBanlist().whyIsPlayerBanned(playerName));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Banlist.getPlayerBanreason(playerName));
         }
     }
 
