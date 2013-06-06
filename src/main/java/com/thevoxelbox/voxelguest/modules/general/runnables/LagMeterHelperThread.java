@@ -12,12 +12,8 @@ import java.util.Set;
  */
 public final class LagMeterHelperThread extends Thread
 {
+    private static final int TICKS_PER_SECOND = 20;
     private final Set<Player> activePlayers = Collections.synchronizedSet(new HashSet<Player>());
-
-    public LagMeterHelperThread()
-    {
-
-    }
 
     /**
      * Sets a players watch state.
@@ -77,13 +73,13 @@ public final class LagMeterHelperThread extends Thread
             for (final Player player : this.activePlayers)
             {
                 tps = (float) TPSTicker.calculateTPS();
-                if (tps > 20)
+                if (tps > TICKS_PER_SECOND)
                 {
-                    tps = 20;
+                    tps = TICKS_PER_SECOND;
                 }
                 if (player.isOnline())
                 {
-                    player.setExp(tps / 20);
+                    player.setExp(tps / TICKS_PER_SECOND);
                 }
             }
         }

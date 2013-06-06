@@ -1,7 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.general.listener;
 
 import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,6 +32,10 @@ public final class PlayerEventListener implements Listener
         this.module = generalModule;
     }
 
+    /**
+     * Handles entity target events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onEntityTarget(final EntityTargetEvent event)
     {
@@ -49,12 +52,15 @@ public final class PlayerEventListener implements Listener
                 if (this.module.getVanishFakequitHandler().isPlayerFakequit(player))
                 {
                     event.setCancelled(true);
-                    return;
                 }
             }
         }
     }
 
+    /**
+     * Handles player item pickup events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerPickupItem(final PlayerPickupItemEvent event)
     {
@@ -69,11 +75,14 @@ public final class PlayerEventListener implements Listener
             if (this.module.getVanishFakequitHandler().isPlayerFakequit(player))
             {
                 event.setCancelled(true);
-                return;
             }
         }
     }
 
+    /**
+     * Handles player move events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerMove(final PlayerMoveEvent event)
     {
@@ -83,6 +92,10 @@ public final class PlayerEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player chat events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerChat(final AsyncPlayerChatEvent event)
     {
@@ -92,6 +105,10 @@ public final class PlayerEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player teleport events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerTeleport(final PlayerTeleportEvent event)
     {
@@ -101,6 +118,10 @@ public final class PlayerEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player command events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerCommand(final PlayerCommandPreprocessEvent event)
     {
@@ -110,6 +131,10 @@ public final class PlayerEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player interact events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event)
     {
@@ -119,6 +144,10 @@ public final class PlayerEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player quit events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerQuit(final PlayerQuitEvent event)
     {
@@ -128,6 +157,10 @@ public final class PlayerEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player kick events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerKick(final PlayerKickEvent event)
     {

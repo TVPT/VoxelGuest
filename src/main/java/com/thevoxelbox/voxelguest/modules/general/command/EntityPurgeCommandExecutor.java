@@ -131,11 +131,7 @@ public final class EntityPurgeCommandExecutor implements TabExecutor
             {
                 for (Entity entity : entities)
                 {
-                    if (!((entity instanceof Player) ||
-                            (entity instanceof Painting) ||
-                            (entity instanceof ItemFrame) ||
-                            (entity instanceof Minecart) ||
-                            (entity instanceof Villager)))
+                    if (!((entity instanceof Player) || (entity instanceof Painting) || (entity instanceof ItemFrame) || (entity instanceof Minecart) || (entity instanceof Villager)))
                     {
                         entity.remove();
                     }

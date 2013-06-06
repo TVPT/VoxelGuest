@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
- * Handles messages on player join/quit/kick
+ * Handles messages on player join/quit/kick.
  */
 public final class ConnectionEventListener implements Listener
 {
@@ -28,12 +28,16 @@ public final class ConnectionEventListener implements Listener
         this.configuration = (GeneralModuleConfiguration) generalModule.getConfiguration();
     }
 
+    /**
+     * Handles player join events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event)
     {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
-        if (this.configuration.getDefaultWatchTPSState())
+        if (this.configuration.isDefaultWatchTPSState())
         {
             this.module.getLagmeter().setPlayerWatchState(player, true);
         }
@@ -46,6 +50,10 @@ public final class ConnectionEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player quit events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerQuit(final PlayerQuitEvent event)
     {
@@ -64,6 +72,10 @@ public final class ConnectionEventListener implements Listener
         }
     }
 
+    /**
+     * Handles player kick events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerKick(final PlayerKickEvent event)
     {

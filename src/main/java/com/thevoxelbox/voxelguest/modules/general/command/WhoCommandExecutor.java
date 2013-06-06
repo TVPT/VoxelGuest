@@ -54,7 +54,7 @@ public final class WhoCommandExecutor implements CommandExecutor
         {
             final String groupName = entry.getKey();
             final StringBuilder groupStrBuilder = new StringBuilder();
-            groupStrBuilder.append(ChatColor.DARK_GRAY + "[").append(this.getColor(groupName)).append(this.getGroupChar(groupName)).append(ChatColor.DARK_GRAY).append("] ");
+            groupStrBuilder.append(ChatColor.DARK_GRAY).append("[").append(this.getColor(groupName)).append(this.getGroupChar(groupName)).append(ChatColor.DARK_GRAY).append("] ");
             final ListIterator<Player> playerItr = entry.getValue().listIterator();
             while (playerItr.hasNext())
             {
@@ -65,12 +65,12 @@ public final class WhoCommandExecutor implements CommandExecutor
                     {
                         continue;
                     }
-                    groupStrBuilder.append(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "FQ" + ChatColor.DARK_GRAY + "] ");
+                    groupStrBuilder.append(ChatColor.DARK_GRAY).append("[").append(ChatColor.AQUA).append("FQ").append(ChatColor.DARK_GRAY).append("] ");
                 }
 
                 if (player.hasMetadata("isHelper"))
                 {
-                    groupStrBuilder.append(ChatColor.DARK_GRAY + "[" + ChatColor.YELLOW + "H" + ChatColor.DARK_GRAY + "] ");
+                    groupStrBuilder.append(ChatColor.DARK_GRAY).append("[").append(ChatColor.YELLOW).append("H").append(ChatColor.DARK_GRAY).append("] ");
                 }
 
                 if (this.module.getAfkManager().isPlayerAfk(player))
@@ -83,7 +83,7 @@ public final class WhoCommandExecutor implements CommandExecutor
                 }
                 if (playerItr.hasNext())
                 {
-                    groupStrBuilder.append(ChatColor.GOLD + ", ");
+                    groupStrBuilder.append(ChatColor.GOLD).append(", ");
                 }
             }
             sender.sendMessage(groupStrBuilder.toString());
@@ -133,10 +133,10 @@ public final class WhoCommandExecutor implements CommandExecutor
             {
                 final int groupSize = groupCount.get(groupName);
                 final char groupChar = this.getGroupChar(groupName);
-                stringBuilder.append(ChatColor.DARK_GRAY + "[").append(this.getColor(groupName)).append(groupChar).append(":").append(groupSize).append(ChatColor.DARK_GRAY).append("] ");
+                stringBuilder.append(ChatColor.DARK_GRAY).append("[").append(this.getColor(groupName)).append(groupChar).append(":").append(groupSize).append(ChatColor.DARK_GRAY).append("] ");
             }
             final int onlinePlayers = canSeeFQ ? Bukkit.getOnlinePlayers().length : Bukkit.getOnlinePlayers().length - this.module.getVanishFakequitHandler().getFakequitSize();
-            stringBuilder.append(ChatColor.DARK_GRAY + "(" + ChatColor.WHITE + "O:").append(onlinePlayers).append(ChatColor.DARK_GRAY).append(")");
+            stringBuilder.append(ChatColor.DARK_GRAY).append("(").append(ChatColor.WHITE).append("O:").append(onlinePlayers).append(ChatColor.DARK_GRAY).append(")");
             return stringBuilder.toString();
         }
         catch (final Exception e)
@@ -169,10 +169,10 @@ public final class WhoCommandExecutor implements CommandExecutor
             {
                 final int groupSize = groupCount.get(groupName);
                 final char groupChar = this.getGroupChar(groupName);
-                stringBuilder.append(ChatColor.DARK_GRAY + "[").append(this.getColor(groupName)).append(groupChar).append(":").append(groupSize).append(ChatColor.DARK_GRAY).append("] ");
+                stringBuilder.append(ChatColor.DARK_GRAY).append("[").append(this.getColor(groupName)).append(groupChar).append(":").append(groupSize).append(ChatColor.DARK_GRAY).append("] ");
             }
             final int onlinePlayers = canSeeFQ ? Bukkit.getOnlinePlayers().length : Bukkit.getOnlinePlayers().length - this.module.getVanishFakequitHandler().getFakequitSize();
-            stringBuilder.append(ChatColor.DARK_GRAY + "(" + ChatColor.WHITE + "O:").append(onlinePlayers).append(ChatColor.DARK_GRAY).append(")");
+            stringBuilder.append(ChatColor.DARK_GRAY).append("(").append(ChatColor.WHITE).append("O:").append(onlinePlayers).append(ChatColor.DARK_GRAY).append(")");
             return stringBuilder.toString();
         }
     }
