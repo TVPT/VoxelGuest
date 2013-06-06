@@ -9,13 +9,11 @@ import java.lang.annotation.Target;
  * @author MikeMatrix
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ConfigurationGetter
+@Target(ElementType.FIELD)
+public @interface ConfigurationProperty
 {
     /**
      * The name of the configuration entry. (This name will be displayed in the plain text file.) Needs a matching @ConfigurationSetter statement.
-     *
-     * @return Returns the name of the configuration entry.
      */
     String value();
 }

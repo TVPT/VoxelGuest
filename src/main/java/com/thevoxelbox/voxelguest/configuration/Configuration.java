@@ -1,16 +1,14 @@
 package com.thevoxelbox.voxelguest.configuration;
 
 import com.google.common.base.Preconditions;
-import com.thevoxelbox.voxelguest.configuration.annotations.ConfigurationGetter;
-import com.thevoxelbox.voxelguest.configuration.annotations.ConfigurationSetter;
-import net.sf.morph.transform.transformers.SimpleDelegatingTransformer;
+import com.google.gson.Gson;
+import com.thevoxelbox.voxelguest.configuration.annotations.ConfigurationProperty;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Properties;
 
 /**
@@ -18,7 +16,7 @@ import java.util.Properties;
  */
 public final class Configuration
 {
-    private static SimpleDelegatingTransformer transformer = new SimpleDelegatingTransformer();
+    private static Gson transformer = new Gson();
 
     private Configuration()
     {
@@ -47,31 +45,24 @@ public final class Configuration
                 properties.load(fileReader);
 
 
-                for (Method method : targetObject.getClass().getMethods())
+                for (Field field : targetObject.getClass().getDeclaredFields())
                 {
-                    if (method.isAnnotationPresent(ConfigurationSetter.class))
+                    if (field.isAnnotationPresent(ConfigurationProperty.class))
                     {
-                        Preconditions.checkState(method.getParameterTypes().length == 1, "ConfigurationSetter methods require to have exactly 1 argument.");
+                        field.setAccessible(true);
+                        ConfigurationProperty property = field.getAnnotation(ConfigurationProperty.class);
 
-                        ConfigurationSetter setter = method.getAnnotation(ConfigurationSetter.class);
-
-                        if (properties.containsKey(setter.value()))
+                        if (properties.containsKey(property.value()))
                         {
-                            final String property = properties.getProperty(setter.value());
-                            final Class<?> destinationClass = method.getParameterTypes()[0];
-                            Object object = transformer.convert(destinationClass, property);
-
-                            method.invoke(targetObject, object);
+                            final String value = properties.getProperty(property.value());
+                            final Class<?> destinationClass = field.getType();
+                            Object object = transformer.fromJson(value, destinationClass);
+                            field.set(targetObject, object);
                         }
                     }
                 }
             }
             catch (IOException e)
-            {
-                e.printStackTrace();
-                return false;
-            }
-            catch (InvocationTargetException e)
             {
                 e.printStackTrace();
                 return false;
@@ -104,30 +95,23 @@ public final class Configuration
         {
             Properties properties = new Properties();
 
-            for (Method method : sourceObject.getClass().getMethods())
+            for (Field field : sourceObject.getClass().getDeclaredFields())
             {
-                if (method.isAnnotationPresent(ConfigurationGetter.class))
+                if (field.isAnnotationPresent(ConfigurationProperty.class))
                 {
-                    Preconditions.checkState(method.getParameterTypes().length == 0, "ConfigurationGetter methods require to have no arguments.");
+                    field.setAccessible(true);
+                    ConfigurationProperty property = field.getAnnotation(ConfigurationProperty.class);
 
-                    ConfigurationGetter setter = method.getAnnotation(ConfigurationGetter.class);
+                    Object result = Preconditions.checkNotNull(field.get(sourceObject), "ConfigurationProperty must not be null.");
+                    String resultString = transformer.toJson(result);
 
-                    Object result = Preconditions.checkNotNull(method.invoke(sourceObject), "ConfigurationGetter methods require not to return null.");
-                    String resultString = (String) transformer.convert(String.class, result);
-
-
-                    properties.setProperty(setter.value(), resultString);
+                    properties.setProperty(property.value(), resultString);
                 }
             }
 
             properties.store(fileWriter, null);
         }
         catch (IOException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-        catch (InvocationTargetException e)
         {
             e.printStackTrace();
             return false;
