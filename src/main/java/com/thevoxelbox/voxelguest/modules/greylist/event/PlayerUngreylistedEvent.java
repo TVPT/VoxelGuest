@@ -22,6 +22,10 @@ public final class PlayerUngreylistedEvent extends Event
         this.playerName = playerName;
     }
 
+    /**
+     * Does some dark magic stuff.
+     * @return Returns a mystic list of event handlers.
+     */
     public static HandlerList getHandlerList()
     {
         return HANDLER_LIST;
@@ -33,13 +37,12 @@ public final class PlayerUngreylistedEvent extends Event
         return HANDLER_LIST;
     }
 
+    /**
+     *
+     * @return Returns the name of the player ungreylisted.
+     */
     public String getPlayerName()
     {
         return playerName;
-    }
-
-    public void setPlayerName(final String playerName)
-    {
-        this.playerName = playerName;
     }
 }

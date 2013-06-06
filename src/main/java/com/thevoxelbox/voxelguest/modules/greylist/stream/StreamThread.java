@@ -1,18 +1,23 @@
-package com.thevoxelbox.voxelguest.modules.greylist;
+package com.thevoxelbox.voxelguest.modules.greylist.stream;
+
+import com.thevoxelbox.voxelguest.modules.greylist.GreylistConfiguration;
+import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
+import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @deprecated This will be replaced with a new and safer system.
+ *
  */
-@Deprecated
-final class StreamThread extends Thread
+public final class StreamThread extends Thread
 {
 
     private final GreylistModule module;
     private ServerSocket serverSocket;
-    private StreamReader reader;
+    private List<StreamReader> readers = new ArrayList<>();
 
     public StreamThread(final GreylistModule module)
     {
@@ -23,18 +28,20 @@ final class StreamThread extends Thread
         }
         catch (IOException ex)
         {
-            this.serverSocket = null;
-            //VoxelGuest.log(name, "Could not bind to port " + streamPort + ". Perhaps it is already in use?", 2);
+            Bukkit.getLogger().severe("Failed to start greylist stream. - Unable to create socket.");
+            ex.printStackTrace();
         }
     }
 
     public void killProcesses()
     {
-        if (reader != null && reader.getStatus() == 100)
+        for (StreamReader reader : readers)
         {
-            reader.interrupt();
+            if (reader != null && reader.isAlive())
+            {
+                reader.interrupt();
+            }
         }
-        this.interrupt();
         try
         {
             serverSocket.close();
@@ -43,6 +50,7 @@ final class StreamThread extends Thread
         {
             ex.printStackTrace();
         }
+        this.interrupt();
     }
 
     @Override
@@ -57,7 +65,8 @@ final class StreamThread extends Thread
         {
             while (true)
             {
-                reader = new StreamReader(serverSocket.accept(), module);
+                StreamReader reader = new StreamReader(serverSocket.accept(), module);
+                readers.add(reader);
                 reader.start();
             }
 

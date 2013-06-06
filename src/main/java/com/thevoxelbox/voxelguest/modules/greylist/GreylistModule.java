@@ -1,22 +1,20 @@
 package com.thevoxelbox.voxelguest.modules.greylist;
 
+import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.GuestModule;
 import com.thevoxelbox.voxelguest.modules.greylist.command.GreylistCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.greylist.command.UngreylistCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.greylist.command.WhitelistCommandExecutor;
-import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerGreylistEvent;
-import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerGreylistedEvent;
-import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerUngreylistedEvent;
 import com.thevoxelbox.voxelguest.modules.greylist.listener.GreylistListener;
-import com.thevoxelbox.voxelguest.modules.greylist.model.Greylistee;
-import com.thevoxelbox.voxelguest.persistence.Persistence;
+import com.thevoxelbox.voxelguest.modules.greylist.stream.StreamPacemaker;
+import com.thevoxelbox.voxelguest.modules.greylist.stream.StreamThread;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * @author MikeMatrix
@@ -30,7 +28,8 @@ public final class GreylistModule extends GuestModule
     private UngreylistCommandExecutor ungreylistCommandExecutor;
     private WhitelistCommandExecutor whitelistCommandExecutor;
     private GreylistConfiguration config;
-    private StreamThread streamTask;
+    private StreamPacemaker streamPacemakerThread;
+    private BukkitTask streamPacemaker;
 
     /**
      *
@@ -51,8 +50,9 @@ public final class GreylistModule extends GuestModule
     {
         if (config.isStreamGreylisting())
         {
-            this.streamTask = new StreamThread(this);
-            this.streamTask.start();
+            StreamThread streamThread = new StreamThread(this);
+            streamPacemakerThread = new StreamPacemaker(streamThread);
+            streamPacemaker = Bukkit.getScheduler().runTaskTimer(VoxelGuest.getPluginInstance(), streamPacemakerThread, 200, 20 * 30);
         }
         super.onEnable();
     }
@@ -60,12 +60,9 @@ public final class GreylistModule extends GuestModule
     @Override
     public void onDisable()
     {
-        super.onDisable();
+        streamPacemaker.cancel();
+        streamPacemakerThread.kill();
 
-        if (this.streamTask != null)
-        {
-            this.streamTask.killProcesses();
-        }
         super.onDisable();
     }
 

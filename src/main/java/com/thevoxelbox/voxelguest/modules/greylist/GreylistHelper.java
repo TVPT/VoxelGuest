@@ -1,21 +1,20 @@
 package com.thevoxelbox.voxelguest.modules.greylist;
 
-import java.util.HashMap;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-
 import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerGreylistEvent;
 import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerGreylistedEvent;
 import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerUngreylistedEvent;
 import com.thevoxelbox.voxelguest.modules.greylist.model.Greylistee;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
+import org.bukkit.Bukkit;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author MikeMatrix
  * @author TheCryoknight
  */
-public class GreylistHelper
+public final class GreylistHelper
 {
 
     /**

@@ -21,30 +21,21 @@ public final class Greylistee
     {
     }
 
+    /**
+     *
+     * @param name The name of the player to greylist.
+     */
     public Greylistee(final String name)
     {
         this.name = name;
     }
 
-    public long getId()
-    {
-        return id;
-    }
-
-    public void setId(final long id)
-    {
-        this.id = id;
-    }
-
+    /**
+     *
+     * @return Returns the name of the greylistee.
+     */
     public String getName()
     {
         return name;
     }
-
-    public void setName(final String name)
-    {
-        this.name = name;
-    }
-
-
 }

@@ -31,6 +31,10 @@ public final class GreylistListener implements Listener
         this.moduleConfiguration = (GreylistConfiguration) greylistModule.getConfiguration();
     }
 
+    /**
+     * Handles login events.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerLogin(final PlayerLoginEvent event)
     {
@@ -48,6 +52,10 @@ public final class GreylistListener implements Listener
         }
     }
 
+    /**
+     * Handles greylist events, does broadcasts and sets the players group.
+     * @param event The Bukkit event.
+     */
     @EventHandler
     public void onPlayerGreylisted(final PlayerGreylistedEvent event)
     {
