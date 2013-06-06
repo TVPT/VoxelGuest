@@ -2,7 +2,6 @@ package com.thevoxelbox.voxelguest.commands;
 
 import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.Module;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,42 +27,38 @@ public final class ModulesCommandExecutor implements TabExecutor
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args)
     {
-        if (sender.hasPermission("voxelguest.manage.modules"))
+        final List<String> matches = new ArrayList<>();
+        if (args.length >= 1)
         {
-            final List<String> matches = new ArrayList<>();
-            if (args.length >= 1)
+            if (args.length == 1)
             {
-                if (args.length == 1)
+                for (String subcommand : SUBCOMMANDS)
                 {
-                    for (String subcommand : SUBCOMMANDS)
+                    if (subcommand.startsWith(args[0].toLowerCase()))
                     {
-                        if (subcommand.startsWith(args[0].toLowerCase()))
-                        {
-                            matches.add(subcommand);
-                        }
-                    }
-                }
-                else if (args.length == 2)
-                {
-                    final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : registeredModules.keySet())
-                    {
-                        final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
-                        if (className.toLowerCase().startsWith(args[1].toLowerCase()))
-                        {
-                            matches.add(className);
-                        }
+                        matches.add(subcommand);
                     }
                 }
             }
-            else
+            else if (args.length == 2)
             {
-                matches.addAll(Arrays.asList(SUBCOMMANDS));
+                final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
+                for (Module module : registeredModules.keySet())
+                {
+                    final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
+                    if (className.toLowerCase().startsWith(args[1].toLowerCase()))
+                    {
+                        matches.add(className);
+                    }
+                }
             }
-            Collections.sort(matches);
-            return matches;
         }
-        return null;
+        else
+        {
+            matches.addAll(Arrays.asList(SUBCOMMANDS));
+        }
+        Collections.sort(matches);
+        return matches;
     }
 
     @Override
@@ -106,9 +101,8 @@ public final class ModulesCommandExecutor implements TabExecutor
                 break;
 
             default:
-            {
                 final StringBuilder builder = new StringBuilder();
-                builder.append(ChatColor.GRAY + "Unknown Subcommand. Available: " + ChatColor.GREEN);
+                builder.append(ChatColor.GRAY).append("Unknown Subcommand. Available: ").append(ChatColor.GREEN);
                 for (int i = 0; i < SUBCOMMANDS.length; i++)
                 {
                     builder.append(SUBCOMMANDS[i]);
@@ -118,17 +112,15 @@ public final class ModulesCommandExecutor implements TabExecutor
                     }
                     else if (i == (SUBCOMMANDS.length - 2))
                     {
-                        builder.append(ChatColor.GRAY + ", and " + ChatColor.GREEN);
+                        builder.append(ChatColor.GRAY).append(", and ").append(ChatColor.GREEN);
                     }
                     else
                     {
-                        builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN);
+                        builder.append(ChatColor.GRAY).append(", ").append(ChatColor.GREEN);
                     }
                 }
                 commandSender.sendMessage(builder.toString());
-            }
         }
-
 
         return false;
     }
@@ -140,7 +132,7 @@ public final class ModulesCommandExecutor implements TabExecutor
         sender.sendMessage(ChatColor.GREEN + "Registered Modules");
         sender.sendMessage(ChatColor.GRAY + "-------------------");
 
-        for (Module module : registeredModules.keySet())
+        for (final Module module : registeredModules.keySet())
         {
             final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
             sender.sendMessage((module.isEnabled() ? ChatColor.GREEN : ChatColor.RED) + className + ChatColor.GRAY + " (" + ChatColor.WHITE + module.getName() + ChatColor.GRAY + ")");

@@ -5,7 +5,6 @@ import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.general.AfkMessage;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistHelper;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,6 +23,7 @@ import java.util.Scanner;
 
 /**
  * Handles /vgimport commands.
+ *
  * @author Monofraps
  * @author TheCryoknight
  */
@@ -43,15 +43,13 @@ public final class ImportCommandExecutor implements TabExecutor
         switch (args[0].toLowerCase())
         {
             case "bans":
-            {
                 // Import bans from VG3 and VG4
                 boolean fail = false;
-                final Banlist banlist = new Banlist();
-                if (!this.importVG3Bans(banlist, sender))
+                if (!this.importVG3Bans(sender))
                 {
                     fail = true;
                 }
-                if (!this.importVG4Bans(banlist, sender))
+                if (!this.importVG4Bans())
                 {
                     fail = true;
                 }
@@ -65,10 +63,8 @@ public final class ImportCommandExecutor implements TabExecutor
                     sender.sendMessage(ChatColor.GRAY + "Banlist import completed!");
                 }
                 return true;
-            }
 
             case "afkmessages":
-            {
                 // Import Afk messages from VG3
                 if (this.importAfkMessages(sender))
                 {
@@ -79,10 +75,8 @@ public final class ImportCommandExecutor implements TabExecutor
                     sender.sendMessage(ChatColor.RED + "Afk message import failed!");
                 }
                 return true;
-            }
 
             case "greylist":
-            {
                 if (this.importGreylist(sender))
                 {
                     sender.sendMessage(ChatColor.GRAY + "greylist import completed!");
@@ -91,13 +85,10 @@ public final class ImportCommandExecutor implements TabExecutor
                 {
                     sender.sendMessage(ChatColor.RED + "greylist import failed!");
                 }
-            }
 
             default:
-            {
                 sender.sendMessage(ChatColor.RED + "Unknown import statement.");
                 return false;
-            }
         }
     }
 
@@ -127,10 +118,9 @@ public final class ImportCommandExecutor implements TabExecutor
      * If a player is already banned it will do nothing.
      * These are the bans stored at "plugins/VoxelGuest/asshatmitigation/banned.properties".
      *
-     * @param banlist Banlist helper from the asshat module
-     * @param sender User running the command
+     * @return Returns true if the import was successful, false otherwise.
      */
-    public boolean importVG4Bans(final Banlist banlist, final CommandSender sender)
+    private boolean importVG4Bans()
     {
         final Properties properties = new Properties();
         final File banfileVG4 = new File("plugins" + File.separator + "VoxelGuest" + File.separator + "asshatmitigation" + File.separator + "banned.properties");
@@ -150,9 +140,9 @@ public final class ImportCommandExecutor implements TabExecutor
 
             final String bannedName = (String) ban.getKey();
             final String banReason = (String) ban.getValue();
-            if (!banlist.isPlayerBanned(bannedName))
+            if (!Banlist.isPlayerBanned(bannedName))
             {
-                banlist.ban(bannedName, banReason);
+                Banlist.ban(bannedName, banReason);
             }
         }
         return true;
@@ -163,10 +153,11 @@ public final class ImportCommandExecutor implements TabExecutor
      * If a player is already banned it will do nothing.
      * These are the bans stored at "plugins\VoxelGuest\banned.txt".
      *
-     * @param banlist Banlist helper from the asshat module
      * @param sender User running the command
+     *
+     * @return Returns true if the import was successful, false otherwise.
      */
-    public boolean importVG3Bans(final Banlist banlist, final CommandSender sender)
+    private boolean importVG3Bans(final CommandSender sender)
     {
         final File banfileVG3 = new File("plugins" + File.separator + "VoxelGuest" + File.separator + "banned.txt");
         final Scanner scanner;
@@ -187,9 +178,9 @@ public final class ImportCommandExecutor implements TabExecutor
             {
                 final String line = scanner.nextLine();
                 final String[] data = line.split(">");
-                if (!banlist.isPlayerBanned(data[0]))
+                if (!Banlist.isPlayerBanned(data[0]))
                 {
-                    banlist.ban(data[0], data[1]);
+                    Banlist.ban(data[0], data[1]);
                 }
                 sender.sendMessage(ChatColor.DARK_AQUA + "Imported ban: " + ChatColor.GOLD + data[0]);
             }
@@ -210,8 +201,10 @@ public final class ImportCommandExecutor implements TabExecutor
      * Imports all random afk messages from VoxelGuest 3.
      *
      * @param sender Sender to inform of imports.
+     *
+     * @return Returns true if the import was successful, false otherwise.
      */
-    public boolean importAfkMessages(final CommandSender sender)
+    private boolean importAfkMessages(final CommandSender sender)
     {
         final File msgFile = new File("plugins" + File.separator + "VoxelGuest" + File.separator + "afkmsg.txt");
         final Scanner scan;
@@ -251,8 +244,10 @@ public final class ImportCommandExecutor implements TabExecutor
      * Imports all greylists from prior versions of VoxelGuest.
      *
      * @param sender Sender to inform of imports.
+     *
+     * @return Returns true if the import was successful, false otherwise.
      */
-    public boolean importGreylist(final CommandSender sender)
+    private boolean importGreylist(final CommandSender sender)
     {
         final GreylistHelper greylistHelper = new GreylistHelper();
         final File afkMsgFile = new File("plugins" + File.separator + "VoxelGuest" + File.separator + "greylist.txt");
