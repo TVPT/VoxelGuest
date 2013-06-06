@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.*;
 /**
  * @author Monofraps
  */
-public final class ModuleManager      // implements ModuleManager -- TODO: export API stuff
+public final class ModuleManager
 {
     // maps module <-> registered event listeners
     private HashMap<Module, HashSet<Listener>> registeredModules = new HashMap<>();
@@ -81,8 +81,7 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
         // it also prevents incomplete modules from staying enabled
         try
         {
-            final Set<Listener> moduleListeners = module.getListeners();
-            checkNotNull(moduleListeners, String.format("Module %s returned null when asked for a list of listeners.", module.toString()));
+            final Set<Listener> moduleListeners = checkNotNull(module.getListeners(), String.format("Module %s returned null when asked for a list of listeners.", module.toString()));
 
             if (!moduleListeners.isEmpty())
             {
@@ -112,8 +111,7 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
         {
             for (String command : commandExecutors.keySet())
             {
-                final PluginCommand pluginCommand = VoxelGuest.getPluginInstance().getCommand(command);
-                checkNotNull(pluginCommand, "You need to put %s into the plugin.yml", command);
+                final PluginCommand pluginCommand = checkNotNull(VoxelGuest.getPluginInstance().getCommand(command), "You need to put %s into the plugin.yml", command);
                 pluginCommand.setExecutor(commandExecutors.get(command));
             }
         }
@@ -223,18 +221,19 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
             ex.printStackTrace();
         }
 
-        if(!isShutdown) {
-        final ModuleMeta moduleMeta = new ModuleMeta();
-        moduleMeta.setModuleName(module.getName());
-        moduleMeta.setEnabled(false);
+        if (!isShutdown)
+        {
+            final ModuleMeta moduleMeta = new ModuleMeta();
+            moduleMeta.setModuleName(module.getName());
+            moduleMeta.setEnabled(false);
 
-        Persistence.getInstance().save(moduleMeta);
+            Persistence.getInstance().save(moduleMeta);
         }
     }
 
     public void disableModuleByInstance(final Module module)
     {
-         disableModuleByInstance(module, false);
+        disableModuleByInstance(module, false);
     }
 
     /**
@@ -265,9 +264,8 @@ public final class ModuleManager      // implements ModuleManager -- TODO: expor
 
     public void disableModuleByType(final Class<? extends Module> module)
     {
-         disableModuleByType(module, false);
+        disableModuleByType(module, false);
     }
-
 
     /**
      * Restarts or just enables a give module. It calls disableModuleByInstance and enableModuleByInstance internally.

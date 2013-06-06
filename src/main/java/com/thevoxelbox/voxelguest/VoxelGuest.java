@@ -48,7 +48,7 @@ public class VoxelGuest extends JavaPlugin
     {
         if (VoxelGuest.pluginInstance != null)
         {
-            throw new RuntimeException("Guest Plugin Instance already set.");
+            throw new RuntimeException("VoxelGuest Plugin Instance already set.");
         }
 
         VoxelGuest.pluginInstance = pluginInstance;
@@ -68,7 +68,7 @@ public class VoxelGuest extends JavaPlugin
     {
         if (VoxelGuest.moduleManagerInstance != null)
         {
-            throw new RuntimeException("Guest Module Manger Instance already set.");
+            throw new RuntimeException("VoxelGuest Module Manger Instance already set.");
         }
 
         VoxelGuest.moduleManagerInstance = moduleManagerInstance;
@@ -89,6 +89,15 @@ public class VoxelGuest extends JavaPlugin
         VoxelGuest.perms = perms;
     }
 
+    /**
+     *
+     * @return Returns true if a permission provider is available.
+     */
+    public static boolean hasPermissionProvider()
+    {
+        return VoxelGuest.perms != null;
+    }
+
     @Override
     public final void onDisable()
     {
@@ -107,6 +116,9 @@ public class VoxelGuest extends JavaPlugin
         }
     }
 
+    /**
+     * Enables the plugin.
+     */
     @Override
     public final void onEnable()
     {
@@ -139,150 +151,7 @@ public class VoxelGuest extends JavaPlugin
 
         try
         {
-            Metrics metrics = new Metrics(this);
-
-            Metrics.Graph asshatGraph = metrics.createGraph("Asshat Statistics");
-            asshatGraph.addPlotter(new Metrics.Plotter("Banned Players")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (!(module instanceof AsshatModule))
-                        {
-                            continue;
-                        }
-
-                        final AsshatModule asshatModule = (AsshatModule) module;
-                        if (!asshatModule.isEnabled())
-                        {
-                            return 0;
-                        }
-
-                        final Banlist banlist = asshatModule.getBanlist();
-                        return banlist.getBanCount();
-                    }
-
-                    return 0;
-                }
-            });
-
-            asshatGraph.addPlotter(new Metrics.Plotter("Muted Players")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (!(module instanceof AsshatModule))
-                        {
-                            continue;
-                        }
-
-                        final AsshatModule asshatModule = (AsshatModule) module;
-                        if (!asshatModule.isEnabled())
-                        {
-                            return 0;
-                        }
-
-                        final Mutelist mutelist = asshatModule.getMutelist();
-                        return mutelist.getMuteCount();
-                    }
-
-                    return 0;
-                }
-            });
-
-            Metrics.Graph moduleGraph = metrics.createGraph("Enabled Modules");
-            moduleGraph.addPlotter(new Metrics.Plotter("Asshat Module")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (module instanceof AsshatModule)
-                        {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                }
-            });
-
-            moduleGraph.addPlotter(new Metrics.Plotter("General Module")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (module instanceof GeneralModule)
-                        {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                }
-            });
-
-            moduleGraph.addPlotter(new Metrics.Plotter("Greylist Module")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (module instanceof GreylistModule)
-                        {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                }
-            });
-
-            moduleGraph.addPlotter(new Metrics.Plotter("Helper Module")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (module instanceof HelperModule)
-                        {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                }
-            });
-
-            moduleGraph.addPlotter(new Metrics.Plotter("Region Module")
-            {
-                @Override
-                public int getValue()
-                {
-                    final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                    for (Module module : modules.keySet())
-                    {
-                        if (module instanceof RegionModule)
-                        {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                }
-            });
-
-            metrics.start();
+            startMetrics();
         }
         catch (IOException e)
         {
@@ -290,6 +159,152 @@ public class VoxelGuest extends JavaPlugin
         }
 
         VoxelGuest.getModuleManagerInstance().loadFromPersistence();
+    }
+
+    private void startMetrics() throws IOException
+    {
+        Metrics metrics = new Metrics(this);
+
+        Metrics.Graph asshatGraph = metrics.createGraph("Asshat Statistics");
+        asshatGraph.addPlotter(new Metrics.Plotter("Banned Players")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (!(module instanceof AsshatModule))
+                    {
+                        continue;
+                    }
+
+                    final AsshatModule asshatModule = (AsshatModule) module;
+                    if (!asshatModule.isEnabled())
+                    {
+                        return 0;
+                    }
+
+                    return Banlist.getBanCount();
+                }
+
+                return 0;
+            }
+        });
+
+        asshatGraph.addPlotter(new Metrics.Plotter("Muted Players")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (!(module instanceof AsshatModule))
+                    {
+                        continue;
+                    }
+
+                    final AsshatModule asshatModule = (AsshatModule) module;
+                    if (!asshatModule.isEnabled())
+                    {
+                        return 0;
+                    }
+
+                    return Mutelist.getMuteCount();
+                }
+
+                return 0;
+            }
+        });
+
+        Metrics.Graph moduleGraph = metrics.createGraph("Enabled Modules");
+        moduleGraph.addPlotter(new Metrics.Plotter("Asshat Module")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (module instanceof AsshatModule)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+
+        moduleGraph.addPlotter(new Metrics.Plotter("General Module")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (module instanceof GeneralModule)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+
+        moduleGraph.addPlotter(new Metrics.Plotter("Greylist Module")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (module instanceof GreylistModule)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+
+        moduleGraph.addPlotter(new Metrics.Plotter("Helper Module")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (module instanceof HelperModule)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+
+        moduleGraph.addPlotter(new Metrics.Plotter("Region Module")
+        {
+            @Override
+            public int getValue()
+            {
+                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
+                for (Module module : modules.keySet())
+                {
+                    if (module instanceof RegionModule)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+
+        metrics.start();
     }
 
     private boolean setupPermissions()
@@ -303,9 +318,5 @@ public class VoxelGuest extends JavaPlugin
 
         setPerms(rsp.getProvider());
         return VoxelGuest.hasPermissionProvider();
-    }
-
-    public static boolean hasPermissionProvider() {
-        return VoxelGuest.perms != null;
     }
 }
