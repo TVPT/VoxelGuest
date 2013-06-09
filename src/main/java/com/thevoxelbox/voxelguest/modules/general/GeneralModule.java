@@ -6,6 +6,7 @@ import com.thevoxelbox.voxelguest.modules.general.command.AddAfkMessageCommandEx
 import com.thevoxelbox.voxelguest.modules.general.command.AfkCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.general.command.EntityPurgeCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.general.command.FakequitCommandExecutor;
+import com.thevoxelbox.voxelguest.modules.general.command.PlayerGroupCommand;
 import com.thevoxelbox.voxelguest.modules.general.command.SystemCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.general.command.VanishCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.general.command.VpgCommandExecutor;
@@ -47,6 +48,7 @@ public final class GeneralModule extends GuestModule
     private final VpgCommandExecutor vpgCommandExecutor;
     private final VtpCommandExecutor vtpCommandExecutor;
     private final AddAfkMessageCommandExecutor addAfkMessageCommandExecutor;
+    private final PlayerGroupCommand playerGroupCommandExecutor;
     //Listeners
     private final ConnectionEventListener connectionEventListener;
     private final PlayerEventListener playerEventListener;
@@ -54,10 +56,10 @@ public final class GeneralModule extends GuestModule
     private final TPSTicker ticker = new TPSTicker();
     //Lag Meter thread and helper
     private final LagMeterHelperThread lagmeter = new LagMeterHelperThread();
-    private BukkitTask lagmeterTask;
     //Handlers
     private final AfkManager afkManager;
     private final VanishFakequitHandler vanishFakequitHandler;
+    private BukkitTask lagmeterTask;
     private GeneralModuleConfiguration configuration;
     private int tpsTickerTaskId = -1;
     private int permGenMonitorTaskId = -1;
@@ -83,6 +85,7 @@ public final class GeneralModule extends GuestModule
         this.vpgCommandExecutor = new VpgCommandExecutor();
         this.vtpCommandExecutor = new VtpCommandExecutor();
         this.addAfkMessageCommandExecutor = new AddAfkMessageCommandExecutor();
+        this.playerGroupCommandExecutor = new PlayerGroupCommand();
 
         this.afkManager = new AfkManager(this);
         this.vanishFakequitHandler = new VanishFakequitHandler(this);
@@ -155,6 +158,7 @@ public final class GeneralModule extends GuestModule
         commandMappings.put("vtp", this.vtpCommandExecutor);
         commandMappings.put("watchtps", this.watchTPSCommadExecutor);
         commandMappings.put("addafkmessage", this.addAfkMessageCommandExecutor);
+        commandMappings.put("vgpg", this.playerGroupCommandExecutor);
 
 
         return commandMappings;

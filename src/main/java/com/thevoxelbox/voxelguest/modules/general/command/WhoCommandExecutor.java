@@ -2,7 +2,8 @@ package com.thevoxelbox.voxelguest.modules.general.command;
 
 import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
-import com.thevoxelbox.voxelguest.modules.general.GeneralModuleConfiguration;
+import com.thevoxelbox.voxelguest.modules.general.PlayerGroup;
+import com.thevoxelbox.voxelguest.modules.general.PlayerGroupDAO;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +25,6 @@ import java.util.Map.Entry;
 public final class WhoCommandExecutor implements CommandExecutor
 {
     private final GeneralModule module;
-    private final GeneralModuleConfiguration configuration;
 
     /**
      * Creates a new instance of the who command executor.
@@ -34,7 +34,6 @@ public final class WhoCommandExecutor implements CommandExecutor
     public WhoCommandExecutor(final GeneralModule generalModule)
     {
         this.module = generalModule;
-        this.configuration = (GeneralModuleConfiguration) generalModule.getConfiguration();
     }
 
     @Override
@@ -275,50 +274,10 @@ public final class WhoCommandExecutor implements CommandExecutor
      */
     private String getColor(final String groupName)
     {
-        //TODO: More flexible group system
-        if (groupName.equalsIgnoreCase("admin"))
+        final PlayerGroup playerGroup = PlayerGroupDAO.byGroupName(groupName);
+        if (playerGroup != null)
         {
-            return configuration.getAdminColor();
-        }
-
-        if (groupName.equalsIgnoreCase("curator"))
-        {
-            return configuration.getCuratorColor();
-        }
-
-        if (groupName.equalsIgnoreCase("sniper"))
-        {
-            return configuration.getSniperColor();
-        }
-
-        if (groupName.equalsIgnoreCase("litesniper"))
-        {
-            return configuration.getLiteSniperColor();
-        }
-
-        if (groupName.equalsIgnoreCase("member"))
-        {
-            return configuration.getMemberColor();
-        }
-
-        if (groupName.equalsIgnoreCase("guest"))
-        {
-            return configuration.getGuestColor();
-        }
-
-        if (groupName.equalsIgnoreCase("visitor"))
-        {
-            return configuration.getVisitorColor();
-        }
-
-        if (groupName.equalsIgnoreCase("vip"))
-        {
-            return configuration.getVipColor();
-        }
-
-        if (groupName.equalsIgnoreCase("builder"))
-        {
-            return configuration.getBuilderColor();
+            return playerGroup.getColor();
         }
 
         return ChatColor.WHITE.toString();

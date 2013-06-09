@@ -8,24 +8,6 @@ import org.bukkit.ChatColor;
  */
 public final class GeneralModuleConfiguration
 {
-    @ConfigurationProperty("admin-color")
-    private String adminColor = ChatColor.GOLD.toString();
-    @ConfigurationProperty("curator-color")
-    private String curatorColor = ChatColor.DARK_PURPLE.toString();
-    @ConfigurationProperty("sniper-color")
-    private String sniperColor = ChatColor.DARK_GREEN.toString();
-    @ConfigurationProperty("litesniper-color")
-    private String liteSniperColor = ChatColor.GREEN.toString();
-    @ConfigurationProperty("member-color")
-    private String memberColor = ChatColor.WHITE.toString();
-    @ConfigurationProperty("guest-color")
-    private String guestColor = ChatColor.GRAY.toString();
-    @ConfigurationProperty("visitor-color")
-    private String visitorColor = ChatColor.DARK_GRAY.toString();
-    @ConfigurationProperty("vip-color")
-    private String vipColor = ChatColor.DARK_AQUA.toString();
-    @ConfigurationProperty("builder-color")
-    private String builderColor = ChatColor.BLUE.toString();
     @ConfigurationProperty("random-afk-messages-enabled")
     private boolean randomAfkMsgs = true;
     @ConfigurationProperty("force-watch-tps")
@@ -49,96 +31,6 @@ public final class GeneralModuleConfiguration
     private int permGenShutdownThreshold = 80;
     @ConfigurationProperty("permgen-warning-threshold")
     private int permGenWarningThreshold = 65;
-
-    public String getAdminColor()
-    {
-        return adminColor;
-    }
-
-    public void setAdminColor(final String adminColor)
-    {
-        this.adminColor = adminColor;
-    }
-
-    public String getCuratorColor()
-    {
-        return curatorColor;
-    }
-
-    public void setCuratorColor(final String curatorColor)
-    {
-        this.curatorColor = curatorColor;
-    }
-
-    public String getSniperColor()
-    {
-        return sniperColor;
-    }
-
-    public void setSniperColor(final String sniperColor)
-    {
-        this.sniperColor = sniperColor;
-    }
-
-    public String getLiteSniperColor()
-    {
-        return liteSniperColor;
-    }
-
-    public void setLiteSniperColor(final String liteSniperColor)
-    {
-        this.liteSniperColor = liteSniperColor;
-    }
-
-    public String getMemberColor()
-    {
-        return memberColor;
-    }
-
-    public void setMemberColor(final String memberColor)
-    {
-        this.memberColor = memberColor;
-    }
-
-    public String getGuestColor()
-    {
-        return guestColor;
-    }
-
-    public void setGuestColor(final String guestColor)
-    {
-        this.guestColor = guestColor;
-    }
-
-    public String getVisitorColor()
-    {
-        return visitorColor;
-    }
-
-    public void setVisitorColor(final String visitorColor)
-    {
-        this.visitorColor = visitorColor;
-    }
-
-    public String getVipColor()
-    {
-        return vipColor;
-    }
-
-    public void setVipColor(final String vipColor)
-    {
-        this.vipColor = vipColor;
-    }
-
-    public String getBuilderColor()
-    {
-        return builderColor;
-    }
-
-    public void setBuilderColor(final String builderColor)
-    {
-        this.builderColor = builderColor;
-    }
 
     public boolean isRandomAfkMsgs()
     {

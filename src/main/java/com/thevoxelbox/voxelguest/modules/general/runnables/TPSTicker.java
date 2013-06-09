@@ -12,7 +12,7 @@ public final class TPSTicker implements Runnable
     private static long lastDifference = POLL_INTERVAL;
 
     /**
-     * Calculates the number of ticks in a second
+     * Calculates the number of ticks in a second.
      *
      * @return Number of ticks in a second
      */
