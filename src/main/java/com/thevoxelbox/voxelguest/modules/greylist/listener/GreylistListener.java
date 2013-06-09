@@ -3,6 +3,7 @@ package com.thevoxelbox.voxelguest.modules.greylist.listener;
 import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistConfiguration;
+import com.thevoxelbox.voxelguest.modules.greylist.GreylistDAO;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
 import com.thevoxelbox.voxelguest.modules.greylist.event.PlayerGreylistedEvent;
 import org.bukkit.Bukkit;
@@ -17,7 +18,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
  */
 public final class GreylistListener implements Listener
 {
-    private final GreylistModule greylistModule;
     private final GreylistConfiguration moduleConfiguration;
 
     /**
@@ -27,12 +27,12 @@ public final class GreylistListener implements Listener
      */
     public GreylistListener(final GreylistModule greylistModule)
     {
-        this.greylistModule = greylistModule;
         this.moduleConfiguration = (GreylistConfiguration) greylistModule.getConfiguration();
     }
 
     /**
      * Handles login events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -46,7 +46,7 @@ public final class GreylistListener implements Listener
         }
 
         final Player player = event.getPlayer();
-        if (!player.hasPermission("voxelguest.greylist.override") && !greylistModule.getGreylistHelper().isOnPersistentGreylist(player.getName()))
+        if (!player.hasPermission("voxelguest.greylist.override") && !GreylistDAO.isOnPersistentGreylist(player.getName()))
         {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, moduleConfiguration.getNotGreylistedKickMessage());
         }
@@ -54,6 +54,7 @@ public final class GreylistListener implements Listener
 
     /**
      * Handles greylist events, does broadcasts and sets the players group.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler

@@ -13,9 +13,14 @@ import java.util.List;
 /**
  * @author MikeMatrix
  * @author TheCryoknight
+ * @author Monofraps
  */
-public final class GreylistHelper
+public final class GreylistDAO
 {
+    private GreylistDAO()
+    {
+
+    }
 
     /**
      * Checks if someone is on the greylist.
@@ -24,7 +29,7 @@ public final class GreylistHelper
      *
      * @return Returns true of the given name is on the greylist.
      */
-    public boolean isOnPersistentGreylist(final String name)
+    public static boolean isOnPersistentGreylist(final String name)
     {
         final List<Greylistee> greylistees;
 
@@ -56,7 +61,7 @@ public final class GreylistHelper
      *
      * @param name The name to greylist.
      */
-    public void greylist(final String name)
+    public static void greylist(final String name)
     {
         try
         {
@@ -71,7 +76,7 @@ public final class GreylistHelper
         {
             ex.printStackTrace();
         }
-        if (this.isOnPersistentGreylist(name))
+        if (GreylistDAO.isOnPersistentGreylist(name))
         {
             return;
         }
@@ -93,7 +98,7 @@ public final class GreylistHelper
      *
      * @param name The name to remove.
      */
-    public void ungreylist(final String name)
+    public static void ungreylist(final String name)
     {
         HashMap<String, Object> selectRestrictions = new HashMap<>();
         selectRestrictions.put("name", name.toLowerCase());

@@ -34,6 +34,7 @@ public final class PlayerGreylistEvent extends Event implements Cancellable
 
     /**
      * Does some dark magic stuff.
+     *
      * @return Returns a mystic list of event handlers.
      */
     public static HandlerList getHandlerList()
@@ -42,7 +43,6 @@ public final class PlayerGreylistEvent extends Event implements Cancellable
     }
 
     /**
-     *
      * @return Returns the name of the player greylisted.
      */
     public String getPlayerName()

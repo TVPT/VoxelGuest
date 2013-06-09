@@ -14,7 +14,6 @@ import java.util.List;
  */
 public final class StreamThread extends Thread
 {
-
     private final GreylistModule module;
     private ServerSocket serverSocket;
     private List<StreamReader> readers = new ArrayList<>();
@@ -22,6 +21,7 @@ public final class StreamThread extends Thread
     public StreamThread(final GreylistModule module)
     {
         this.module = module;
+
         try
         {
             this.serverSocket = new ServerSocket(((GreylistConfiguration) module.getConfiguration()).getStreamPort());

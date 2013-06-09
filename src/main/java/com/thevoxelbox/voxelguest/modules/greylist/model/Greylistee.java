@@ -22,7 +22,6 @@ public final class Greylistee
     }
 
     /**
-     *
      * @param name The name of the player to greylist.
      */
     public Greylistee(final String name)
@@ -31,7 +30,6 @@ public final class Greylistee
     }
 
     /**
-     *
      * @return Returns the name of the greylistee.
      */
     public String getName()

@@ -21,7 +21,6 @@ import java.util.HashSet;
  */
 public final class GreylistModule extends GuestModule
 {
-    private final GreylistHelper greylistHelper;
     private GreylistListener greylistListener;
     private GreylistCommandExecutor greylistCommandExecutor;
     private UngreylistCommandExecutor ungreylistCommandExecutor;
@@ -36,11 +35,10 @@ public final class GreylistModule extends GuestModule
     public GreylistModule()
     {
         this.setName("Greylist Module");
-        greylistHelper = new GreylistHelper();
         config = new GreylistConfiguration();
         greylistListener = new GreylistListener(this);
-        greylistCommandExecutor = new GreylistCommandExecutor(this);
-        ungreylistCommandExecutor = new UngreylistCommandExecutor(this);
+        greylistCommandExecutor = new GreylistCommandExecutor();
+        ungreylistCommandExecutor = new UngreylistCommandExecutor();
         whitelistCommandExecutor = new WhitelistCommandExecutor(this);
     }
 
@@ -91,15 +89,5 @@ public final class GreylistModule extends GuestModule
         commandMapping.put("whitelist", whitelistCommandExecutor);
 
         return commandMapping;
-    }
-
-    /**
-     * Gets the separate object that helps in handling the greylist.
-     *
-     * @return the greylist helper
-     */
-    public GreylistHelper getGreylistHelper()
-    {
-        return greylistHelper;
     }
 }

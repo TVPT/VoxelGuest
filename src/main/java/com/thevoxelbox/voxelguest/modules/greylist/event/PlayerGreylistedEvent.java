@@ -26,6 +26,7 @@ public final class PlayerGreylistedEvent extends Event
 
     /**
      * Does some dark magic stuff.
+     *
      * @return Returns a mystic list of event handlers.
      */
     public static HandlerList getHandlerList()
@@ -47,15 +48,5 @@ public final class PlayerGreylistedEvent extends Event
     public String getPlayerName()
     {
         return playerName;
-    }
-
-    /**
-     * Sets the player name.
-     *
-     * @param playerName The new player name.
-     */
-    public void setPlayerName(final String playerName)
-    {
-        this.playerName = playerName;
     }
 }

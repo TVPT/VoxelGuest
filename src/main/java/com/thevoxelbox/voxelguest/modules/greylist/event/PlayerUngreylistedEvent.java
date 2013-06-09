@@ -24,6 +24,7 @@ public final class PlayerUngreylistedEvent extends Event
 
     /**
      * Does some dark magic stuff.
+     *
      * @return Returns a mystic list of event handlers.
      */
     public static HandlerList getHandlerList()
@@ -38,7 +39,6 @@ public final class PlayerUngreylistedEvent extends Event
     }
 
     /**
-     *
      * @return Returns the name of the player ungreylisted.
      */
     public String getPlayerName()

@@ -2,7 +2,7 @@ package com.thevoxelbox.voxelguest.modules.greylist.command;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
+import com.thevoxelbox.voxelguest.modules.greylist.GreylistDAO;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,18 +12,6 @@ import org.bukkit.command.CommandSender;
  */
 public final class UngreylistCommandExecutor implements CommandExecutor
 {
-    private GreylistModule greylistModule;
-
-    /**
-     * Creats a new ungreylist command executor instance.
-     *
-     * @param greylistModule The owning module.
-     */
-    public UngreylistCommandExecutor(final GreylistModule greylistModule)
-    {
-        this.greylistModule = greylistModule;
-    }
-
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args)
     {
@@ -36,12 +24,12 @@ public final class UngreylistCommandExecutor implements CommandExecutor
             if (args.length == 1)
             {
                 final String greylistee = Strings.nullToEmpty(args[0]);
-                if (!greylistModule.getGreylistHelper().isOnPersistentGreylist(greylistee))
+                if (!GreylistDAO.isOnPersistentGreylist(greylistee))
                 {
                     sender.sendMessage(String.format("%s is not already on the greylist.", greylistee));
                     return true;
                 }
-                greylistModule.getGreylistHelper().ungreylist(greylistee);
+                GreylistDAO.ungreylist(greylistee);
                 sender.sendMessage(String.format("Removed %s from greylist.", greylistee));
                 return true;
             }

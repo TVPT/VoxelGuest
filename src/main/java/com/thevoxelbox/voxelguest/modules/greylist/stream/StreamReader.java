@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelguest.modules.greylist.stream;
 
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistConfiguration;
+import com.thevoxelbox.voxelguest.modules.greylist.GreylistDAO;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
 
 import java.io.DataInputStream;
@@ -16,7 +17,6 @@ import java.util.List;
  */
 public final class StreamReader extends Thread
 {
-
     private final Socket socket;
     private final GreylistModule module;
 
@@ -29,11 +29,11 @@ public final class StreamReader extends Thread
     @Override
     public void run()
     {
-        List<String> list = this.readSocket();
+        final List<String> list = this.readSocket();
 
         for (String name : list)
         {
-            this.module.getGreylistHelper().greylist(name);
+            GreylistDAO.greylist(name);
         }
     }
 
