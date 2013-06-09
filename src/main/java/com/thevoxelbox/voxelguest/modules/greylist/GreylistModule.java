@@ -22,7 +22,6 @@ import java.util.HashSet;
 public final class GreylistModule extends GuestModule
 {
     private final GreylistHelper greylistHelper;
-
     private GreylistListener greylistListener;
     private GreylistCommandExecutor greylistCommandExecutor;
     private UngreylistCommandExecutor ungreylistCommandExecutor;
@@ -60,8 +59,11 @@ public final class GreylistModule extends GuestModule
     @Override
     public void onDisable()
     {
-        streamPacemaker.cancel();
-        streamPacemakerThread.kill();
+        if (streamPacemaker != null)
+        {
+            streamPacemaker.cancel();
+            streamPacemakerThread.kill();
+        }
 
         super.onDisable();
     }
