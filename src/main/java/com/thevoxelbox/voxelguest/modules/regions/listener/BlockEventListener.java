@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.StructureGrowEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -269,6 +270,29 @@ public final class BlockEventListener implements Listener
             }
         }
     }
+    
+    @EventHandler
+    public void onStructureGrow(final ScructureGrowEvent event)
+    {
+        Preconditions.checkNotNull(event.getBlock());
+        final Location eventLoc = event.getBlock().getLocation();
+        final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+        if (regions.isEmpty())
+        {
+            event.setCancelled(true);
+        }
+
+        for (final Region region : regions)
+        {
+            if (!region.isStructureGrowAllowed())
+            {
+                event.setCancelled(true);
+                break;
+            }
+        }
+    }
+    
+
 
     @EventHandler
     public void onBlockPhysics(final BlockPhysicsEvent event)
