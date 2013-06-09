@@ -24,6 +24,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.List;
@@ -439,7 +440,7 @@ public final class BlockEventListener implements Listener
     }
 
     @EventHandler
-    public void onPaintingBreak(final HangingBreakByEntityEvent event)
+    public void onPaintingBreakByEntity(final HangingBreakByEntityEvent event)
     {
         final Location eventLoc = event.getEntity().getLocation();
         final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
@@ -459,4 +460,21 @@ public final class BlockEventListener implements Listener
         }
     }
 
+    @EventHandler
+    public void onPaintingBreak(final HangingBreakEvent event)
+    {
+        final Location eventLoc = event.getEntity().getLocation();
+        final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+
+        for (final Region region : regions)
+        {
+            if (!region.isBuildingRestricted() && event.getCause().equals(HangingBreakEvent.RemoveCause.EXPLOSION))
+            {
+                if (!region.isTntBreakingPaintingsAllowed())
+                {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
 }
