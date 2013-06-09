@@ -2,7 +2,7 @@ package com.thevoxelbox.voxelguest.modules.asshat.command;
 
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
-import com.thevoxelbox.voxelguest.modules.asshat.command.argument.CommonAsshatCommandArguments;
+import com.thevoxelbox.voxelguest.modules.asshat.command.argument.AsshatCommandArguments;
 import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +38,7 @@ public class MuteCommandExecutor implements TabExecutor
     @Override
     public final boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
     {
-        final CommonAsshatCommandArguments arguments = new CommonAsshatCommandArguments();
+        final AsshatCommandArguments arguments = new AsshatCommandArguments();
         final CmdLineParser parser = new CmdLineParser(arguments);
         try
         {

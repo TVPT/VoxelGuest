@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Monofraps
  */
-public final class CommonAsshatCommandArguments
+public final class AsshatCommandArguments
 {
     @Option(name = "-force", aliases = {"-f"}, usage = "Force the ban system to use the exact player name entered.")
     private boolean forceName = false;
