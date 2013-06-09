@@ -39,8 +39,17 @@ public class PlayerListener implements Listener
         {
             event.setCancelled(true);
 
-            player.sendMessage("You are muted for: ");
-            player.sendMessage(Mutelist.getPlayerMutereason(player.getName()));
+            // TODO: Make that phrase configurable
+            if (Mutelist.isSelfUngaggable(player.getName()) && event.getMessage().equals("I agree. Allow me to chat."))
+            {
+                Mutelist.unmute(player.getName());
+            }
+            else
+            {
+                player.sendMessage("You are muted for: ");
+                player.sendMessage(Mutelist.getPlayerMutereason(player.getName()));
+                player.sendMessage("You cannot chat until you say &6the ungag key phrase.");
+            }
         }
 
         if (module.isSilenceEnabled())

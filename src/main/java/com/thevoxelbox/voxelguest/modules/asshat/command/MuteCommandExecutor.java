@@ -55,7 +55,7 @@ public class MuteCommandExecutor implements TabExecutor
 
         if (arguments.isForceName())
         {
-            safeMute(arguments.getPlayerName(), muteReason, commandSender, arguments.isSilent());
+            safeMute(arguments.getPlayerName(), muteReason, commandSender, arguments.isSilent(), arguments.isSelfUngag());
             return true;
         }
 
@@ -80,11 +80,11 @@ public class MuteCommandExecutor implements TabExecutor
             return true;
         }
 
-        safeMute(players.get(0).getName(), muteReason, commandSender, arguments.isSilent());
+        safeMute(players.get(0).getName(), muteReason, commandSender, arguments.isSilent(), arguments.isSelfUngag());
         return true;
     }
 
-    private void safeMute(final String playerName, final String muteReason, final CommandSender commandSender, final boolean silentFlag)
+    private void safeMute(final String playerName, final String muteReason, final CommandSender commandSender, final boolean silentFlag, final boolean selfUngag)
     {
         if (Mutelist.isPlayerMuted(playerName))
         {
@@ -94,7 +94,7 @@ public class MuteCommandExecutor implements TabExecutor
 
         try
         {
-            Mutelist.mute(playerName, muteReason);
+            Mutelist.mute(playerName, muteReason, selfUngag);
             Bukkit.getLogger().info(String.format("%s gagged by %s for %s", playerName, commandSender.getName(), muteReason));
             if (!silentFlag)
             {

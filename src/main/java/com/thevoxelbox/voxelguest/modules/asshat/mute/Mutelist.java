@@ -22,15 +22,28 @@ public final class Mutelist
      *
      * @return Returns true if the mute operation was successful. False indicates that the player is already muted.
      */
-    public static boolean mute(final String playerName, final String muteReason)
+    public static boolean mute(final String playerName, final String muteReason, final boolean selfUngag)
     {
         if (isPlayerMuted(playerName))
         {
             return false;
         }
 
-        Persistence.getInstance().save(new MutedPlayer(playerName.toLowerCase(), muteReason));
+        Persistence.getInstance().save(new MutedPlayer(playerName.toLowerCase(), muteReason, selfUngag));
         return true;
+    }
+
+    /**
+     * Mutes a player and stores the reason he was muted for.
+     *
+     * @param playerName The name of the player to mute.
+     * @param muteReason The reason the player is muted for.
+     *
+     * @return Returns true if the mute operation was successful. False indicates that the player is already muted.
+     */
+    public static boolean mute(final String playerName, final String muteReason)
+    {
+        return mute(playerName, muteReason, false);
     }
 
     /**
@@ -108,6 +121,17 @@ public final class Mutelist
     {
         Preconditions.checkState(isPlayerMuted(playerName), "Player %s must be muted in order to get the mute reason.", playerName);
         return getMutedPlayer(playerName).getMuteReason();
+    }
+
+
+    public static boolean isSelfUngaggable(final String playerName)
+    {
+        if (!isPlayerMuted(playerName))
+        {
+            return false;
+        }
+
+        return getMutedPlayer(playerName).isSelfUngag();
     }
 
     /**

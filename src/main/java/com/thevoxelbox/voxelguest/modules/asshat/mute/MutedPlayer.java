@@ -15,6 +15,8 @@ public class MutedPlayer
     private String playerName;
     @DatabaseField
     private String muteReason;
+    @DatabaseField
+    private boolean selfUngag;
 
     /**
      * ORM constructor.
@@ -27,10 +29,11 @@ public class MutedPlayer
      * @param playerName The name of the muted player.
      * @param muteReason The reason the player is muted for.
      */
-    public MutedPlayer(final String playerName, final String muteReason)
+    public MutedPlayer(final String playerName, final String muteReason, final boolean selfUngag)
     {
         this.playerName = playerName;
         this.muteReason = muteReason;
+        this.selfUngag = selfUngag;
     }
 
     /**
@@ -47,5 +50,13 @@ public class MutedPlayer
     public final String getMuteReason()
     {
         return muteReason;
+    }
+
+    /**
+     * @return True if self-ungagging is enabled.
+     */
+    public boolean isSelfUngag()
+    {
+        return selfUngag;
     }
 }

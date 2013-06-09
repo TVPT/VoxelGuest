@@ -16,6 +16,8 @@ public final class AsshatCommandArguments
     private boolean forceName = false;
     @Option(name = "-silent", aliases = {"-s", "-si"}, usage = "Do not show broadcasts.")
     private boolean silent = false;
+    @Option(name = "-selfungag", aliases = {"-u", "-su"}, usage = "Allows the player to ungag himself by saying the ungag phrase.")
+    private boolean selfUngag = false;
     @Argument(metaVar = "<player-name>", index = 0, required = true, usage = "The Player's name.")
     private String playerName = "";
     @Argument(metaVar = "<ban-reason>", index = 1, usage = "A reason.")
@@ -51,5 +53,13 @@ public final class AsshatCommandArguments
     public String getReason()
     {
         return Joiner.on(" ").join(reason);
+    }
+
+    /**
+     * @return Returns true if self-ungagging should be enabled.
+     */
+    public boolean isSelfUngag()
+    {
+        return selfUngag;
     }
 }
