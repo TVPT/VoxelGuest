@@ -10,6 +10,7 @@ commands:
     aliases: [vgmodules]
     permission: voxelguest.manage.modules
     description: Handles all module management
+    usage: '/vmodules [-list|-l] [-enable|-e <module-name>] [-disable|-d <module-name>]'
   greylist:
     aliases: [graylist, gl]
     permission: voxelguest.greylist.greylist
@@ -111,5 +112,6 @@ commands:
   vgimport:
     alias: [voxelguestimport, guestimport, import]
     permissions: voxelguest.manage.import
+    usage: '/vgimport [-bans|-b] [-greylist|-gl] [-afkmessages|-am]'
   vgpg:
     permissions: voxelgust.general.playergroup

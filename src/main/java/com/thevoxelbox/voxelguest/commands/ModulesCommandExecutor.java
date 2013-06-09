@@ -1,6 +1,8 @@
 package com.thevoxelbox.voxelguest.commands;
 
+import com.thevoxelbox.voxelguest.A4JUtils;
 import com.thevoxelbox.voxelguest.VoxelGuest;
+import com.thevoxelbox.voxelguest.commands.arguments.ModulesCommandArguments;
 import com.thevoxelbox.voxelguest.modules.Module;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,7 +11,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,107 +23,69 @@ import java.util.List;
  */
 public final class ModulesCommandExecutor implements TabExecutor
 {
-    private static final String[] SUBCOMMANDS = {"enable", "disable", "list"};
-
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args)
     {
         final List<String> matches = new ArrayList<>();
-        if (args.length >= 1)
+        for (int i = 0; i < args.length; i++)
         {
-            if (args.length == 1)
-            {
-                for (String subcommand : SUBCOMMANDS)
-                {
-                    if (subcommand.startsWith(args[0].toLowerCase()))
-                    {
-                        matches.add(subcommand);
-                    }
-                }
-            }
-            else if (args.length == 2)
+            final String arg = args[i];
+
+            if ((arg.startsWith("-e") || arg.startsWith("-d")) && i < (args.length - 1))
             {
                 final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
                 for (Module module : registeredModules.keySet())
                 {
                     final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
-                    if (className.toLowerCase().startsWith(args[1].toLowerCase()))
+                    if (className.toLowerCase().startsWith(arg.toLowerCase()))
                     {
                         matches.add(className);
                     }
                 }
             }
+            else if (arg.startsWith("-"))
+            {
+                matches.add("-enable");
+                matches.add("-disable");
+                matches.add("-list");
+            }
         }
-        else
-        {
-            matches.addAll(Arrays.asList(SUBCOMMANDS));
-        }
+
         Collections.sort(matches);
         return matches;
     }
 
     @Override
-    public boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] args)
+    public boolean onCommand(final CommandSender sender, final Command command, final String s, final String[] args)
     {
-        if (args.length < 1)
+        // we assume the player wants to see the usage if he does not enter any argument
+        if (args.length == 0)
         {
-            commandSender.sendMessage(ChatColor.RED + "Not enough arguments.");
             return false;
         }
 
-        switch (args[0].toLowerCase())
+        final ModulesCommandArguments arguments = A4JUtils.parse(ModulesCommandArguments.class, args, sender);
+        if (arguments == null)
         {
-            case "list":
-                listModules(commandSender);
-                break;
-
-            case "enable":
-                if (args.length < 2)
-                {
-                    commandSender.sendMessage(ChatColor.RED + "Not enough arguments.");
-                    return false;
-                }
-                if (enableModule(commandSender, args[1]))
-                {
-                    return true;
-                }
-                break;
-
-            case "disable":
-                if (args.length < 2)
-                {
-                    commandSender.sendMessage(ChatColor.RED + "Not enough arguments.");
-                    return false;
-                }
-                if (disableModule(commandSender, args[1]))
-                {
-                    return true;
-                }
-                break;
-
-            default:
-                final StringBuilder builder = new StringBuilder();
-                builder.append(ChatColor.GRAY).append("Unknown Subcommand. Available: ").append(ChatColor.GREEN);
-                for (int i = 0; i < SUBCOMMANDS.length; i++)
-                {
-                    builder.append(SUBCOMMANDS[i]);
-                    if (i == (SUBCOMMANDS.length - 1))
-                    {
-                        break;
-                    }
-                    else if (i == (SUBCOMMANDS.length - 2))
-                    {
-                        builder.append(ChatColor.GRAY).append(", and ").append(ChatColor.GREEN);
-                    }
-                    else
-                    {
-                        builder.append(ChatColor.GRAY).append(", ").append(ChatColor.GREEN);
-                    }
-                }
-                commandSender.sendMessage(builder.toString());
+            return false;
         }
 
-        return false;
+        if (arguments.isListModules())
+        {
+            listModules(sender);
+        }
+
+        if (!arguments.getModuleToEnable().isEmpty())
+        {
+            enableModule(sender, arguments.getModuleToEnable());
+        }
+
+        if (!arguments.getModuleToDisable().isEmpty())
+        {
+            disableModule(sender, arguments.getModuleToDisable());
+        }
+
+        return true;
     }
 
     private void listModules(final CommandSender sender)
@@ -159,7 +122,7 @@ public final class ModulesCommandExecutor implements TabExecutor
             }
         }
 
-        sender.sendMessage(ChatColor.RED + "No such module registered.");
+        sender.sendMessage(ChatColor.RED + "No such module.");
         return false;
     }
 
