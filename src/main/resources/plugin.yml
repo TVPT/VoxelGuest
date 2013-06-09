@@ -111,3 +111,5 @@ commands:
   vgimport:
     alias: [voxelguestimport, guestimport, import]
     permissions: voxelguest.manage.import
+  vgpg:
+    permissions: voxelgust.general.playergroup
