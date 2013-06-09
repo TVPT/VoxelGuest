@@ -95,9 +95,6 @@
         <property name="severity" value="ignore"/>
         <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
-    <module name="NewlineAtEndOfFile">
-        <property name="severity" value="warning"/>
-    </module>
     <module name="Translation"/>
     <module name="FileLength"/>
     <module name="FileTabCharacter">
