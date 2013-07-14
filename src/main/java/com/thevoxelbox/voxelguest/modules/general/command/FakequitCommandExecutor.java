@@ -28,7 +28,7 @@ public final class FakequitCommandExecutor implements CommandExecutor
     {
         if (sender instanceof Player)
         {
-            this.module.getVanishFakequitHandler().toggleFakeQuit((Player) sender);
+            this.module.getVanishFakequitHandler().toggleFakeQuit((Player) sender, true);
             return true;
         }
         return false;
