@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
             <artifactId>metrics</artifactId>
-            <version>R6</version>
+            <version>R7</version>
         </dependency>
 
         <!-- Argument Parsing -->
