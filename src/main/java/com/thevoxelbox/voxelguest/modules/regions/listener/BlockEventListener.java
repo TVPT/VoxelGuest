@@ -1,8 +1,10 @@
 package com.thevoxelbox.voxelguest.modules.regions.listener;
 
 import com.google.common.base.Preconditions;
+import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.regions.Region;
 import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -23,6 +26,7 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -35,7 +39,7 @@ import java.util.List;
 public final class BlockEventListener implements Listener
 {
 
-    private static final String CANT_BUILD_HERE = "§cYou may not modify this area.";
+    public static final String CANT_BUILD_HERE = "§cYou may not modify this area.";
     private RegionModule regionModule;
 
     /**
@@ -56,7 +60,7 @@ public final class BlockEventListener implements Listener
         if (!this.regionModule.getRegionManager().canPlayerModify(event.getPlayer(), event.getBlock().getLocation()))
         {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(CANT_BUILD_HERE);
+            this.regionModule.getFloodProtector().sendMessage(event.getPlayer(), BlockEventListener.CANT_BUILD_HERE);
         }
     }
 
@@ -71,7 +75,7 @@ public final class BlockEventListener implements Listener
         {
             if (!region.isBlockDropAllowed())
             {
-                event.getBlock().setTypeId(Material.AIR.getId(), false);
+                event.getBlock().setTypeId(Material.AIR.getId(), true);
                 break;
             }
         }
@@ -85,7 +89,7 @@ public final class BlockEventListener implements Listener
         if (!this.regionModule.getRegionManager().canPlayerModify(event.getPlayer(), event.getBlock().getLocation()))
         {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(CANT_BUILD_HERE);
+            this.regionModule.getFloodProtector().sendMessage(event.getPlayer(), BlockEventListener.CANT_BUILD_HERE);
         }
     }
 
@@ -99,11 +103,11 @@ public final class BlockEventListener implements Listener
         if (!this.regionModule.getRegionManager().canPlayerModify(event.getPlayer(), event.getClickedBlock().getLocation()))
         {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(CANT_BUILD_HERE);
+            this.regionModule.getFloodProtector().sendMessage(event.getPlayer(), BlockEventListener.CANT_BUILD_HERE);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onLeafDecay(final LeavesDecayEvent event)
     {
         Preconditions.checkNotNull(event.getBlock());
@@ -116,7 +120,28 @@ public final class BlockEventListener implements Listener
 
         for (final Region region : regions)
         {
-            if (!region.isBlockSpreadAllowed())
+            if (!region.isLeafDecayAllowed())
+            {
+                event.setCancelled(true);
+                break;
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBurn(final BlockBurnEvent event)
+    {
+        Preconditions.checkNotNull(event.getBlock());
+        final Location eventLoc = event.getBlock().getLocation();
+        final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+        if (regions.isEmpty())
+        {
+            event.setCancelled(true);
+        }
+
+        for (final Region region : regions)
+        {
+            if (!region.isLeafDecayAllowed()) // Temp Fix as permanent fix would need to change db schema
             {
                 event.setCancelled(true);
                 break;
@@ -278,84 +303,48 @@ public final class BlockEventListener implements Listener
         switch (mat)
         {
             case COMMAND:
-                return;
             case DETECTOR_RAIL:
-                return;
             case DIODE:
-                return;
             case DIODE_BLOCK_OFF:
-                return;
             case DIODE_BLOCK_ON:
-                return;
             case DISPENSER:
-                return;
             case GLOWING_REDSTONE_ORE:
-                return;
             case IRON_DOOR:
-                return;
             case IRON_DOOR_BLOCK:
-                return;
             case MINECART:
-                return;
             case NOTE_BLOCK:
-                return;
             case PISTON_BASE:
-                return;
             case PISTON_EXTENSION:
-                return;
             case PISTON_MOVING_PIECE:
-                return;
             case PISTON_STICKY_BASE:
-                return;
             case POWERED_RAIL:
-                return;
             case REDSTONE:
-                return;
             case REDSTONE_LAMP_OFF:
-                return;
             case REDSTONE_LAMP_ON:
-                return;
             case REDSTONE_ORE:
-                return;
             case REDSTONE_TORCH_OFF:
-                return;
             case REDSTONE_TORCH_ON:
-                return;
             case REDSTONE_WIRE:
-                return;
             case STONE_PLATE:
-                return;
             case WOOD_PLATE:
-                return;
             case STORAGE_MINECART:
-                return;
             case STRING:
-                return;
             case TNT:
-                return;
             case TRAP_DOOR:
-                return;
             case TRIPWIRE:
-                return;
             case TRIPWIRE_HOOK:
-                return;
             case WOODEN_DOOR:
-                return;
             case WOOD_BUTTON:
-                return;
             case WOOD_DOOR:
-                return;
             case LEVER:
-                return;
             case STONE_BUTTON:
-                return;
             case WATER:
-                return;
             case STATIONARY_WATER:
-                return;
             case LAVA:
-                return;
             case STATIONARY_LAVA:
+            case REDSTONE_COMPARATOR:
+            case REDSTONE_COMPARATOR_OFF:
+            case REDSTONE_COMPARATOR_ON:
                 return;
             default:
                 break;
@@ -422,6 +411,14 @@ public final class BlockEventListener implements Listener
     @EventHandler
     public void onCreatureSpawn(final CreatureSpawnEvent event)
     {
+        if (
+            event.getSpawnReason().equals(SpawnReason.CUSTOM) ||
+            event.getSpawnReason().equals(SpawnReason.EGG) ||
+            event.getSpawnReason().equals(SpawnReason.SPAWNER_EGG)
+           )
+        {
+            return;
+        }
         final Location eventLoc = event.getLocation();
         final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
         if (regions.isEmpty())

@@ -2,6 +2,8 @@ package com.thevoxelbox.voxelguest.modules.general.listener;
 
 import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
 import com.thevoxelbox.voxelguest.modules.general.GeneralModuleConfiguration;
+import com.thevoxelbox.voxelguest.modules.general.command.WhoCommandExecutor;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,6 +37,7 @@ public final class ConnectionEventListener implements Listener
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event)
     {
+        WhoCommandExecutor.updatePGM();
         final Player player = event.getPlayer();
 
         if (this.configuration.isDefaultWatchTPSState())
@@ -57,6 +60,7 @@ public final class ConnectionEventListener implements Listener
     @EventHandler
     public void onPlayerQuit(final PlayerQuitEvent event)
     {
+        WhoCommandExecutor.updatePGM();
         Player player = event.getPlayer();
 
         if (this.module.getLagmeter().isPlayerOnTpsWatch(player))
@@ -79,6 +83,7 @@ public final class ConnectionEventListener implements Listener
     @EventHandler
     public void onPlayerKick(final PlayerKickEvent event)
     {
+        WhoCommandExecutor.updatePGM();
         Player player = event.getPlayer();
 
         if (this.module.getLagmeter().isPlayerOnTpsWatch(player))
