@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
             <artifactId>metrics</artifactId>
-            <version>R6</version>
+            <version>R7</version>
         </dependency>
 
         <!-- Argument Parsing -->
@@ -131,6 +131,13 @@
             <groupId>args4j</groupId>
             <artifactId>args4j</artifactId>
             <version>2.0.23</version>
+        </dependency>
+
+        <!-- VoxelDoop events -->
+        <dependency>
+            <groupId>com.thevoxelbox</groupId>
+            <artifactId>VoxelDoop</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
 
         <!-- Unit testing -->
@@ -187,7 +194,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.0</version>
+                <version>2.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -202,6 +209,8 @@
                                     <exclude>org.bukkit:bukkit</exclude>
                                     <exclude>com.google.guava:guava</exclude>
                                     <exclude>org.xerial:sqlite-jdbc</exclude>
+                                    <exclude>com.thevoxelbox:VoxelDoop</exclude>
+                                    <exclude>net.milkbowl.vault:Vault</exclude>
                                 </excludes>
                             </artifactSet>
                             <relocations>
@@ -212,6 +221,14 @@
                                 <relocation>
                                     <pattern>javax.persistence</pattern>
                                     <shadedPattern>com.thevoxelbox.voxelguest.libs.javax.persistence</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.kohsuke.args4j</pattern>
+                                    <shadedPattern>com.thevoxelbox.voxelguest.libs.org.kohsuke.args4j</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.j256.ormlite</pattern>
+                                    <shadedPattern>com.thevoxelbox.voxelguest.libs.com.j256.ormlite</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

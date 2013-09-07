@@ -1,10 +1,13 @@
 package com.thevoxelbox.voxelguest.modules.general.command;
 
+import com.google.common.base.Preconditions;
 import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
 import com.thevoxelbox.voxelguest.modules.general.PlayerGroup;
 import com.thevoxelbox.voxelguest.modules.general.PlayerGroupDAO;
+
 import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,6 +27,12 @@ import java.util.Map.Entry;
  */
 public final class WhoCommandExecutor implements CommandExecutor
 {
+    private static boolean updatePGM = true;
+    private static Map<String, List<Player>> playerGroupMap;
+    private static Map<String, List<Player>> playerGroupMapWithFQ;
+    private static String header;
+    private static String headerWithFQ;
+
     private final GeneralModule module;
 
     /**
@@ -45,11 +54,25 @@ public final class WhoCommandExecutor implements CommandExecutor
             return true;
         }
 
+        if (updatePGM)
+        {
+            WhoCommandExecutor.playerGroupMap = this.makeGroupPlayerMap(false);
+            WhoCommandExecutor.playerGroupMapWithFQ = this.makeGroupPlayerMap(true);
+            WhoCommandExecutor.header = this.getHeader(false);
+            WhoCommandExecutor.headerWithFQ = this.getHeader(true);
+            updatePGM = false;
+        }
+
+        Preconditions.checkNotNull(playerGroupMap);
+        Preconditions.checkNotNull(playerGroupMapWithFQ);
+        Preconditions.checkNotNull(header);
+        Preconditions.checkNotNull(headerWithFQ);
+
         final boolean canSeeFQ = sender.hasPermission(GeneralModule.FAKEQUIT_PERM);
         sender.sendMessage(ChatColor.DARK_GRAY + "------------------------------");
-        sender.sendMessage(this.getHeader(canSeeFQ));
+        sender.sendMessage(canSeeFQ ? headerWithFQ : header);
 
-        for (Entry<String, List<Player>> entry : this.makeGroupPlayerMap(canSeeFQ).entrySet())
+        for (Entry<String, List<Player>> entry : (canSeeFQ ? playerGroupMapWithFQ : playerGroupMap).entrySet())
         {
             final String groupName = entry.getKey();
             final StringBuilder groupStrBuilder = new StringBuilder();
@@ -281,5 +304,9 @@ public final class WhoCommandExecutor implements CommandExecutor
         }
 
         return ChatColor.WHITE.toString();
+    }
+    public static void updatePGM()
+    {
+        updatePGM = true;
     }
 }

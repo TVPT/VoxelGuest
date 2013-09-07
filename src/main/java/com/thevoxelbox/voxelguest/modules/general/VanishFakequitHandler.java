@@ -85,7 +85,10 @@ public final class VanishFakequitHandler
             this.fakeQuit.remove(player);
             Preconditions.checkState(module.getConfiguration() instanceof GeneralModuleConfiguration);
 
-            if(verbose) Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getJoinFormat(), player.getName()));
+            if(verbose)
+            {
+                Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getJoinFormat(), player.getName()));
+            }
             player.sendMessage(ChatColor.AQUA + "You have un-fakequit!");
             return false;
         }
@@ -95,7 +98,10 @@ public final class VanishFakequitHandler
             this.fakeQuit.add(player);
             Preconditions.checkState(module.getConfiguration() instanceof GeneralModuleConfiguration);
 
-            if(verbose) Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getLeaveFormat(), player.getName()));
+            if(verbose)
+            {
+                Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getLeaveFormat(), player.getName()));
+            }
             player.sendMessage(ChatColor.AQUA + "You have fakequit!");
             return true;
         }
