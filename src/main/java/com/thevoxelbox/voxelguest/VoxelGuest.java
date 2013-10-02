@@ -12,6 +12,8 @@ import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
 import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
 import net.milkbowl.vault.permission.Permission;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.lf5.util.ResourceUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Properties;
 
 /**
  * @author MikeMatrix
@@ -121,6 +124,13 @@ public class VoxelGuest extends JavaPlugin
     @Override
     public final void onEnable()
     {
+        Properties logProps = new Properties();
+        logProps.put("log4j.rootLogger","ERROR, stdout");
+        logProps.put("log4j.appender.stdout","org.apache.log4j.ConsoleAppender");
+        logProps.put("log4j.appender.stdout.layout", "org.apache.log4j.SimpleLayout");
+        logProps.put("log4j.logger.com.j256.ormlite","ERROR");
+        PropertyConfigurator.configure(logProps);
+
         VoxelGuest.setPluginInstance(this);
         VoxelGuest.setModuleManagerInstance(new GuestModuleManager());
 
