@@ -1,7 +1,7 @@
 package com.thevoxelbox.voxelguest.commands;
 
 import com.google.common.base.Preconditions;
-import com.thevoxelbox.voxelguest.A4JUtils;
+import com.thevoxelbox.voxelguest.utils.A4JUtils;
 import com.thevoxelbox.voxelguest.commands.arguments.ImportCommandArguments;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.general.AfkMessage;

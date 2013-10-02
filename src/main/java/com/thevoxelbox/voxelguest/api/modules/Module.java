@@ -1,4 +1,4 @@
-package com.thevoxelbox.voxelguest.modules;
+package com.thevoxelbox.voxelguest.api.modules;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -13,12 +13,12 @@ import java.util.Set;
 public interface Module
 {
     /**
-     * Gets called when the {@link com.thevoxelbox.voxelguest.ModuleManager ModuleManager} enables the module.
+     * Gets called when the {@link com.thevoxelbox.voxelguest.GuestModuleManager ModuleManager} enables the module.
      */
     void onEnable();
 
     /**
-     * Gets called when the {@link com.thevoxelbox.voxelguest.ModuleManager ModuleManager} disables the module.
+     * Gets called when the {@link com.thevoxelbox.voxelguest.GuestModuleManager ModuleManager} disables the module.
      */
     void onDisable();
 

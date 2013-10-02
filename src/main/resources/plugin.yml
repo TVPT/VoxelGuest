@@ -6,11 +6,6 @@ website: ${project.url}
 description: ${project.description}
 
 commands:
-  vmodules:
-    aliases: [vgmodules]
-    permission: voxelguest.manage.modules
-    description: Handles all module management
-    usage: '/vmodules [-list|-l] [-enable|-e <module-name>] [-disable|-d <module-name>]'
   greylist:
     aliases: [graylist, gl]
     permission: voxelguest.greylist.greylist
@@ -23,9 +18,11 @@ commands:
     aliases: [whitelist, wl]
     permission: voxelguest.greylist.whitelist
     description: Whitelists a player.
+
   vgregion:
     aliases: [vgregion, vregion]
     permission: voxelguest.regions.modifyregion
+
   ban:
     aliases: [vban]
     permission: voxelguest.asshat.ban
@@ -58,6 +55,7 @@ commands:
     aliases: [ungag, vungag]
     permission: voxelguest.asshat.unmute
     description: Unmutes a player.
+
   who:
     aliases: [who, vwho, list]
     permission: voxelguest.general.who
@@ -98,6 +96,7 @@ commands:
     aliases: [watchtps, vwatchtps]
     permission: voxelguest.general.watchtps
     description: Makes the exp bar a lag meter.
+
   wlreview:
     aliases: [wlreview, vwlreview]
     description: Submits a whitelist review ticket.
@@ -109,9 +108,17 @@ commands:
     aliases: [helperreview, hreview]
     permission: voxelguest.helper.review
     description: Reviews a whitelist review ticket.
+
   vgimport:
     alias: [voxelguestimport, guestimport, import]
     permissions: voxelguest.manage.import
     usage: '/vgimport [-bans|-b] [-greylist|-gl] [-afkmessages|-am]'
   vgpg:
     permissions: voxelgust.general.playergroup
+    description: Adds a VoxelGuest player group (PG). PG's are used to map /who colors to permission group names.
+    usage: '/vgpg <group-name(must match the name the group has in the permission system)> <color>'
+  vgmodules:
+    aliases: [vmodules]
+    permission: voxelguest.manage.modules
+    description: Handles modules management and allows to enable/disable a module.
+    usage: '/vmodules [-list|-l] [-enable|-e <module-name>] [-disable|-d <module-name>]'

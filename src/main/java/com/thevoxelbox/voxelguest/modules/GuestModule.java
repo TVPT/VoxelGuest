@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelguest.modules;
 
+import com.thevoxelbox.voxelguest.api.modules.Module;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 

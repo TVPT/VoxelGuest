@@ -1,9 +1,9 @@
 package com.thevoxelbox.voxelguest.modules.regions;
 
 import com.thevoxelbox.voxelguest.modules.GuestModule;
-import com.thevoxelbox.voxelguest.modules.regions.command.RegionCommand;
-import com.thevoxelbox.voxelguest.modules.regions.listener.BlockEventListener;
-import com.thevoxelbox.voxelguest.modules.regions.listener.PlayerEventListener;
+import com.thevoxelbox.voxelguest.modules.regions.listener.BukkitEventListener;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 
@@ -15,10 +15,7 @@ import java.util.HashSet;
  */
 public final class RegionModule extends GuestModule
 {
-    private final BlockEventListener blockEventListener;
-    private final PlayerEventListener playerEventListener;
-    private final RegionCommand regionCommand;
-    private final RegionManager regionManager;
+    private final BukkitEventListener bukkitEventListener;
 
     /**
      * Creates a new RegionModule instance.
@@ -27,15 +24,21 @@ public final class RegionModule extends GuestModule
     {
         this.setName("Region Module");
 
-        this.blockEventListener = new BlockEventListener(this);
-        this.playerEventListener = new PlayerEventListener(this);
-        this.regionCommand = new RegionCommand(this);
-        this.regionManager = new RegionManager();
+        bukkitEventListener = new BukkitEventListener();
     }
 
     @Override
     public void onEnable()
     {
+        // check if each world has a global region and create it if not
+        for (final World world : Bukkit.getWorlds())
+        {
+            if (RegionDAO.byName("global", world.getName()) == null)
+            {
+                RegionDAO.saveRegion(new Region("global"));
+            }
+        }
+
         super.onEnable();
     }
 
@@ -49,9 +52,7 @@ public final class RegionModule extends GuestModule
     public HashSet<Listener> getListeners()
     {
         final HashSet<Listener> listeners = new HashSet<>();
-        listeners.add(this.blockEventListener);
-        listeners.add(this.playerEventListener);
-
+        listeners.add(this.bukkitEventListener);
         return listeners;
     }
 
@@ -59,16 +60,7 @@ public final class RegionModule extends GuestModule
     public HashMap<String, CommandExecutor> getCommandMappings()
     {
         HashMap<String, CommandExecutor> commandMappings = new HashMap<>();
-        commandMappings.put("vgregion", this.regionCommand);
         return commandMappings;
-    }
-
-    /**
-     * @return The region manager
-     */
-    public RegionManager getRegionManager()
-    {
-        return this.regionManager;
     }
 
 }

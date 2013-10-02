@@ -1,8 +1,8 @@
 package com.thevoxelbox.voxelguest;
 
 
+import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.configuration.Configuration;
-import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.*;
 /**
  * @author Monofraps
  */
-public final class ModuleManager
+public final class GuestModuleManager
 {
     // maps module <-> registered event listeners
     private HashMap<Module, HashSet<Listener>> registeredModules = new HashMap<>();

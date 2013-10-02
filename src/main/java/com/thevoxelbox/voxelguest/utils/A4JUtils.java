@@ -1,4 +1,4 @@
-package com.thevoxelbox.voxelguest;
+package com.thevoxelbox.voxelguest.utils;
 
 import org.bukkit.command.CommandSender;
 import org.kohsuke.args4j.CmdLineException;

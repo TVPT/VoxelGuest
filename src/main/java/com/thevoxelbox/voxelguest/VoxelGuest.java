@@ -1,8 +1,8 @@
 package com.thevoxelbox.voxelguest;
 
+import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.commands.ImportCommandExecutor;
 import com.thevoxelbox.voxelguest.commands.ModulesCommandExecutor;
-import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
@@ -31,7 +31,7 @@ import java.util.HashSet;
 public class VoxelGuest extends JavaPlugin
 {
     private static VoxelGuest pluginInstance = null;
-    private static ModuleManager moduleManagerInstance = null;
+    private static GuestModuleManager moduleManagerInstance = null;
     private static Permission perms = null;
 
     /**
@@ -59,12 +59,12 @@ public class VoxelGuest extends JavaPlugin
      *
      * @return Returns the module manager instance.
      */
-    public static ModuleManager getModuleManagerInstance()
+    public static GuestModuleManager getModuleManagerInstance()
     {
         return moduleManagerInstance;
     }
 
-    private static void setModuleManagerInstance(final ModuleManager moduleManagerInstance)
+    private static void setModuleManagerInstance(final GuestModuleManager moduleManagerInstance)
     {
         if (VoxelGuest.moduleManagerInstance != null)
         {
@@ -90,7 +90,6 @@ public class VoxelGuest extends JavaPlugin
     }
 
     /**
-     *
      * @return Returns true if a permission provider is available.
      */
     public static boolean hasPermissionProvider()
@@ -123,7 +122,7 @@ public class VoxelGuest extends JavaPlugin
     public final void onEnable()
     {
         VoxelGuest.setPluginInstance(this);
-        VoxelGuest.setModuleManagerInstance(new ModuleManager());
+        VoxelGuest.setModuleManagerInstance(new GuestModuleManager());
 
         try
         {
