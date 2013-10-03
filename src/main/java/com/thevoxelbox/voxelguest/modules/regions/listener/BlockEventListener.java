@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -116,7 +117,28 @@ public final class BlockEventListener implements Listener
 
         for (final Region region : regions)
         {
-            if (!region.isBlockSpreadAllowed())
+            if (!region.isLeafDecayAllowed())
+            {
+                event.setCancelled(true);
+                break;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockBurn(final BlockBurnEvent event) {
+        Preconditions.checkNotNull(event.getBlock());
+        final Location eventLoc = event.getBlock().getLocation();
+        final List<Region> regions = this.regionModule.getRegionManager().getRegionsAtLoc(eventLoc);
+
+        if (regions.isEmpty())
+        {
+            event.setCancelled(true);
+        }
+
+        for (final Region region : regions)
+        {
+            if (!region.isLeafDecayAllowed())
             {
                 event.setCancelled(true);
                 break;
