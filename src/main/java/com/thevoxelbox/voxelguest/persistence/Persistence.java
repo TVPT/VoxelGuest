@@ -7,7 +7,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.table.TableUtils;
-import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -46,8 +46,9 @@ public final class Persistence
      *
      * @throws SQLException Thrown if the system fails to open the DB connection.
      */
-    public void initialize(final File dbFile) throws SQLException
+    public void initialize(@NotNull final File dbFile) throws SQLException
     {
+        Preconditions.checkNotNull(dbFile, "dbFile may not be null.");
         Preconditions.checkState(!initialized, "Persistence system has already been initialized.");
         dbFile.getParentFile().mkdirs();
         connectionSource = new JdbcConnectionSource("jdbc:sqlite:" + dbFile.getPath());
@@ -58,7 +59,7 @@ public final class Persistence
     /**
      * Clears the DAO cache and closes all remaining DB connections.
      *
-     * @throws SQLException
+     * @throws SQLException .
      */
     public void shutdown() throws SQLException
     {
@@ -77,7 +78,7 @@ public final class Persistence
      *
      * @return Returns a DAO.
      *
-     * @throws SQLException
+     * @throws SQLException .
      */
     public <E> Dao<E, ?> getDao(final Class<E> clazz) throws SQLException
     {
@@ -112,6 +113,8 @@ public final class Persistence
             {
                 objectDao.commit(connection);
             }
+
+            objectDao.endThreadConnection(connection);
         }
         catch (SQLException e)
         {
@@ -149,6 +152,8 @@ public final class Persistence
             {
                 objectDao.commit(connection);
             }
+
+            objectDao.endThreadConnection(connection);
         }
         catch (SQLException e)
         {
@@ -173,15 +178,7 @@ public final class Persistence
         try
         {
             Dao<V, ID> objectDao = (Dao<V, ID>) getDao(clazz);
-            DatabaseConnection connection = objectDao.startThreadConnection();
-
             objects = objectDao.queryForAll();
-
-            if (!objectDao.isAutoCommit(connection))
-            {
-                objectDao.commit(connection);
-            }
-
         }
         catch (SQLException e)
         {
@@ -241,6 +238,8 @@ public final class Persistence
             {
                 objectDao.commit(connection);
             }
+
+            objectDao.endThreadConnection(connection);
         }
         catch (SQLException e)
         {
