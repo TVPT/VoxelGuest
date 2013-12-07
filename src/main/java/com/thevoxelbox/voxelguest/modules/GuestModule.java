@@ -1,5 +1,7 @@
 package com.thevoxelbox.voxelguest.modules;
 
+import com.thevoxelbox.voxelguest.api.modules.Module;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 
@@ -56,7 +58,7 @@ public abstract class GuestModule implements Module
     @Override
     public String getConfigFileName()
     {
-        return getName().replace(" ", "");
+        return StringUtils.deleteWhitespace(getName());
     }
 
     @Override

@@ -1,19 +1,17 @@
 package com.thevoxelbox.voxelguest;
 
+import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.commands.ImportCommandExecutor;
 import com.thevoxelbox.voxelguest.commands.ModulesCommandExecutor;
-import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
 import com.thevoxelbox.voxelguest.modules.general.GeneralModule;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistModule;
 import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
-import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
 import net.milkbowl.vault.permission.Permission;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.lf5.util.ResourceUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -34,7 +32,7 @@ import java.util.Properties;
 public class VoxelGuest extends JavaPlugin
 {
     private static VoxelGuest pluginInstance = null;
-    private static ModuleManager moduleManagerInstance = null;
+    private static GuestModuleManager moduleManagerInstance = null;
     private static Permission perms = null;
 
     /**
@@ -62,12 +60,12 @@ public class VoxelGuest extends JavaPlugin
      *
      * @return Returns the module manager instance.
      */
-    public static ModuleManager getModuleManagerInstance()
+    public static GuestModuleManager getModuleManagerInstance()
     {
         return moduleManagerInstance;
     }
 
-    private static void setModuleManagerInstance(final ModuleManager moduleManagerInstance)
+    private static void setModuleManagerInstance(final GuestModuleManager moduleManagerInstance)
     {
         if (VoxelGuest.moduleManagerInstance != null)
         {
@@ -93,7 +91,6 @@ public class VoxelGuest extends JavaPlugin
     }
 
     /**
-     *
      * @return Returns true if a permission provider is available.
      */
     public static boolean hasPermissionProvider()
@@ -126,14 +123,14 @@ public class VoxelGuest extends JavaPlugin
     public final void onEnable()
     {
         Properties logProps = new Properties();
-        logProps.put("log4j.rootLogger","ERROR, stdout");
-        logProps.put("log4j.appender.stdout","org.apache.log4j.ConsoleAppender");
+        logProps.put("log4j.rootLogger", "ERROR, stdout");
+        logProps.put("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
         logProps.put("log4j.appender.stdout.layout", "org.apache.log4j.SimpleLayout");
-        logProps.put("log4j.logger.com.j256.ormlite","ERROR");
+        logProps.put("log4j.logger.com.j256.ormlite", "ERROR");
         PropertyConfigurator.configure(logProps);
 
         VoxelGuest.setPluginInstance(this);
-        VoxelGuest.setModuleManagerInstance(new ModuleManager());
+        VoxelGuest.setModuleManagerInstance(new GuestModuleManager());
 
         try
         {
@@ -150,7 +147,6 @@ public class VoxelGuest extends JavaPlugin
             Bukkit.getLogger().severe("Failed to setup Vault, due to no dependency found!"); //Should stop?
         }
 
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new RegionModule(), false);
         VoxelGuest.getModuleManagerInstance().registerGuestModule(new AsshatModule(), false);
         VoxelGuest.getModuleManagerInstance().registerGuestModule(new GreylistModule(), false);
         VoxelGuest.getModuleManagerInstance().registerGuestModule(new GeneralModule(), false);
@@ -289,23 +285,6 @@ public class VoxelGuest extends JavaPlugin
                 for (Module module : modules.keySet())
                 {
                     if (module instanceof HelperModule)
-                    {
-                        return 1;
-                    }
-                }
-                return 0;
-            }
-        });
-
-        moduleGraph.addPlotter(new Metrics.Plotter("Region Module")
-        {
-            @Override
-            public int getValue()
-            {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (module instanceof RegionModule)
                     {
                         return 1;
                     }

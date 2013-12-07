@@ -2,8 +2,8 @@ package com.thevoxelbox.voxelguest.commands;
 
 import com.thevoxelbox.voxelguest.A4JUtils;
 import com.thevoxelbox.voxelguest.VoxelGuest;
+import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.commands.arguments.ModulesCommandArguments;
-import com.thevoxelbox.voxelguest.modules.Module;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

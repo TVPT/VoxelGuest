@@ -1,8 +1,8 @@
 package com.thevoxelbox.voxelguest;
 
 
+import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.configuration.Configuration;
-import com.thevoxelbox.voxelguest.modules.Module;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.*;
 /**
  * @author Monofraps
  */
-public final class ModuleManager
+public final class GuestModuleManager
 {
     // maps module <-> registered event listeners
     private HashMap<Module, HashSet<Listener>> registeredModules = new HashMap<>();
@@ -231,6 +231,11 @@ public final class ModuleManager
         }
     }
 
+    /**
+     * Disables a module by its instance.
+     *
+     * @param module The module instance to disable.
+     */
     public void disableModuleByInstance(final Module module)
     {
         disableModuleByInstance(module, false);
@@ -262,6 +267,11 @@ public final class ModuleManager
         }
     }
 
+    /**
+     * Disables a module by its type.
+     *
+     * @param module The class type of the module to disable.
+     */
     public void disableModuleByType(final Class<? extends Module> module)
     {
         disableModuleByType(module, false);
@@ -368,4 +378,25 @@ public final class ModuleManager
             }
         }
     }
+
+    /**
+     * Returns the instance of a registered module based on a given class.
+     *
+     * @param moduleClass The class of the module instance to find.
+     *
+     * @return Returns the instance of a registered module.
+     */
+    public Module getModuleInstance(final Class<? extends Module> moduleClass)
+    {
+        for (final Module registeredModule : registeredModules.keySet())
+        {
+            if (moduleClass.isAssignableFrom(registeredModule.getClass()))
+            {
+                return registeredModule;
+            }
+        }
+
+        return null;
+    }
+
 }

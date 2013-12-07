@@ -10,7 +10,6 @@ import com.thevoxelbox.voxelguest.modules.asshat.command.SoapboxCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.UnbanCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.UnmuteCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.listener.PlayerListener;
-import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 
@@ -36,7 +35,6 @@ public class AsshatModule extends GuestModule
     private KickCommandExecutor kickCommandExecutor;
     private SoapboxCommandExecutor soapboxCommandExecutor;
     private FreezeCommandExecutor freezeCommandExecutor;
-    private Mutelist mutelist = new Mutelist();
     private boolean silenceEnabled = false;
     private boolean freezeEnabled = false;
 
@@ -99,14 +97,6 @@ public class AsshatModule extends GuestModule
         commandMappings.put("freeze", freezeCommandExecutor);
 
         return commandMappings;
-    }
-
-    /**
-     * @return Returns the mutelist instance.
-     */
-    public final Mutelist getMutelist()
-    {
-        return mutelist;
     }
 
     /**
