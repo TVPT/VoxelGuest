@@ -1,4 +1,4 @@
-package com.thevoxelbox.voxelguest;
+package com.thevoxelbox.voxelguest.utils;
 
 import org.bukkit.command.CommandSender;
 import org.kohsuke.args4j.CmdLineException;
@@ -57,7 +57,6 @@ public final class A4JUtils
         }
         catch (CmdLineException e)
         {
-            e.printStackTrace();
             sender.sendMessage(e.getMessage());
             final ByteArrayOutputStream usageBuffer = new ByteArrayOutputStream();
             parser.printUsage(usageBuffer);

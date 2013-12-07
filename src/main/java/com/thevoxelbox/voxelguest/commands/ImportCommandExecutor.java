@@ -1,12 +1,12 @@
 package com.thevoxelbox.voxelguest.commands;
 
 import com.google.common.base.Preconditions;
-import com.thevoxelbox.voxelguest.A4JUtils;
 import com.thevoxelbox.voxelguest.commands.arguments.ImportCommandArguments;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.general.AfkMessage;
 import com.thevoxelbox.voxelguest.modules.greylist.GreylistDAO;
 import com.thevoxelbox.voxelguest.persistence.Persistence;
+import com.thevoxelbox.voxelguest.utils.A4JUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
