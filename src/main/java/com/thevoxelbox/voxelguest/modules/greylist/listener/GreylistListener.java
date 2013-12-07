@@ -60,17 +60,17 @@ public final class GreylistListener implements Listener
     @EventHandler
     public void onPlayerGreylisted(final PlayerGreylistedEvent event)
     {
+        if (moduleConfiguration.isBroadcastGreylists())
+        {
+            Bukkit.broadcastMessage(ChatColor.GRAY + event.getPlayerName() + ChatColor.DARK_GRAY + " was added to the greylist.");
+        }
+
         if (moduleConfiguration.isSetGroupOnGreylist() && VoxelGuest.hasPermissionProvider())
         {
             if (VoxelGuest.getPerms().playerAddGroup(Bukkit.getWorlds().get(0), event.getPlayerName(), moduleConfiguration.getGreylistGroupName()))
             {
                 VoxelGuest.getPluginInstance().getLogger().warning("Error: Could not set new greylisted player to group.");
             }
-        }
-
-        if (moduleConfiguration.isBroadcastGreylists())
-        {
-            Bukkit.broadcastMessage(ChatColor.GRAY + event.getPlayerName() + ChatColor.DARK_GRAY + " was added to the greylist.");
         }
     }
 }
