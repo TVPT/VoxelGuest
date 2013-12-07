@@ -6,7 +6,6 @@ import com.thevoxelbox.voxelguest.modules.regions.command.subcommand.Help;
 import com.thevoxelbox.voxelguest.modules.regions.command.subcommand.Modify;
 import com.thevoxelbox.voxelguest.modules.regions.command.subcommand.Resize;
 import com.thevoxelbox.voxelguest.modules.regions.command.subcommand.RuleParams;
-import com.thevoxelbox.voxelguest.modules.regions.command.subcommand.Snapshot;
 import com.thevoxelbox.voxelguest.modules.regions.command.subcommand.debug.Debug;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.spi.SubCommand;
@@ -24,7 +23,6 @@ public final class RegionCommandArguments
             @SubCommand(name = "create", impl = Create.class),
             @SubCommand(name = "resize", impl = Resize.class),
             @SubCommand(name = "help", impl = Help.class),
-            @SubCommand(name = "snapshot", impl = Snapshot.class),
             @SubCommand(name = "ruleparams", impl = RuleParams.class),
             @SubCommand(name = "debug", impl = Debug.class)
     })
