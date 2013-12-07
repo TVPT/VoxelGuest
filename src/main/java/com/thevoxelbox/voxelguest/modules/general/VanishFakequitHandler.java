@@ -45,7 +45,7 @@ public final class VanishFakequitHandler
 
         if (this.fakeQuit.contains(player))
         {
-            player.sendMessage(ChatColor.AQUA + "You are already fakequit and thus cannot toggle your vanish state");
+            player.sendMessage(ChatColor.AQUA + "You are already fakequit");
             return false;
         }
         if (this.vanished.contains(player))
@@ -71,7 +71,7 @@ public final class VanishFakequitHandler
      *
      * @return true if player is now vanished
      */
-    public boolean toggleFakeQuit(final Player player, boolean verbose)
+    public boolean toggleFakeQuit(final Player player)
     {
         Preconditions.checkNotNull(player);
 
@@ -85,7 +85,7 @@ public final class VanishFakequitHandler
             this.fakeQuit.remove(player);
             Preconditions.checkState(module.getConfiguration() instanceof GeneralModuleConfiguration);
 
-            if(verbose) Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getJoinFormat(), player.getName()));
+            Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getJoinFormat(), player.getName()));
             player.sendMessage(ChatColor.AQUA + "You have un-fakequit!");
             return false;
         }
@@ -95,7 +95,7 @@ public final class VanishFakequitHandler
             this.fakeQuit.add(player);
             Preconditions.checkState(module.getConfiguration() instanceof GeneralModuleConfiguration);
 
-            if(verbose) Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getLeaveFormat(), player.getName()));
+            Bukkit.broadcastMessage(this.module.formatJoinLeaveMessage(((GeneralModuleConfiguration) this.module.getConfiguration()).getLeaveFormat(), player.getName()));
             player.sendMessage(ChatColor.AQUA + "You have fakequit!");
             return true;
         }
@@ -138,12 +138,10 @@ public final class VanishFakequitHandler
         if (this.offlineVanished.contains(player.getName()))
         {
             this.toggleVanish(player);
-            this.offlineVanished.remove(player.getName());
         }
         if (this.offlineFakeQuit.contains(player.getName()))
         {
-            this.toggleFakeQuit(player, false);
-            this.offlineFakeQuit.remove(player.getName());
+            this.toggleFakeQuit(player);
         }
 
         if (player.hasPermission(VANISH_PERM))
