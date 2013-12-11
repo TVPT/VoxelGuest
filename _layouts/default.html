@@ -7,17 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- syntax highlighting CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/VoxelGuest/css/syntax.css">
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/VoxelGuest/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/VoxelGuest/css/style.css">
 </head>
 <body>
 
 <div class="wrapper">
     <header>
         <div class="text-center">
-            <img src="/media/VoxelGuest_Banner.jpg" alt="VoxelGuest Banner"/>
+            <img src="/VoxelGuest/media/VoxelGuest_Banner.jpg" alt="VoxelGuest Banner"/>
         </div>
     </header>
 
@@ -72,7 +72,7 @@
 </footer>
 
 <script src="https://code.jquery.com/jquery.js"></script>
-<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/VoxelGuest/js/bootstrap.min.js"></script>
 
 {% if page.dataspy == true %}
 <script type="text/javascript">
@@ -88,6 +88,17 @@
         $(document.links).filter(function () {
             return this.hostname != window.location.hostname;
         }).attr('target', '_blank');
+
+        // Fix local link locations
+        $(document.links).each(function() {
+            if(this.hostname == 'localhost') {
+              return;
+            }
+
+            if(this.hostname == window.location.hostname)  {
+                this.href = this.href.replace("github.io", "github.io/VoxelGuest");
+            }
+        });
     });
 </script>
 
