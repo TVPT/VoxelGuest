@@ -1,0 +1,1405 @@
+---
+layout: default
+title: Keep the Keys to Your Kingdom
+nav: docs
+dataspy: true
+---
+
+<div class="row">
+<div class="col-md-3 col-sm-12" id="sidebar">
+    <ul class="nav side-nav affix" data-spy="affix" data-offset-top="302">
+        <li class="active"><a href="#installation">Installation</a>
+            <ul class="nav">
+                <li><a href="#generated-files">Generated Files</a></li>
+                <li><a href="#persistence">Persistence</a></li>
+            </ul>
+        </li>
+        <li><a href="#migration">Migration</a>
+            <ul class="nav">
+                <li><a href="#migration-from-4">Migration from VoxelGuest 4.x</a></li>
+                <li><a href="#migration-from-5">Migration from VoxelGuest 5.0 Development Builds</a></li>
+            </ul>
+        </li>
+        <li><a href="#database-schema">Database Schema</a></li>
+        <li><a href="#asshat-module">Asshat Module</a>
+            <ul class="nav">
+                <li><a href="#am-commands">Commands and Permissions</a></li>
+                <li><a href="#am-configuration">Configuration</a></li>
+            </ul>
+        </li>
+        <li><a href="#general-module">General Module</a>
+            <ul class="nav">
+                <li><a href="#gem-commands">Commands and Permissions</a></li>
+                <li><a href="#gem-configuration">Configuration</a></li>
+            </ul>
+        </li>
+        <li><a href="#greylist-module">Greylist Module</a>
+            <ul class="nav">
+                <li><a href="#grm-commands">Commands and Permissions</a></li>
+                <li><a href="#grm-configuration">Configuration</a></li>
+            </ul>
+        </li>
+        <li><a href="#helper-module">Helper Module</a>
+            <ul class="nav">
+                <li><a href="#hm-commands">Commands and Permissions</a></li>
+                <li><a href="#hm-configuration">Configuration</a></li>
+            </ul>
+        </li>
+        <li><a href="#region-module">Region Module</a>
+            <ul class="nav">
+                <li><a href="#rm-commands">Commands and Permissions</a></li>
+                <li><a href="#rm-configuration">Configuration</a></li>
+            </ul>
+        </li>
+        <li><a href="#voxelguest-administration-system">VoxelGuest Administration System</a>
+            <ul class="nav">
+                <li><a href="#vgas-commands">Commands and Permissions</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class="col-md-9 col-sm-12">
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="installation">Installation</h1>
+    </div>
+    <ol>
+        <li>Download VoxelGuest.jar and place it into your <em>plugins</em> folder.</li>
+        <li>Restart/reload your server <em>twice</em>. Module configuration files will not be generated upon
+            first restart/reload.
+        </li>
+    </ol>
+
+    <h2 id="generated-files">Generated Files</h2>
+    <ul>
+        <li><strong>persistence.db</strong> - Stores all module data. More information is detailed below.</li>
+        <li><strong>AsshatModule.properties</strong> - Contains settings that influence the behaviour of the
+            <a href="#asshat-module">Asshat Module</a>.
+        </li>
+        <li><strong>GeneralModule.properties</strong> - Contains settings that influence the behaviour of the
+            <a href="#general-module">General Module</a>.
+        </li>
+        <li><strong>GreylistModule.properties</strong> - Contains settings that influence the behaviour of the
+            <a href="#greylist-module">Greylist Module</a>.
+        </li>
+    </ul>
+
+    <h2 id="persistence">Persistence</h2>
+</section>
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="migration">Migration</h1>
+    </div>
+
+    <h2 id="migration-from-4">Migration from VoxelGuest 4.x</h2>
+
+    <p>If you are using VoxelGuest 4.x you will not be able to import most of your data yet. However, we are
+        working on more import functionality.</p>
+    <ol>
+        <li>Delete the old VoxelGuest jar file from your <em>plugins</em> directory.</li>
+        <li>Download VoxelGuest.jar and place it into your <em>plugins</em> folder.</li>
+        <li>Restart/reload your server <em>twice</em>. Module configuration files will not be generated upon
+            first
+            restart/reload.
+        </li>
+        <li>Use the /vgimport (<a href="#voxelguest-administration-system">VoxelGuest Administration System</a>)
+            command to import your old data.
+        </li>
+    </ol>
+
+    <h2 id="migration-from-5">Migration from VoxelGuest 5.0 Development Builds</h2>
+
+    <p>If you are using a development build of VoxelGuest 5.0 you need to manually update your database file or
+        delete it (all persistent data like bans, mutes, regions will be lost) and let the plugin generate a new
+        one. You also need to update some configuration file names. Please note, upgrading from a development
+        build to a release build is not officially supported. The steps below might be outdated. Furthermore,
+        these steps are not meant to as a step-by-step or click-this-button-and-then-that-one tutorials.
+        Especially the manual database upgrading part requires a bit database/SQL knowledge.</p>
+
+    <ol>
+        <li><strong>Shut down(!!!) the server.</strong></li>
+        <li><strong>Back up</strong> your files</li>
+        <li>Delete the old VoxelGuest jar file from your <em>plugins</em> directory.</li>
+        <li>Download VoxelGuest.jar and place it into your <em>plugins</em> folder.</li>
+        <li>Rename the following files
+            <ol>
+                <li><strong>asshat.properties</strong> to <strong>AsshatModule.properties</strong></li>
+                <li><strong>general.properties</strong> to <strong>GeneralModule.properties</strong></li>
+                <li><strong>greylistmodule.properties</strong> to <strong>GreylistModule.properties</strong></li>
+            </ol>
+        </li>
+        <li>Make sure the strings in your config files are enclosed with " characters (check default config
+            files below)
+        </li>
+        <li>Manually update your database file (only required if really want to keep your persistent data)
+            <ol>
+                <li>Get a program to read, modify and write SQlite databases.</li>
+                <li>Open persistence.db and make sure the schema matches the one found in the
+                    <a href="#database-schema">database documentation</a> section below.
+                </li>
+            </ol>
+        </li>
+        <li>Start your server.</li>
+    </ol>
+</section>
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="database-schema">Database Schema</h1>
+    </div>
+    <p>As mentioned above, the <strong>persistence.db</strong> file stores all persistent data. This includes things
+        like bans,
+        greylist entries and region data. The current schema of our SQlite database looks like this:</p>
+</section>
+
+<section class="docs-section">
+<div class="page-header">
+    <h1 id="asshat-module">Asshat Module</h1>
+</div>
+<p>The Asshat Module allows server staff to manage and restrict the extent to which a player may interact with
+    the server. Banning, kicking, muting, freezing, and recalling ban data are all possible through this
+    module.</p>
+
+<h2 id="am-commands">Commands and Permissions</h2>
+
+<div class="command">
+    <h3 class="command-name">ban</h3>
+
+    <div class="command-description">
+        Bans the player specified in the <em>playername</em> argument from the server for the reason specified in
+        the
+        <em>reason</em> argument. Banned users may not reconnect to the server. If the specified player is online,
+        player detection is enabled and the entire name need not be typed.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vban</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.ban</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player to ban</td>
+                <td><code>/ban MrBoobs</code></td>
+            </tr>
+            <tr>
+                <td>reason</td>
+                <td>no</td>
+                <td>The reason you are banning the player for</td>
+                <td><code>/ban MrBoobs He sucks</code></td>
+            </tr>
+            <tr>
+                <td>-si</td>
+                <td>no</td>
+                <td>Suppresses ban broadcast</td>
+                <td><code>/ban MrBoobs -si</code></td>
+            </tr>
+            <tr>
+                <td>-f</td>
+                <td>no</td>
+                <td>Bans an offline player (name has to be spelt correctly)</td>
+                <td><code>/ban MrBoobs -f</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">unban</h3>
+
+    <div class="command-description">
+        Unbans the player specified in the <em>playername</em> argument from the server.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vunban</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.unban</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player to unban</td>
+                <td><code>/unban MrBoobs</code></td>
+            </tr>
+            <tr>
+                <td>-si</td>
+                <td>no</td>
+                <td>Suppresses unban broadcast</td>
+                <td><code>/unban MrBoobs -si</code></td>
+            </tr>
+            <tr>
+                <td>-f</td>
+                <td>no</td>
+                <td>Bans an offline player (name has to be spelt correctly)</td>
+                <td><code>/unban MrBoobs -f</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">banreason</h3>
+
+    <div class="command-description">
+        Returns the reason for which the player specified in the <em>playername</em> argument has been banned. Names
+        of offline players must be spelt completely with all numbers, letters, and symbols, but capitalization is
+        not important.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vbanreason</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.banreason</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player you want to get the banreason of</td>
+                <td><code>/banreason MrBoobs</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">kick</h3>
+
+    <div class="command-description">
+        Kicks the player specified in the <em>playername</em> argument from the server.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vkick</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.kick</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player to kick</td>
+                <td><code>/kick MrBoobs</code></td>
+            </tr>
+            <tr>
+                <td>reason</td>
+                <td>no</td>
+                <td>The reason you are kicking the player for</td>
+                <td><code>/kick MrBoobs He sucks</code></td>
+            </tr>
+            <tr>
+                <td>-si</td>
+                <td>no</td>
+                <td>Suppresses kick broadcast</td>
+                <td><code>/kick MrBoobs -si</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">mute</h3>
+
+    <div class="command-description">
+        Denies the player specified in the <em>playername</em> argument the ability to speak in chat.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vmute</li>
+            <li>gag</li>
+            <li>vgag</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.mute</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player to mute</td>
+                <td><code>/mute MrBoobs</code></td>
+            </tr>
+            <tr>
+                <td>reason</td>
+                <td>no</td>
+                <td>The reason you are muting the player for</td>
+                <td><code>/mute MrBoobs He sucks</code></td>
+            </tr>
+            <tr>
+                <td>-si</td>
+                <td>no</td>
+                <td>Suppresses mute broadcast</td>
+                <td><code>/mute MrBoobs -si</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">unmute</h3>
+
+    <div class="command-description">
+        Re-allows the player specified in the <em>playername</em> argument the ability to speak in chat.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vunmute</li>
+            <li>ungag</li>
+            <li>vungag</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.unmute</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player to unmute</td>
+                <td><code>/unmute MrBoobs</code></td>
+            </tr>
+            <tr>
+                <td>-si</td>
+                <td>no</td>
+                <td>Suppresses unmute broadcast</td>
+                <td><code>/unmute MrBoobs -si</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">soapbox</h3>
+
+    <div class="command-description">
+        Denies all players the ability to speak in chat. Resend the command to re-allow all players the ability to speak
+        in chat.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vsoapbox</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.soapbox (Allows command usage.)</li>
+            <li>voxelguest.asshat.bypass.silence (Prevents a player from being muted by soapbox.)</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        This command doesn't have any arguments.
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">freeze</h3>
+
+    <div class="command-description">
+        Denies all players the ability to move. Resend the command to re-allow all players the ability to move.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vfreeze</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.asshat.freeze (Allows command usage.)</li>
+            <li>voxelguest.asshat.bypass.freeze (Prevents a player from being movement impaired by freeze.)</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        This command doesn't have any arguments.
+    </div>
+</div>
+
+<h2 id="am-configuration">Configuration</h2>
+<h6>Default Configuration</h6>
+{% highlight properties %}
+#Tue Jan 1 00:00:00 PST 2013
+ban-message="§8Player §c%playername%§8 has been banned by §c%admin%§8 for\: §9%reason%"
+gag-message="§8Player §c%playername%§8 has been gagged by §c%admin%§8 for\: §9%reason%"
+asshat-reason="Asshat"
+kick-message="§8Player §c%playername%§8 has been kicked by §c%admin%§8 for\: §9%reason%"
+ungag-message="§8Player §c%playername%§8 has been ungagged by §c%admin%"
+unban-message="§8Player §c%playername%§8 has been unbanned by §c%admin%"
+{% endhighlight %}
+
+<h6>Variables</h6>
+<dl class="dl-horizontal">
+    <dt>%playername%</dt>
+    <dd>Returns the name of player specified in the argument <em>playername</em>.</dd>
+
+    <dt>%admin%</dt>
+    <dd>Returns the name of the player executing the command.</dd>
+
+    <dt>%reason%</dt>
+    <dd>Returns the reason for the action specified in the argument <em>reason</em>.</dd>
+</dl>
+
+<h6>Explanation</h6>
+<dl class="dl-horizontal">
+    <dt>ban-message</dt>
+    <dd>Defines the format of the message displayed to all users when a player is banned.</dd>
+
+    <dt>gag-message</dt>
+    <dd>Defines the format of the message displayed to all users when a player is gagged.</dd>
+
+    <dt>asshat-reason</dt>
+    <dd>Defines the default value for the <em>%reason%</em> variable</dd>
+
+    <dt>kick-message</dt>
+    <dd>Defines the format of the message displayed to all users when a player is kicked.</dd>
+
+    <dt>ungag-message</dt>
+    <dd>Defines the format of the message displayed to all users when a player is ungagged.</dd>
+
+    <dt>unban-message</dt>
+    <dd>Defines the format of the message displayed to all users when a player is unbanned.</dd>
+</dl>
+</section>
+
+<section class="docs-section">
+<div class="page-header">
+    <h1 id="general-module">General Module</h1>
+</div>
+<p>The General Module contains useful commands for both staff and users of all usergroups. Users may view an
+    organized list online players, track server TPS, and alert other users that they are going AFK. Staff may
+    teleport to users, change usergroups, vanish, fakequit, and view system data.</p>
+
+<h2 id="gem-commands">Commands and Permissions</h2>
+
+<div class="command">
+    <h3 class="command-name">who</h3>
+
+    <div class="command-description">
+        Lists all online players, organized by usergroup. Players flagged as AFK display a light gray name in the player
+        list.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vwho</li>
+            <li>list</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.who</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        This command doesn't have any arguments.
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">vanish</h3>
+
+    <div class="command-description">
+        Hides you character model and nameplate from players without vanish permission.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vvanish</li>
+            <li>van</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.vanish</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        This command doesn't have any arguments.
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">fakequit</h3>
+
+    <div class="command-description">
+        Hides you character model and nameplate from players without vanish permission. Additionally
+        hides your name in the online player list from all players without fakequit permissions. A fake disconnect
+        message is displayed on behalf of the player fakequitting.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>fq</li>
+            <li>vfq</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.fakequit</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        This command doesn't have any arguments.
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">ep</h3>
+
+    <div class="command-description">
+        Removes all entities except paintings and item frames in the specified world. The <em>world</em> argument can be
+        replaced with an asterisk (*) to target all worlds.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vep</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.ep</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>world</td>
+                <td>yes</td>
+                <td>The world to remove entities from</td>
+                <td><code>/ep MyCoolWorld</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">sys</h3>
+
+    <div class="command-description">
+        Returns information regarding CPU performance and memory usage amongst other data.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>system</li>
+            <li>vsys</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.sys</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>mem</td>
+                <td>no</td>
+                <td>Prints more detailed memory usage information</td>
+                <td><code>/sys mem</code></td>
+            </tr>
+            <tr>
+                <td>gc</td>
+                <td>no</td>
+                <td>Triggers Java's native garbage collector</td>
+                <td><code>/sys gc</code></td>
+            </tr>
+            <tr>
+                <td>lag</td>
+                <td>no</td>
+                <td>Prints the server's TPS (ticks per second) only</td>
+                <td><code>/sys lag</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">vpg</h3>
+
+    <div class="command-description">
+        Assign a user group to a player.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vpromote</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.vpg</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>yes</td>
+                <td>The player to assign to a group</td>
+                <td><code>/vpg MrBoobs <strong>guests</strong></code></td>
+            </tr>
+            <tr>
+                <td>usergroup</td>
+                <td>yes</td>
+                <td>The group to add a player to</td>
+                <td><code>/vpg MrBoobs <strong>guests</strong></code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">vtp</h3>
+
+    <div class="command-description">
+        Teleports a player.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vteleport</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.vtp</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>playername</td>
+                <td>no</td>
+                <td>The player to teleport to <strong>OR</strong> the player to teleport - see arguments below</td>
+                <td><code>/vtp MrBoobs</code> teleports you to MrBoobs</td>
+            </tr>
+            <tr>
+                <td>me</td>
+                <td>no, requires playername</td>
+                <td>Teleport player specified in <em>playername</em> to your location</td>
+                <td><code>/vtp MrBoobs me</code> teleports MrBoobs to you</td>
+            </tr>
+            <tr>
+                <td>x# y# z#</td>
+                <td>no</td>
+                <td>Modify destination coordinates relative to the target player</td>
+                <td><code>/vtp MrBoobs x5 x10 z5</code> teleports you to MrBoobs with an offset of (5|10|5)</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">afk</h3>
+
+    <div class="command-description">
+        Flags your account as AFK and displays a message indicating the action to all players on the server.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vafk</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.afk</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>reason</td>
+                <td>no</td>
+                <td>Sets the reason you've gone AFK for. A random AFK message will be selected if this argument is
+                    omitted.
+                </td>
+                <td><code>/afk School</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">addafkmessage</h3>
+
+    <div class="command-description">
+        Adds an AFK message that may be selected at random when a player goes AFK.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>addafkmsg</li>
+            <li>vaddafkmsg</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.createafkmsg</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>text</td>
+                <td>yes</td>
+                <td>The message to add to the list of random messages</td>
+                <td><code>/addafkmessage Pointless message</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">watchtps</h3>
+
+    <div class="command-description">
+        Rather than displaying your current experience level, your experience bar will display the server's TPS and
+        update in real time. Resend the command to return your experience bar to displaying your current experience
+        level.
+    </div>
+    <div class="command-misc">
+        <ul class="aliases">
+            <li>vwatchtps</li>
+        </ul>
+        <ul class="permissions">
+            <li>voxelguest.general.watchtps</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        This command doesn't have any arguments.
+    </div>
+</div>
+
+<div class="command">
+    <h3 class="command-name">vgpg</h3>
+
+    <div class="command-description">
+        Allows to create a VoxelGuest player group that maps permission system group names to /who group colors.
+    </div>
+    <div class="command-misc">
+        This command doesn't have any aliases.
+        <ul class="permissions">
+            <li>voxelguest.general.playergroup</li>
+        </ul>
+    </div>
+    <div class="command-arguments">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Argument</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>colors</td>
+                <td>no</td>
+                <td>Displays all available colors</td>
+                <td><code>/vgpg colors</code></td>
+            </tr>
+            <tr>
+                <td>group-name</td>
+                <td>yes (no if 'colors' has been passed as an argument)</td>
+                <td>The name of the group in your permission system</td>
+                <td><code>/vgpg Guests green</code></td>
+            </tr>
+            <tr>
+                <td>color</td>
+                <td>yes (no if 'colors' has been passed as an argument)</td>
+                <td>The color to use in /who for the group specified in <em>group-name</em></td>
+                <td><code>/vgpg Guests green</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h2 id="gem-configuration">Configuration</h2>
+<h6>Default Configuration</h6>
+{% highlight properties %}
+#Tue Jan 1 00:00:00 PST 2013
+fakequit-prefix="§8[§cFQ§8]"
+leave-format="§8(§6$no§8) §3$n§7 left"
+permgen-shutdown-threshold=80
+permgen-warning-threshold=65
+force-watch-tps=true
+join-format="§8(§6$no§8) §3$n§7 joined"
+random-afk-messages=true
+kick-format="§8(§6$no§8) §3$n§4 was kicked out"
+{% endhighlight %}
+
+<h6>Variables</h6>
+<dl class="dl-horizontal">
+    <dt>$no</dt>
+    <dd>Returns the number of currently online players.</dd>
+
+    <dt>$n</dt>
+    <dd>Returns the name of triggering player.</dd>
+
+    <dt>%reason%</dt>
+    <dd>Returns the reason for the action specified in the argument <em>reason</em>.</dd>
+</dl>
+
+<h6>Explanation</h6>
+<dl class="dl-horizontal">
+    <dt>fakequit-prefix</dt>
+    <dd>Defines the prefix applied to players in fakequit mode in the player list for people who have the fakequit
+        permission.
+    </dd>
+
+    <dt>leave-format</dt>
+    <dd>Defines the format of the message displayed to all users when a player disconnects from the server.</dd>
+
+    <dt>member-color</dt>
+    <dd>Defines the color of the member usergroup representation in the player list.</dd>
+
+    <dt>permgen-shutdown-threshold</dt>
+    <dd>Don't play with it or set it to 99 if you notice regular server restarts due to PermGen space overflow.</dd>
+
+    <dt>permgen-warning-threshold</dt>
+    <dd>Don't play with it unless you know what you're doing.</dd>
+
+    <dt>force-watch-tps</dt>
+    <dd>States whether the watchtps feature is enabled for players by default.</dd>
+
+    <dt>join-format</dt>
+    <dd>Defines the format of the message displayed to all users when a player connects to the server.</dd>
+
+    <dt>random-afk-messages</dt>
+    <dd>States whether random AFK messages are displayed when no reason argument is provided when sending the AFK
+        command.
+    </dd>
+
+    <dt>kick-format</dt>
+    <dd>Defines the format of the message displayed to all users when a player is forcibly removed from the server.</dd>
+</dl>
+</section>
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="greylist-module">Greylist Module</h1>
+    </div>
+    <p>The Greylist Module allows a server's administration to filter direct access to the server through
+        greylisting and whitelisting, and control demographics through a very simple and effective system.</p>
+
+    <h2 id="grm-commands">Commands and Permissions</h2>
+
+    <div class="command">
+        <h3 class="command-name">greylist</h3>
+
+        <div class="command-description">
+            Greylists a player. Greylisted users may access the server at any time. This command automatically promotes
+            the player specified in the playername argument to the usergroup defined as the <em>gl-group-name</em> in
+            the greylist module configuration.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>gl</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.greylist.greylist - Allows to use /greylist command</li>
+                <li>voxelguest.greylist.override - Allows a player to bypass greylist check on join</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>playername</td>
+                    <td>yes</td>
+                    <td>The player to greylist</td>
+                    <td><code>/greylist MrBoobs</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="command">
+        <h3 class="command-name">ungreylist</h3>
+
+        <div class="command-description">
+            Ungreylists a player.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>ugl</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.greylist.ungreylist - Allows to use /ungreylist command</li>
+                <li>voxelguest.greylist.override - Allows a player to bypass greylist check on join</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>playername</td>
+                    <td>yes</td>
+                    <td>The player to ungreylist</td>
+                    <td><code>/ungreylist MrBoobs</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="command">
+        <h3 class="command-name">whitelist</h3>
+
+        <div class="command-description">
+            Whitelists a player. This command automatically promotes the player specified in the playername argument to
+            the usergroup defined as the <em>wl-group-name</em> in the greylist module configuration.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>wl</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.greylist.whitelist</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>playername</td>
+                    <td>yes</td>
+                    <td>The player to whitelist</td>
+                    <td><code>/whitelist MrBoobs</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h2 id="grm-configuration">Configuration</h2>
+    <h6>Default Configuration</h6>
+    {% highlight properties %}
+    #Tue Jan 1 00:00:00 PST 2013
+    exploration-mode=false
+    wl-group-name="Member"
+    stream-port=8080
+    gl-group-name="Guest"
+    not-greylisted-kick-message="You are not greylisted."
+    set-group-on-graylist=true
+    stream-enable=false
+    stream-password="changeme"
+    {% endhighlight %}
+
+    <h6>Explanation</h6>
+    <dl class="dl-horizontal">
+        <dt>exploration-mode</dt>
+        <dd>States whether non-greylisted users will be allowed to join the server.</dd>
+
+        <dt>wl-group-name</dt>
+        <dd>ets the Member usergroup's name (used in whitelisting).</dd>
+
+        <dt>stream-port</dt>
+        <dd>Sets the port to listen on for the greylist stream. (The Voxel Box only, deprecated)</dd>
+
+        <dt>gl-group-name</dt>
+        <dd>Sets the Guest usergroup's name (used in greylisting).</dd>
+
+        <dt>not-greylisted-kick-message</dt>
+        <dd>Defines the format of the disconnect message displayed to users who are not greylisted and cannot join the
+            server.
+        </dd>
+
+        <dt>set-group-on-graylist</dt>
+        <dd>States whether a user's group will be changed upon greylist/whitelist.</dd>
+
+        <dt>stream-enable</dt>
+        <dd>States whether to listen on the greylist stream port. (The Voxel Box only, deprecated)</dd>
+
+        <dt>stream-password</dt>
+        <dd>Sets the greylist stream password. (The Voxel Box only, deprecated)</dd>
+    </dl>
+</section>
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="helper-module">Helper Module</h1>
+    </div>
+    <p>The Helper Module serves as a systematic method of communication between guests and helpers. Logs are
+        maintained to keep statistical data regarding the frequency of a player's interaction with the module and
+        helper notes regarding feedback for players that use the module's functionality.</p>
+
+    <h2 id="hm-commands">Commands and Permissions</h2>
+
+    <div class="command">
+        <h3 class="command-name">wlreview</h3>
+
+        <div class="command-description">
+            Submits a ticket to helpers indicating that the triggering player would like to be reviewed for
+            whitelisting.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>vwlreview</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.helper.wloveride - <strong>Disallows a player to submit a ticket. This behaviour might be
+                    changed in the final 5.2.0 release</strong></li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            This command doesn't have any arguments.
+        </div>
+    </div>
+
+    <div class="command">
+        <h3 class="command-name">helper</h3>
+
+        <div class="command-description">
+            Adds or removes a player form the list of helpers.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>vhelper</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.helper.helper</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>--add [playername]</td>
+                    <td>no</td>
+                    <td>Adds the player specified in <em>playername</em> to the list of helpers</td>
+                    <td><code>/helper --add MrBoobs</code></td>
+                </tr>
+                <tr>
+                    <td>--remove [playername]</td>
+                    <td>no</td>
+                    <td>Removes the player specified in <em>playername</em> to the list of helpers</td>
+                    <td><code>/helper --remove MrBoobs</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="command">
+        <h3 class="command-name">helperreview</h3>
+
+        <div class="command-description">
+            Allows a helper to examine the helper review history of a player or comment on one instance of a player's
+            review history.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>hreview</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.helper.review</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>-c [comment]</td>
+                    <td>no</td>
+                    <td>Adds a review comment</td>
+                    <td><code>/helperreview -c Needs moar materials!</code></td>
+                </tr>
+                <tr>
+                    <td>-h [playername]</td>
+                    <td>no</td>
+                    <td>Displays a players review history</td>
+                    <td><code>/helperreview -h MrBoobs</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="region-module">Region Module</h1>
+    </div>
+    <p>
+        The Region Module is an extremely powerful module that allows to set specific rules based on defined areas. A
+        rule can be anything from interaction and build restrictions to block physics modifications.
+        <br/>This module is still under development. This documentation could be incomplete.
+    </p>
+
+    <h2 id="rm-commands">Commands and Permissions</h2>
+
+    <h2 id="rm-configuration">Configuration</h2>
+</section>
+
+<section class="docs-section">
+    <div class="page-header">
+        <h1 id="voxelguest-administration-system">VoxelGuest Administration System</h1>
+    </div>
+    <p>The Administration System encompasses several commands to manage VoxelGuest.</p>
+
+    <h2 id="vgas-commands">Commands and Permissions</h2>
+    <div class="command">
+        <h3 class="command-name">vmodules</h3>
+
+        <div class="command-description">
+            This command allows you to list, enabled and disable VoxelGuest modules.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>vgmodules</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.manage.modules</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>--list, -l</td>
+                    <td>no</td>
+                    <td>Lists all avaiable modules</td>
+                    <td><code>/vmodules -l</code></td>
+                </tr>
+                <tr>
+                    <td>--enable [module-name], -e [module-name]</td>
+                    <td>no</td>
+                    <td>Enables a module</td>
+                    <td><code>/vmodules -e RegionModule</code></td>
+                </tr>
+                <tr>
+                    <td>--disable [module-name], -d [module-name]</td>
+                    <td>no</td>
+                    <td>Disables a module</td>
+                    <td><code>/vmodules -d RegionModule</code></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h6>Available Modules</h6>
+            <ul>
+                <li>AsshatModule</li>
+                <li>GeneralModule</li>
+                <li>GreylistModule</li>
+                <li>HelperModule</li>
+                <li>RegionModule</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="command">
+        <h3 class="command-name">vgimport</h3>
+
+        <div class="command-description">
+            This command allows you to list, enabled and disable VoxelGuest modules.
+        </div>
+        <div class="command-misc">
+            <ul class="aliases">
+                <li>voxelguestimport</li>
+                <li>guestimport</li>
+                <li>import</li>
+            </ul>
+            <ul class="permissions">
+                <li>voxelguest.manage.import</li>
+            </ul>
+        </div>
+        <div class="command-arguments">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>Argument</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>-bans</td>
+                    <td>no</td>
+                    <td>Imports banned players from VG 3.x and 4.x. The old file(s) have to be in the VoxelGuest folder in the plugins directory.</td>
+                    <td><code>/vgimport -bans</code></td>
+                </tr>
+                <tr>
+                    <td>-greylist</td>
+                    <td>no</td>
+                    <td>Imports the greylist from VG 4.x. The old file(s) have to be in the VoxelGuest folder in the plugins directory.</td>
+                    <td><code>/vgimport -greylist</code></td>
+                </tr>
+                <tr>
+                    <td>-afkmessages</td>
+                    <td>no</td>
+                    <td>Imports the random AFK messages from VG 4.x. The old file(s) have to be in the VoxelGuest folder in the plugins directory.</td>
+                    <td><code>/vgimport -afkmessages</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</div>
+</div>

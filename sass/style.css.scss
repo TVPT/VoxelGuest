@@ -1,0 +1,300 @@
+$headerBackground: #2e2e2e;
+$bodyBackground: #eeeeee;
+$footerBackground: #671a35;
+$carouselUIColor: #1e4154;
+$linkHoverColor: $footerBackground + #414141;
+
+$footerHeight: 150px;
+$footerLinkColor: #2ebdff;
+
+$commandDocumentationContentPadding: 12px;
+$commandDocumentationBackgroundColor: #f4f8fa;
+$commandDocumentationBorderColor: #bce8f1;
+
+$sideNavActiveBorderWidth: 2px;
+$sideNavLevel1Indent: 15px;
+$sideNavLevelNIndent: 32px;
+
+@import 'utils';
+
+html, body {
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: $bodyBackground;
+
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .5)
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+
+  margin: 0 auto $footerHeight*-1;
+
+  & > main {
+    padding-bottom: $footerHeight + 40px;
+  }
+}
+
+h1, h2, h3 {
+  small {
+    text-shadow: none;
+  }
+}
+
+h1, h2 {
+  margin-top: 60px;
+}
+
+h6 {
+  margin-top: 35px;
+
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.page-header {
+  border-bottom: 1px solid $linkHoverColor;
+}
+
+header {
+  height: 250px;
+
+  background-color: $headerBackground;
+}
+
+nav {
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+
+  -webkit-box-shadow: 0 0 10px black;
+  -moz-box-shadow: 0 0 10px black;
+  box-shadow: 0 0 10px black;
+
+  font-size: 17px;
+}
+
+footer {
+  min-height: $footerHeight;
+
+  padding-top: 35px;
+
+  color: #ffffff;
+  background-color: $footerBackground;
+
+  img {
+    transition: box-shadow .5s;
+  }
+
+  img:hover {
+    -webkit-box-shadow: 0 0 10px black;
+    -moz-box-shadow: 0 0 10px black;
+    box-shadow: 0 0 10px black;
+  }
+
+  a {
+    color: $footerLinkColor;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+}
+
+a {
+  color: $footerBackground;
+  transition: color .5s;
+
+  &:hover {
+    color: $linkHoverColor !important;
+    text-decoration: none;
+  }
+}
+
+div#carousel-feat {
+  height: 320px;
+
+  margin-bottom: 25px;
+}
+
+.carousel {
+  .jumbotron {
+    text-align: center;
+  }
+}
+
+.carousel-control {
+  background-image: none !important;
+  filter: none !important;
+
+  width: inherit;
+  color: $footerBackground;
+  opacity: 1;
+}
+
+.carousel-indicators li {
+  border-color: $carouselUIColor;
+}
+
+.carousel-indicators .active {
+  background-color: $carouselUIColor;
+}
+
+.front-page {
+  line-height: 1.4em;
+  font-size: 17px;
+}
+
+#sidebar {
+  .affix {
+    position: static;
+    top: 21px;
+  }
+
+  @media (min-width: 992px) {
+    .affix, .affix-bottom {
+      position: fixed;
+      width: 213px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .affix, .affix-bottom {
+      position: fixed;
+      width: 263px;
+    }
+  }
+
+  & > .nav {
+    background-color: white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+    padding: 7px 0;
+
+    .active {
+      .nav {
+        display: block;
+      }
+
+      & > a {
+        color: $linkHoverColor;
+
+        border-left: $sideNavActiveBorderWidth solid $carouselUIColor;
+        border-right: $sideNavActiveBorderWidth solid $carouselUIColor;
+
+        padding-left: $sideNavLevel1Indent - $sideNavActiveBorderWidth;
+      }
+
+      .active a {
+        padding-left: $sideNavLevelNIndent - $sideNavActiveBorderWidth;
+      }
+    }
+
+    .nav {
+      display: none;
+
+      a {
+        padding-left: $sideNavLevelNIndent;
+      }
+    }
+  }
+}
+
+.command {
+  background-color: $commandDocumentationBackgroundColor;
+
+  @mixin command-common {
+    border: 1px solid $commandDocumentationBorderColor;
+    padding: $commandDocumentationContentPadding;
+  }
+
+  .command-name {
+    @include command-common;
+
+    @include border-radius(5px, 5px, 0, 0);
+
+    margin-bottom: 0;
+
+    &:before {
+      content: '/';
+    }
+  }
+
+  .command-description {
+    @include command-common;
+  }
+
+  .command-misc {
+    @include command-common;
+
+    .aliases {
+      list-style: none;
+      padding-left: 20px;
+
+      & > li:before {
+        content: '/';
+      }
+
+      & > li {
+        margin-left: 100px;
+      }
+
+      &:before {
+        width: 80px;
+        content: 'Aliases';
+        float: left;
+        text-align: right;
+        font-weight: bold;
+      }
+    }
+
+    .permissions {
+      @extend .aliases;
+
+      & > li:before {
+        content: '';
+      }
+
+      &:before {
+        content: 'Permissions';
+      }
+    }
+  }
+
+  .command-arguments {
+    @include command-common;
+
+    @include border-radius(0, 0, 5px, 5px);
+
+    tbody tr {
+      & > td:nth-child(2) {
+        text-transform: uppercase;
+      }
+    }
+
+    // Argument name column
+    & > table > tbody > tr > td:nth-child(0) {
+      white-space: nowrap
+    }
+  }
+
+  code {
+    background-color: inherit;
+    color: $linkHoverColor;
+  }
+}
+
+.post {
+ margin-bottom: 150px;
+
+ &> h1 > small {
+  float: right;
+  margin-top: 15px;
+}
+}

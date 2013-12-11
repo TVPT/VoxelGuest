@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{ site.name }} | {{ page.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <header>
+        <div class="text-center">
+            <img src="/media/VoxelGuest_Banner.jpg" alt="VoxelGuest Banner"/>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#primary-nav-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="primary-nav-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="{% if page.nav == 'index' %}active{% endif %}"><a href="/index.html">Overview</a></li>
+                    <li class="{% if page.nav == 'docs' %}active{% endif %}">
+                        <a href="/pages/docs.html">Documentation</a></li>
+                    <li class="{% if page.nav == 'news' %}active{% endif %}"><a href="/news.html">News</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://github.com/TVPT/VoxelGuest">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <main class="container">
+        {{ content }}
+    </main>
+</div>
+
+<footer>
+    <div class="container">
+        <a href="http://voxelwiki.com/minecraft/VoxelPlugineers"><img class="img img-rounded pull-right" src="https://2.gravatar.com/avatar/ecc721221e6b3d88114585b38609a9a8" alt="TVPT Logo"/></a>
+
+        <p>VoxelGuest is brought to you by The VoxelBox Pluginnering Team<br>and many more contributers</p>
+
+        <p>
+            Lead Developer: <a href="https://twitter.com/monofraps">Monofraps</a> <br/>
+            Contributors: <a href="https://twitter.com/Mike_Matrix">MikeMatrix</a> (Code),
+            <a href="https://https://github.com/TheCryoknight">TheCryoknight</a> (Code),
+            <a href="https://twitter.com/Thedeadlybutter">TheDeadlyButter</a> (Code),
+            <a href="https://github.com/Deamon5550">Deamon5550</a> (Code),
+            <a href="http://voxelwiki.com/minecraft/Felryder">Felryder</a> (Documentation),
+            <a href="http://voxelwiki.com/minecraft/Wingman">Wingman2468</a> (Logo)
+        </p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
+{% if page.dataspy == true %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('body').scrollspy({target: '#sidebar'});
+    });
+</script>
+{% endif %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Adds target="_blank" to all external links
+        $(document.links).filter(function () {
+            return this.hostname != window.location.hostname;
+        }).attr('target', '_blank');
+    });
+</script>
+
+</body>
+</html>

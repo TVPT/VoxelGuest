@@ -1,0 +1,17 @@
+---
+layout: default
+title: News
+nav: news
+---
+
+{% for post in site.posts %}
+
+<article class="post">
+    <h1 class="page-header">{{ post.title }}<small class="hidden-xs"> {{ post.date | date_to_string }}</small></h1>
+
+    <div class="post-content">
+        {{ post.content }}
+    </div>
+</article>
+
+{% endfor %}
