@@ -2,14 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>{{ site.name }} | {{ page.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- syntax highlighting CSS -->
     <link rel="stylesheet" href="/VoxelGuest/css/syntax.css">
 
-    <link rel="stylesheet" href="/VoxelGuest/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="/VoxelGuest/css/style.css">
 </head>
 <body>
@@ -72,7 +71,7 @@
 </footer>
 
 <script src="https://code.jquery.com/jquery.js"></script>
-<script type="text/javascript" src="/VoxelGuest/js/bootstrap.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
 {% if page.dataspy == true %}
 <script type="text/javascript">
@@ -95,7 +94,7 @@
               return;
             }
 
-            if(this.hostname == window.location.hostname)  {
+            if((this.hostname == window.location.hostname) && (!this.href.contains("github.io/VoxelGuest")))  {
                 this.href = this.href.replace("github.io", "github.io/VoxelGuest");
             }
         });
