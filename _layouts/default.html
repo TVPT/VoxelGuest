@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- syntax highlighting CSS -->
-    <link rel="stylesheet" href="/VoxelGuest/css/syntax.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/syntax.css">
 
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/VoxelGuest/css/style.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/style.css">
 </head>
 <body>
 
 <div class="wrapper">
     <header>
         <div class="text-center">
-            <img src="/VoxelGuest/media/VoxelGuest_Banner.jpg" alt="VoxelGuest Banner"/>
+            <img src="{{ site.baseurl }}/media/VoxelGuest_Banner.jpg" alt="VoxelGuest Banner"/>
         </div>
     </header>
 
@@ -33,10 +33,10 @@
 
             <div class="collapse navbar-collapse" id="primary-nav-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="{% if page.nav == 'index' %}active{% endif %}"><a href="/index.html">Overview</a></li>
+                    <li class="{% if page.nav == 'index' %}active{% endif %}"><a href="{{ site.baseurl }}/index.html">Overview</a></li>
                     <li class="{% if page.nav == 'docs' %}active{% endif %}">
-                        <a href="/pages/docs.html">Documentation</a></li>
-                    <li class="{% if page.nav == 'news' %}active{% endif %}"><a href="/news.html">News</a></li>
+                        <a href="{{ site.baseurl }}/pages/docs.html">Documentation</a></li>
+                    <li class="{% if page.nav == 'news' %}active{% endif %}"><a href="{{ site.baseurl }}/news.html">News</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -71,7 +71,7 @@
 </footer>
 
 <script src="https://code.jquery.com/jquery.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
 {% if page.dataspy == true %}
 <script type="text/javascript">
@@ -87,17 +87,6 @@
         $(document.links).filter(function () {
             return this.hostname != window.location.hostname;
         }).attr('target', '_blank');
-
-        // Fix local link locations
-        $(document.links).each(function() {
-            if(this.hostname == 'localhost') {
-              return;
-            }
-
-            if((this.hostname == window.location.hostname) && (!this.href.contains("github.io/VoxelGuest")))  {
-                this.href = this.href.replace("github.io", "github.io/VoxelGuest");
-            }
-        });
     });
 </script>
 
