@@ -31,7 +31,7 @@ public final class WLReviewCommand implements CommandExecutor
     {
         if (sender instanceof Player)
         {
-            if (!sender.hasPermission("voxelguest.helper.wloveride"))
+            if (!sender.hasPermission("voxelguest.helper.wloverride"))
             {
                 this.module.getManager().newReview((Player) sender);
             }
