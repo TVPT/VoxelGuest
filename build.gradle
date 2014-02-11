@@ -67,15 +67,15 @@ dependencies {
     compile 'com.google.guava:guava:10.0'
 
     compile 'log4j:log4j:1.2.17'
-    compile 'com.j256.ormliste:ormlite-core:4.47'
-    compile 'com.j256.ormliste:ormlite-jdbc:4.47'
+    compile 'com.j256.ormlite:ormlite-core:4.47'
+    compile 'com.j256.ormlite:ormlite-jdbc:4.47'
 
     compile 'args4j:args4j:2.0.26'
     compile 'org.reflections:reflections:0.9.9-RC1'
 
     compile 'org.apache.httpcomponents:httpcore:4.3.1'
 
-    compile 'com.intellij:annotatoins:12.0'
+    compile 'com.intellij:annotations:12.0'
 
     compile group: 'net.milkbowl.vault', name: 'Vault', version: '1.2.27', transitive: false
     compile 'org.mcstats.bukkit:metrics:R7'
