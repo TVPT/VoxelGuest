@@ -20,7 +20,7 @@ public final class PlayerGroupDAO
      * @param groupName The name to query for.
      *
      * @return The {@link PlayerGroup} with the name <code>groupName</code> or null. Where null indicates that no group
-     *         with the name <code>groupName</code> was found.
+     * with the name <code>groupName</code> was found.
      */
     public static PlayerGroup byGroupName(final String groupName)
     {
@@ -42,6 +42,7 @@ public final class PlayerGroupDAO
 
     /**
      * {@link #save(PlayerGroup)} will save or update a {@link PlayerGroup} entry.
+     *
      * @param playerGroup The {@link PlayerGroup} to save or update.
      */
     public static void save(final PlayerGroup playerGroup)

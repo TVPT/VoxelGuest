@@ -17,25 +17,16 @@ import java.util.Set;
  */
 public abstract class GuestModule implements Module
 {
-    private String name = "Default Module Name (Yell at the developer if you see this!)";
-    private boolean enabled = false;
+    private String name = "Default Module Name";
 
     @Override
     public void onEnable()
     {
-        enabled = true;
     }
 
     @Override
     public void onDisable()
     {
-        enabled = false;
-    }
-
-    @Override
-    public boolean isEnabled()
-    {
-        return enabled;
     }
 
     @Override

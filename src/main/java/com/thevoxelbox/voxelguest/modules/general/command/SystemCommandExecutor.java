@@ -28,10 +28,10 @@ import java.util.List;
  */
 public final class SystemCommandExecutor implements TabExecutor
 {
-    private static final String[] COMMAND_FLAGS = {"gc", "mem", "lag"};
-    private static final int TPS_PER_SECOND_THRESHOLD = 20;
-    private static final int BAR_SEGMENTS = 20;
-    private static final int BYTES_PER_MB = 1048576;
+    private static final String[] COMMAND_FLAGS            = {"gc", "mem", "lag"};
+    private static final int      TPS_PER_SECOND_THRESHOLD = 20;
+    private static final int      BAR_SEGMENTS             = 20;
+    private static final int      BYTES_PER_MB             = 1048576;
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args)

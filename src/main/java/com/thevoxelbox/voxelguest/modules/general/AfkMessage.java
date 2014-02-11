@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public final class AfkMessage
 {
     @DatabaseField(generatedId = true)
-    private long id;
+    private long   id;
     @DatabaseField
     private String message;
 

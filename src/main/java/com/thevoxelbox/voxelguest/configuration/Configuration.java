@@ -50,7 +50,7 @@ public final class Configuration
                     if (field.isAnnotationPresent(ConfigurationProperty.class))
                     {
                         field.setAccessible(true);
-                        ConfigurationProperty property = field.getAnnotation(ConfigurationProperty.class);
+                        final ConfigurationProperty property = field.getAnnotation(ConfigurationProperty.class);
 
                         if (properties.containsKey(property.value()))
                         {
@@ -100,7 +100,7 @@ public final class Configuration
                 if (field.isAnnotationPresent(ConfigurationProperty.class))
                 {
                     field.setAccessible(true);
-                    ConfigurationProperty property = field.getAnnotation(ConfigurationProperty.class);
+                    final ConfigurationProperty property = field.getAnnotation(ConfigurationProperty.class);
 
                     Object result = Preconditions.checkNotNull(field.get(sourceObject), "ConfigurationProperty must not be null.");
                     String resultString = transformer.toJson(result);

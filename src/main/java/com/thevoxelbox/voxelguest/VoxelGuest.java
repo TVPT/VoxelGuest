@@ -1,6 +1,5 @@
 package com.thevoxelbox.voxelguest;
 
-import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.commands.ImportCommandExecutor;
 import com.thevoxelbox.voxelguest.commands.ModulesCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
@@ -13,7 +12,6 @@ import com.thevoxelbox.voxelguest.persistence.Persistence;
 import net.milkbowl.vault.permission.Permission;
 import org.apache.log4j.PropertyConfigurator;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -21,8 +19,6 @@ import org.mcstats.Metrics;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Properties;
 
 /**
@@ -31,9 +27,9 @@ import java.util.Properties;
  */
 public class VoxelGuest extends JavaPlugin
 {
-    private static VoxelGuest pluginInstance = null;
+    private static VoxelGuest         pluginInstance        = null;
     private static GuestModuleManager moduleManagerInstance = null;
-    private static Permission perms = null;
+    private static Permission         perms                 = null;
 
     /**
      * Returns the VoxelGuest plugin instance.
@@ -49,7 +45,7 @@ public class VoxelGuest extends JavaPlugin
     {
         if (VoxelGuest.pluginInstance != null)
         {
-            throw new RuntimeException("VoxelGuest Plugin Instance already set.");
+            throw new RuntimeException("VoxelGuest plugin instance already set.");
         }
 
         VoxelGuest.pluginInstance = pluginInstance;
@@ -69,7 +65,7 @@ public class VoxelGuest extends JavaPlugin
     {
         if (VoxelGuest.moduleManagerInstance != null)
         {
-            throw new RuntimeException("VoxelGuest Module Manger Instance already set.");
+            throw new RuntimeException("VoxelGuest module manger instance already set.");
         }
 
         VoxelGuest.moduleManagerInstance = moduleManagerInstance;
@@ -147,10 +143,7 @@ public class VoxelGuest extends JavaPlugin
             Bukkit.getLogger().severe("Failed to setup Vault, due to no dependency found!"); //Should stop?
         }
 
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new AsshatModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GreylistModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new GeneralModule(), false);
-        VoxelGuest.getModuleManagerInstance().registerGuestModule(new HelperModule(), false);
+        VoxelGuest.getModuleManagerInstance().autoRegisterModulesInPackage("com.thevoxelbox.voxelguest.modules");
 
         getCommand("vmodules").setExecutor(new ModulesCommandExecutor());
         getCommand("vgimport").setExecutor(new ImportCommandExecutor());
@@ -163,8 +156,6 @@ public class VoxelGuest extends JavaPlugin
         {
             e.printStackTrace();
         }
-
-        VoxelGuest.getModuleManagerInstance().loadFromPersistence();
     }
 
     private void startMetrics() throws IOException
@@ -177,24 +168,7 @@ public class VoxelGuest extends JavaPlugin
             @Override
             public int getValue()
             {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (!(module instanceof AsshatModule))
-                    {
-                        continue;
-                    }
-
-                    final AsshatModule asshatModule = (AsshatModule) module;
-                    if (!asshatModule.isEnabled())
-                    {
-                        return 0;
-                    }
-
-                    return Banlist.getBanCount();
-                }
-
-                return 0;
+                return Banlist.getBanCount();
             }
         });
 
@@ -203,24 +177,7 @@ public class VoxelGuest extends JavaPlugin
             @Override
             public int getValue()
             {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (!(module instanceof AsshatModule))
-                    {
-                        continue;
-                    }
-
-                    final AsshatModule asshatModule = (AsshatModule) module;
-                    if (!asshatModule.isEnabled())
-                    {
-                        return 0;
-                    }
-
-                    return Mutelist.getMuteCount();
-                }
-
-                return 0;
+                return Mutelist.getMuteCount();
             }
         });
 
@@ -230,15 +187,11 @@ public class VoxelGuest extends JavaPlugin
             @Override
             public int getValue()
             {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (module instanceof AsshatModule)
-                    {
-                        return 1;
-                    }
+                try {
+                    return getModuleManagerInstance().findStateContainer(AsshatModule.class).isEnabled() ? 1 : 0;
+                } catch (final IllegalStateException ignored) {
+                    return 0;
                 }
-                return 0;
             }
         });
 
@@ -247,15 +200,11 @@ public class VoxelGuest extends JavaPlugin
             @Override
             public int getValue()
             {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (module instanceof GeneralModule)
-                    {
-                        return 1;
-                    }
+                try {
+                    return getModuleManagerInstance().findStateContainer(GeneralModule.class).isEnabled() ? 1 : 0;
+                } catch (final IllegalStateException ignored) {
+                    return 0;
                 }
-                return 0;
             }
         });
 
@@ -264,15 +213,11 @@ public class VoxelGuest extends JavaPlugin
             @Override
             public int getValue()
             {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (module instanceof GreylistModule)
-                    {
-                        return 1;
-                    }
+                try {
+                    return getModuleManagerInstance().findStateContainer(GreylistModule.class).isEnabled() ? 1 : 0;
+                } catch (final IllegalStateException ignored) {
+                    return 0;
                 }
-                return 0;
             }
         });
 
@@ -281,15 +226,11 @@ public class VoxelGuest extends JavaPlugin
             @Override
             public int getValue()
             {
-                final HashMap<Module, HashSet<Listener>> modules = getModuleManagerInstance().getRegisteredModules();
-                for (Module module : modules.keySet())
-                {
-                    if (module instanceof HelperModule)
-                    {
-                        return 1;
-                    }
+                try {
+                    return getModuleManagerInstance().findStateContainer(HelperModule.class).isEnabled() ? 1 : 0;
+                } catch (final IllegalStateException ignored) {
+                    return 0;
                 }
-                return 0;
             }
         });
 

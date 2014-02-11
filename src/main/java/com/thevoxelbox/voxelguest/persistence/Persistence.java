@@ -23,9 +23,10 @@ import java.util.Map;
 public final class Persistence
 {
     private static Persistence instance = new Persistence();
+
     private ConnectionSource connectionSource;
-    private Map<Class<?>, Dao> daoCache = new HashMap<>();
-    private boolean initialized = false;
+    private Map<Class<?>, Dao> daoCache    = new HashMap<>();
+    private boolean            initialized = false;
 
     private Persistence()
     {
@@ -51,6 +52,7 @@ public final class Persistence
         Preconditions.checkNotNull(dbFile, "dbFile may not be null.");
         Preconditions.checkState(!initialized, "Persistence system has already been initialized.");
         dbFile.getParentFile().mkdirs();
+
         connectionSource = new JdbcConnectionSource("jdbc:sqlite:" + dbFile.getPath());
 
         initialized = true;

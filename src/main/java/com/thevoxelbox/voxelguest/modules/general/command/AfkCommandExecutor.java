@@ -32,7 +32,7 @@ public final class AfkCommandExecutor implements CommandExecutor
             Player player = (Player) sender;
             if (args.length != 0)
             {
-                String afkMsg = Joiner.on(" ").join(args);
+                final String afkMsg = Joiner.on(" ").join(args);
                 this.module.getAfkManager().toggleAfk(player, afkMsg);
                 return true;
             }

@@ -101,9 +101,9 @@ public final class EntityPurgeCommandExecutor implements TabExecutor
      */
     private final class EntityPurgeThread extends Thread
     {
-        private final World world;
+        private final World         world;
         private final CommandSender sender;
-        private final boolean allEntities;
+        private final boolean       allEntities;
 
         public EntityPurgeThread(final World world, final CommandSender sender, final boolean allEntities)
         {
