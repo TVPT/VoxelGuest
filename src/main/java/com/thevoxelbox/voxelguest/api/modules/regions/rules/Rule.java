@@ -14,7 +14,8 @@ public @interface Rule
 {
     /**
      * A list of groups to add this rule to.
+     *
      * @return .
      */
-    String[] groups();
+    String[] groups() default {"default"};
 }

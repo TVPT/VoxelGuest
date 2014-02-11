@@ -23,13 +23,6 @@ public interface Module
     void onDisable();
 
     /**
-     * Returns a boolean determining whether the module is currently enabled or not.
-     *
-     * @return a boolean indicating the current status of the module
-     */
-    boolean isEnabled();
-
-    /**
      * Returns a HashSet of listeners the module wants the module manager to register.
      *
      * @return HashSet of listeners to register
