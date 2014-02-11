@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelguest.modules.general;
 
 import com.thevoxelbox.voxelguest.VoxelGuest;
+import com.thevoxelbox.voxelguest.api.AutoRegisterModule;
 import com.thevoxelbox.voxelguest.modules.GuestModule;
 import com.thevoxelbox.voxelguest.modules.general.command.AddAfkMessageCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.general.command.AfkCommandExecutor;
@@ -18,6 +19,7 @@ import com.thevoxelbox.voxelguest.modules.general.listener.PlayerEventListener;
 import com.thevoxelbox.voxelguest.modules.general.runnables.LagMeterHelperThread;
 import com.thevoxelbox.voxelguest.modules.general.runnables.PermGenMonitor;
 import com.thevoxelbox.voxelguest.modules.general.runnables.TPSTicker;
+import com.thevoxelbox.voxelguest.utils.MessageFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -25,6 +27,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 
 /**
@@ -34,34 +37,35 @@ import java.util.HashSet;
  * @author TheCryoknight
  * @author Deamon5550
  */
+@AutoRegisterModule
 public final class GeneralModule extends GuestModule
 {
     public static final String FAKEQUIT_PERM = "voxelguest.general.fakequit";
     //CommandExecuters
-    private final EntityPurgeCommandExecutor entityPurgeCommandExecutor;
-    private final VanishCommandExecutor vanishCommandExecutor;
-    private final FakequitCommandExecutor fakequitCommandExecutor;
-    private final WhoCommandExecutor whoCommandExecutor;
-    private final AfkCommandExecutor afkCommandExecutor;
-    private final WatchTPSCommadExecutor watchTPSCommadExecutor;
-    private final SystemCommandExecutor systemCommandExecutor;
-    private final VpgCommandExecutor vpgCommandExecutor;
-    private final VtpCommandExecutor vtpCommandExecutor;
+    private final EntityPurgeCommandExecutor   entityPurgeCommandExecutor;
+    private final VanishCommandExecutor        vanishCommandExecutor;
+    private final FakequitCommandExecutor      fakequitCommandExecutor;
+    private final WhoCommandExecutor           whoCommandExecutor;
+    private final AfkCommandExecutor           afkCommandExecutor;
+    private final WatchTPSCommadExecutor       watchTPSCommadExecutor;
+    private final SystemCommandExecutor        systemCommandExecutor;
+    private final VpgCommandExecutor           vpgCommandExecutor;
+    private final VtpCommandExecutor           vtpCommandExecutor;
     private final AddAfkMessageCommandExecutor addAfkMessageCommandExecutor;
-    private final PlayerGroupCommand playerGroupCommandExecutor;
+    private final PlayerGroupCommand           playerGroupCommandExecutor;
     //Listeners
-    private final ConnectionEventListener connectionEventListener;
-    private final PlayerEventListener playerEventListener;
+    private final ConnectionEventListener      connectionEventListener;
+    private final PlayerEventListener          playerEventListener;
     //TPS ticker
-    private final TPSTicker ticker = new TPSTicker();
+    private final TPSTicker            ticker   = new TPSTicker();
     //Lag Meter thread and helper
     private final LagMeterHelperThread lagmeter = new LagMeterHelperThread();
     //Handlers
-    private final AfkManager afkManager;
-    private final VanishFakequitHandler vanishFakequitHandler;
-    private BukkitTask lagmeterTask;
-    private GeneralModuleConfiguration configuration;
-    private int tpsTickerTaskId = -1;
+    private final AfkManager                 afkManager;
+    private final VanishFakequitHandler      vanishFakequitHandler;
+    private       BukkitTask                 lagmeterTask;
+    private       GeneralModuleConfiguration configuration;
+    private int tpsTickerTaskId      = -1;
     private int permGenMonitorTaskId = -1;
 
     /**
@@ -193,7 +197,11 @@ public final class GeneralModule extends GuestModule
     {
         int onlinePlayers = Bukkit.getOnlinePlayers().length;
         onlinePlayers -= this.getVanishFakequitHandler().getFakequitSize();
-        return msg.replace("$no", Integer.toString(onlinePlayers)).replace("$n", playerName);
+        final Map<String, String> vals = new HashMap<>();
+        vals.put("no", String.valueOf(onlinePlayers));
+        vals.put("n", playerName);
+
+        return MessageFormatter.format(msg, vals);
     }
 
     /**

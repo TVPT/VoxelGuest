@@ -9,28 +9,28 @@ import org.bukkit.ChatColor;
 public final class GeneralModuleConfiguration
 {
     @ConfigurationProperty("random-afk-messages-enabled")
-    private boolean randomAfkMsgs = true;
+    private boolean randomAfkMsgs            = true;
     @ConfigurationProperty("force-watch-tps")
-    private boolean defaultWatchTPSState = true;
+    private boolean defaultWatchTPSState     = true;
     @ConfigurationProperty("kick-format")
-    private String kickFormat = ChatColor.DARK_GRAY
-            + "(" + ChatColor.GOLD + "$no" + ChatColor.DARK_GRAY + ") "
-            + ChatColor.DARK_AQUA + "$n" + ChatColor.DARK_RED + " was kicked out";
+    private String  kickFormat               = ChatColor.DARK_GRAY
+                                               + "(" + ChatColor.GOLD + "${no}" + ChatColor.DARK_GRAY + ") "
+                                               + ChatColor.DARK_AQUA + "${n}" + ChatColor.DARK_RED + " was kicked out";
     @ConfigurationProperty("leave-format")
-    private String leaveFormat = ChatColor.DARK_GRAY
-            + "(" + ChatColor.GOLD + "$no" + ChatColor.DARK_GRAY + ") "
-            + ChatColor.DARK_AQUA + "$n" + ChatColor.GRAY + " left";
+    private String  leaveFormat              = ChatColor.DARK_GRAY
+                                               + "(" + ChatColor.GOLD + "${no}" + ChatColor.DARK_GRAY + ") "
+                                               + ChatColor.DARK_AQUA + "${n}" + ChatColor.GRAY + " left";
     @ConfigurationProperty("join-format")
-    private String joinFormat = ChatColor.DARK_GRAY
-            + "(" + ChatColor.GOLD + "$no" + ChatColor.DARK_GRAY + ") "
-            + ChatColor.DARK_AQUA + "$n" + ChatColor.GRAY + " joined";
+    private String  joinFormat               = ChatColor.DARK_GRAY
+                                               + "(" + ChatColor.GOLD + "${no}" + ChatColor.DARK_GRAY + ") "
+                                               + ChatColor.DARK_AQUA + "${n}" + ChatColor.GRAY + " joined";
     @ConfigurationProperty("fakequit-prefix")
-    private String fakequitPrefix = ChatColor.DARK_GRAY
-            + "[" + ChatColor.RED + "FQ" + ChatColor.DARK_GRAY + "]";
+    private String  fakequitPrefix           = ChatColor.DARK_GRAY
+                                               + "[" + ChatColor.RED + "FQ" + ChatColor.DARK_GRAY + "]";
     @ConfigurationProperty("permgen-shutdown-threshold")
-    private int permGenShutdownThreshold = 80;
+    private int     permGenShutdownThreshold = 80;
     @ConfigurationProperty("permgen-warning-threshold")
-    private int permGenWarningThreshold = 65;
+    private int     permGenWarningThreshold  = 65;
 
     public boolean isRandomAfkMsgs()
     {
