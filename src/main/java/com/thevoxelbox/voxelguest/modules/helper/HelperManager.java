@@ -26,10 +26,10 @@ import java.util.Set;
  */
 public final class HelperManager
 {
-    private final Set<ReviewRequest> activeReviews = new HashSet<>();
-    private final Map<String, Helper> helpers = new HashMap<>();
-    private final Map<Player, GuestHistoryEntry> lastReview = new HashMap<>();
-    private static final long MIN_TIME_BETWEEN = 1200000;
+    private final        Set<ReviewRequest>             activeReviews    = new HashSet<>();
+    private final        Map<String, Helper>            helpers          = new HashMap<>();
+    private final        Map<Player, GuestHistoryEntry> lastReview       = new HashMap<>();
+    private static final long                           MIN_TIME_BETWEEN = 1200000;
 
     /**
      * Opens up a new review request for the player provided.
@@ -319,8 +319,8 @@ public final class HelperManager
             date.setTimeInMillis(entry.getReviewTime());
 
             final String dateStr = date.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + ". "
-                    + date.get(Calendar.DAY_OF_MONTH) + ", " + date.get(Calendar.YEAR) + " at "
-                    + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
+                                   + date.get(Calendar.DAY_OF_MONTH) + ", " + date.get(Calendar.YEAR) + " at "
+                                   + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
 
             stringBuilder.append(ChatColor.DARK_AQUA).append("(").append(ChatColor.GOLD).append(reviewListItr.previousIndex() + 1).append(ChatColor.DARK_AQUA).append(")").append(ChatColor.GRAY).append(" by ").append(ChatColor.GOLD).append(entry.getReviewerName()).append(ChatColor.GRAY).append(" on ").append(ChatColor.DARK_AQUA).append(dateStr);
 

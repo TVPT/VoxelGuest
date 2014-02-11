@@ -24,7 +24,7 @@ public final class HelperCommand implements TabExecutor
 {
     private final HelperModule module;
 
-    private static final String[] COMMAND_FLAGS = { "-add", "-remove", "-hist" };
+    private static final String[] COMMAND_FLAGS = {"-add", "-remove", "-hist"};
 
     /**
      * Creates a new helper command executor.
@@ -128,14 +128,14 @@ public final class HelperCommand implements TabExecutor
                         date.setTimeInMillis(helper.getTimeOfLastReview());
 
                         final String dateStr = date.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + ". "
-                                + date.get(Calendar.DAY_OF_MONTH) + ", " + date.get(Calendar.YEAR) + " at "
-                                + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
+                                               + date.get(Calendar.DAY_OF_MONTH) + ", " + date.get(Calendar.YEAR) + " at "
+                                               + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE);
 
-                        final String helperHistMsg = ChatColor.GOLD + helper.getName() 
-                                + ChatColor.GRAY + " has reviewed "
-                                + ChatColor.GOLD + helper.getReviews()
-                                + ChatColor.GRAY + (helper.getReviews() == 1 ? " time" : " times")
-                                + " and last reviewed on " + dateStr;
+                        final String helperHistMsg = ChatColor.GOLD + helper.getName()
+                                                     + ChatColor.GRAY + " has reviewed "
+                                                     + ChatColor.GOLD + helper.getReviews()
+                                                     + ChatColor.GRAY + (helper.getReviews() == 1 ? " time" : " times")
+                                                     + " and last reviewed on " + dateStr;
 
                         sender.sendMessage(helperHistMsg);
                         return true;
@@ -145,7 +145,7 @@ public final class HelperCommand implements TabExecutor
                         if (matchedPlayer.hasPermission("voxelguest.helper.adminhelper"))
                         {
                             sender.sendMessage(ChatColor.DARK_RED + "Player called \"" + matchedPlayer.getName()
-                                    + "\" is an administrative helper no statistics are taken from administrative helpers.");
+                                               + "\" is an administrative helper no statistics are taken from administrative helpers.");
                         }
                         else
                         {

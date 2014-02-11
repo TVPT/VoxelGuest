@@ -27,6 +27,7 @@ public final class HelperListener implements Listener
 
     /**
      * Handles player join events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler(priority = EventPriority.MONITOR)

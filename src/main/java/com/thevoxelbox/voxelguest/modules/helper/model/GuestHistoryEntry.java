@@ -14,13 +14,13 @@ public final class GuestHistoryEntry implements Comparable<GuestHistoryEntry>
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField
-    private String guestName = "";
+    private String guestName    = "";
     @DatabaseField
     private String reviewerName = "";
     @DatabaseField
-    private long reviewTime = 0;
+    private long   reviewTime   = 0;
     @DatabaseField
-    private String comment = "";
+    private String comment      = "";
 
     /**
      * Default constructor used by ORM system.

@@ -17,11 +17,11 @@ public final class Helper implements MetadataValue
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField
-    private String name = "";
+    private String name       = "";
     @DatabaseField
-    private int reviews = 0;
+    private int    reviews    = 0;
     @DatabaseField
-    private long lastReview = 0;
+    private long   lastReview = 0;
 
     /**
      * Default constructor for ORM system.

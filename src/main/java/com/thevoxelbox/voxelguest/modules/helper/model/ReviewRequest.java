@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public final class ReviewRequest
 {
     private final Location location;
-    private final Player guest;
+    private final Player   guest;
 
     /**
      * Creates a new review request instance.

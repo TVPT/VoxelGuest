@@ -2,7 +2,6 @@ package com.thevoxelbox.voxelguest.modules.helper.command;
 
 import com.thevoxelbox.voxelguest.modules.helper.HelperModule;
 import com.thevoxelbox.voxelguest.modules.helper.model.ReviewRequest;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
