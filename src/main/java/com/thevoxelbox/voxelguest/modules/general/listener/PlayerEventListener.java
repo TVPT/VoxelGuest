@@ -34,6 +34,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles entity target events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -59,6 +60,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player item pickup events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -81,6 +83,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player move events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -94,6 +97,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player chat events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -107,6 +111,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player teleport events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -120,6 +125,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player command events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -133,6 +139,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player interact events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -146,6 +153,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player quit events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler
@@ -159,6 +167,7 @@ public final class PlayerEventListener implements Listener
 
     /**
      * Handles player kick events.
+     *
      * @param event The Bukkit event.
      */
     @EventHandler

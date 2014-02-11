@@ -12,8 +12,8 @@ import java.util.Set;
  */
 public final class LagMeterHelperThread extends Thread
 {
-    private static final int TICKS_PER_SECOND = 20;
-    private final Set<Player> activePlayers = Collections.synchronizedSet(new HashSet<Player>());
+    private static final int         TICKS_PER_SECOND = 20;
+    private final        Set<Player> activePlayers    = Collections.synchronizedSet(new HashSet<Player>());
 
     /**
      * Sets a players watch state.
