@@ -13,15 +13,15 @@ import java.util.List;
 public final class AsshatCommandArguments
 {
     @Option(name = "-force", aliases = {"-f"}, usage = "Force the ban system to use the exact player name entered.")
-    private boolean forceName = false;
+    private boolean      forceName  = false;
     @Option(name = "-silent", aliases = {"-s", "-si"}, usage = "Do not show broadcasts.")
-    private boolean silent = false;
+    private boolean      silent     = false;
     @Option(name = "-selfungag", aliases = {"-u", "-su"}, usage = "Allows the player to ungag himself by saying the ungag phrase.")
-    private boolean selfUngag = false;
+    private boolean      selfUngag  = false;
     @Argument(metaVar = "<player-name>", index = 0, required = true, usage = "The Player's name.")
-    private String playerName = "";
+    private String       playerName = "";
     @Argument(metaVar = "<ban-reason>", index = 1, usage = "A reason.")
-    private List<String> reason = new ArrayList<>();
+    private List<String> reason     = new ArrayList<>();
 
     /**
      * @return Returns true if the -force flag was set.

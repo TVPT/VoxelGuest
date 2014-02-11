@@ -10,15 +10,15 @@ public final class AsshatModuleConfiguration
     @ConfigurationProperty("default-asshat-reason")
     private String defaultAsshatReason = "asshat";
     @ConfigurationProperty("ban-message")
-    private String banBroadcastMsg = "§8Player §c%playername%§8 has been banned by §c%admin%§8 for: §9%reason%";
+    private String banBroadcastMsg     = "§8Player §c${playername}§8 has been banned by §c${admin}§8 for: §9${reason}";
     @ConfigurationProperty("unban-message")
-    private String unbanBroadcastMsg = "§8Player §c%playername%§8 has been unbanned by §c%admin%";
+    private String unbanBroadcastMsg   = "§8Player §c${playername}§8 has been unbanned by §c${reason}";
     @ConfigurationProperty("kick-message")
-    private String kickBroadcastMsg = "§8Player §c%playername%§8 has been kicked by §c%admin%§8 for: §9%reason%";
+    private String kickBroadcastMsg    = "§8Player §c${playername}§8 has been kicked by §c%admin%§8 for: §9${reason}";
     @ConfigurationProperty("gag-message")
-    private String gagBroadcastMsg = "§8Player §c%playername%§8 has been gagged by §c%admin%§8 for: §9%reason%";
+    private String gagBroadcastMsg     = "§8Player §c${playername}§8 has been gagged by §c%admin%§8 for: §9${reason}";
     @ConfigurationProperty("ungag-message")
-    private String ungagBroadcastMsg = "§8Player §c%playername%§8 has been ungagged by §c%admin%";
+    private String ungagBroadcastMsg   = "§8Player §c${playername}§8 has been ungagged by §c${reason}";
 
     public String getDefaultAsshatReason()
     {

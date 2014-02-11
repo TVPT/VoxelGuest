@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.asshat;
 
+import com.thevoxelbox.voxelguest.api.AutoRegisterModule;
 import com.thevoxelbox.voxelguest.modules.GuestModule;
 import com.thevoxelbox.voxelguest.modules.asshat.command.BanCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.BanreasonCommandExecutor;
@@ -10,6 +11,7 @@ import com.thevoxelbox.voxelguest.modules.asshat.command.SoapboxCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.UnbanCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.command.UnmuteCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.asshat.listener.PlayerListener;
+import com.thevoxelbox.voxelguest.utils.MessageFormatter;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 
@@ -21,6 +23,7 @@ import java.util.Set;
 /**
  * @author Monofraps
  */
+@AutoRegisterModule
 public class AsshatModule extends GuestModule
 {
     public static final String SILENCE_BYPASS_PERM = "voxelguest.asshat.bypass.silence";
@@ -147,7 +150,10 @@ public class AsshatModule extends GuestModule
      */
     public static String formatBroadcastMessage(final String msg, final String target, final String adminName, final String reason)
     {
-        return msg.replace("%playername%", target).replace("%admin%", adminName)
-                .replace("%reason%", reason);
+        final Map<String, String> params = new HashMap<>();
+        params.put("playername", target);
+        params.put("admin", adminName);
+        params.put("reason", reason);
+        return MessageFormatter.format(msg, params);
     }
 }

@@ -10,11 +10,11 @@ import com.j256.ormlite.table.DatabaseTable;
 public class MutedPlayer
 {
     @DatabaseField(generatedId = true)
-    private long id;
+    private long    id;
     @DatabaseField
-    private String playerName;
+    private String  playerName;
     @DatabaseField
-    private String muteReason;
+    private String  muteReason;
     @DatabaseField
     private boolean selfUngag;
 
