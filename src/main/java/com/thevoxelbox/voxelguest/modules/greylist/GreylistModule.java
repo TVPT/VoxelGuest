@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelguest.modules.greylist;
 
 import com.thevoxelbox.voxelguest.VoxelGuest;
+import com.thevoxelbox.voxelguest.api.AutoRegisterModule;
 import com.thevoxelbox.voxelguest.modules.GuestModule;
 import com.thevoxelbox.voxelguest.modules.greylist.command.GreylistCommandExecutor;
 import com.thevoxelbox.voxelguest.modules.greylist.command.UngreylistCommandExecutor;
@@ -19,6 +20,8 @@ import java.util.HashSet;
 /**
  * @author MikeMatrix
  */
+@Deprecated
+@AutoRegisterModule
 public final class GreylistModule extends GuestModule
 {
     private GreylistListener greylistListener;

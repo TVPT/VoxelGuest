@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 /**
  * @author MikeMatrix
  */
+@Deprecated
 public final class GreylistListener implements Listener
 {
     private final GreylistConfiguration moduleConfiguration;

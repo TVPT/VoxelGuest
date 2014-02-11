@@ -15,9 +15,10 @@ import java.util.List;
 /**
  *
  */
+@Deprecated
 public final class StreamReader extends Thread
 {
-    private final Socket socket;
+    private final Socket         socket;
     private final GreylistModule module;
 
     public StreamReader(final Socket socket, final GreylistModule module)

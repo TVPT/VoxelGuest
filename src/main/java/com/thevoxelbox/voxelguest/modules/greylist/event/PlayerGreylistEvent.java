@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
  *
  * @author Monofraps
  */
+@Deprecated
 public final class PlayerGreylistEvent extends Event implements Cancellable
 {
     private static final HandlerList HANDLER_LIST = new HandlerList();

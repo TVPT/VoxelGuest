@@ -6,11 +6,12 @@ import com.j256.ormlite.table.DatabaseTable;
 /**
  * @author MikeMatrix
  */
+@Deprecated
 @DatabaseTable(tableName = "greylist")
 public final class Greylistee
 {
     @DatabaseField(generatedId = true)
-    private long id;
+    private long   id;
     @DatabaseField
     private String name;
 

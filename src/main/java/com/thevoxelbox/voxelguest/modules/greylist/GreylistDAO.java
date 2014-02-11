@@ -15,6 +15,7 @@ import java.util.List;
  * @author TheCryoknight
  * @author Monofraps
  */
+@Deprecated
 public final class GreylistDAO
 {
     private GreylistDAO()

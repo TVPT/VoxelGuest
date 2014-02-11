@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Handles /whitelist commands.
  */
+@Deprecated
 public final class WhitelistCommandExecutor implements TabExecutor
 {
     private final GreylistConfiguration moduleConfiguration;

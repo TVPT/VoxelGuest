@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 /**
  * @author MikeMatrix
  */
+@Deprecated
 public final class GreylistCommandExecutor implements CommandExecutor
 {
     @Override

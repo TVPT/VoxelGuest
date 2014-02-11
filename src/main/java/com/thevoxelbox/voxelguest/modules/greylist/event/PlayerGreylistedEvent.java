@@ -8,6 +8,7 @@ import org.bukkit.event.HandlerList;
  *
  * @author Monofraps
  */
+@Deprecated
 public final class PlayerGreylistedEvent extends Event
 {
     private static final HandlerList HANDLER_LIST = new HandlerList();

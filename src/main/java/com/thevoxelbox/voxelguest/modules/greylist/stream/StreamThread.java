@@ -12,10 +12,11 @@ import java.util.List;
 /**
  *
  */
+@Deprecated
 public final class StreamThread extends Thread
 {
     private final GreylistModule module;
-    private ServerSocket serverSocket;
+    private       ServerSocket   serverSocket;
     private List<StreamReader> readers = new ArrayList<>();
 
     public StreamThread(final GreylistModule module)

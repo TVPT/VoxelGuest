@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 /**
  * @author Monofraps
  */
+@Deprecated
 public final class StreamPacemaker extends Thread
 {
     private StreamThread streamThread;

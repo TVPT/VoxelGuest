@@ -5,26 +5,27 @@ import com.thevoxelbox.voxelguest.configuration.annotations.ConfigurationPropert
 /**
  * Represents the greylist module configuration.
  */
+@Deprecated
 public final class GreylistConfiguration
 {
     @ConfigurationProperty("stream-password")
-    private String streamPasswordHash = "changeme";
+    private String  streamPasswordHash       = "changeme";
     @ConfigurationProperty("stream-port")
-    private int streamPort = 8080;
+    private int     streamPort               = 8080;
     @ConfigurationProperty("not-greylisted-kick-message")
-    private String notGreylistedKickMessage = "You are not greylisted.";
+    private String  notGreylistedKickMessage = "You are not greylisted.";
     @ConfigurationProperty("wl-group-name")
-    private String whitelistGroupName = "Member";
+    private String  whitelistGroupName       = "Member";
     @ConfigurationProperty("gl-group-name")
-    private String greylistGroupName = "Guest";
+    private String  greylistGroupName        = "Guest";
     @ConfigurationProperty("exploration-mode")
-    private boolean explorationMode = false;
+    private boolean explorationMode          = false;
     @ConfigurationProperty("stream-enable")
-    private boolean streamGreylisting = false;
+    private boolean streamGreylisting        = false;
     @ConfigurationProperty("set-group-on-graylist")
-    private boolean setGroupOnGreylist = true;
+    private boolean setGroupOnGreylist       = true;
     @ConfigurationProperty("broadcast-greylists")
-    private boolean broadcastGreylists = true;
+    private boolean broadcastGreylists       = true;
 
     public String getStreamPasswordHash()
     {
