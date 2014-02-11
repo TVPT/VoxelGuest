@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelguest.commands;
 
 import com.thevoxelbox.voxelguest.VoxelGuest;
+import com.thevoxelbox.voxelguest.api.ModuleStateContainer;
 import com.thevoxelbox.voxelguest.api.modules.Module;
 import com.thevoxelbox.voxelguest.commands.arguments.ModulesCommandArguments;
 import com.thevoxelbox.voxelguest.utils.A4JUtils;
@@ -8,13 +9,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles /vmodules commands.
@@ -27,16 +26,17 @@ public final class ModulesCommandExecutor implements TabExecutor
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args)
     {
         final List<String> matches = new ArrayList<>();
+
         for (int i = 0; i < args.length; i++)
         {
             final String arg = args[i];
 
             if ((arg.startsWith("-e") || arg.startsWith("-d")) && i < (args.length - 1))
             {
-                final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
-                for (Module module : registeredModules.keySet())
+                final Set<Class<? extends Module>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
+                for (Class<? extends Module> moduleType : registeredModules)
                 {
-                    final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
+                    final String className = moduleType.getSimpleName();
                     if (className.toLowerCase().startsWith(arg.toLowerCase()))
                     {
                         matches.add(className);
@@ -90,62 +90,59 @@ public final class ModulesCommandExecutor implements TabExecutor
 
     private void listModules(final CommandSender sender)
     {
-        final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
+        final Set<Class<? extends Module>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
 
         sender.sendMessage(ChatColor.GREEN + "Registered Modules");
         sender.sendMessage(ChatColor.GRAY + "-------------------");
 
-        for (final Module module : registeredModules.keySet())
+        for (final Class<? extends Module> moduleType : registeredModules)
         {
-            final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
-            sender.sendMessage((module.isEnabled() ? ChatColor.GREEN : ChatColor.RED) + className + ChatColor.GRAY + " (" + ChatColor.WHITE + module.getName() + ChatColor.GRAY + ")");
+            final String className = moduleType.getSimpleName();
+            final ModuleStateContainer stateContainer = VoxelGuest.getModuleManagerInstance().findStateContainer(moduleType);
+            sender.sendMessage((stateContainer.isEnabled() ? ChatColor.GREEN : ChatColor.RED) + className + ChatColor.GRAY + " (" + ChatColor.WHITE + stateContainer.getModule().getName() + ChatColor.GRAY + ")");
         }
     }
 
     private boolean enableModule(final CommandSender sender, final String moduleClassName)
     {
-        final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
-
-        for (Module module : registeredModules.keySet())
+        final ModuleStateContainer stateContainer = VoxelGuest.getModuleManagerInstance().findStateContainer(moduleClassName);
+        if (stateContainer == null)
         {
-            final String className = module.getClass().getName().replaceFirst(module.getClass().getPackage().getName().concat("."), "");
-            if (className.equalsIgnoreCase(moduleClassName))
-            {
-                if (module.isEnabled())
-                {
-                    sender.sendMessage(ChatColor.RED + module.getName() + " is already enabled.");
-                    return true;
-                }
-                VoxelGuest.getModuleManagerInstance().enableModuleByType(module.getClass());
-                sender.sendMessage(ChatColor.GRAY + module.getName() + " has been enabled!");
-                return true;
-            }
+            sender.sendMessage(ChatColor.RED + "No such module.");
+            return false;
         }
 
-        sender.sendMessage(ChatColor.RED + "No such module.");
-        return false;
+        if (stateContainer.enable())
+        {
+            sender.sendMessage(ChatColor.GRAY + moduleClassName + " has been enabled!");
+            return true;
+        }
+        else
+        {
+            sender.sendMessage(ChatColor.GRAY + moduleClassName + " is already enabled!");
+            return true;
+        }
     }
 
     private boolean disableModule(final CommandSender sender, final String moduleClassName)
     {
-        final HashMap<Module, HashSet<Listener>> registeredModules = VoxelGuest.getModuleManagerInstance().getRegisteredModules();
-        for (Module module : registeredModules.keySet())
+        final ModuleStateContainer stateContainer = VoxelGuest.getModuleManagerInstance().findStateContainer(moduleClassName);
+        if (stateContainer == null)
         {
-            if (module.getClass().getName().toLowerCase().endsWith(moduleClassName.toLowerCase()))
-            {
-                if (!module.isEnabled())
-                {
-                    sender.sendMessage(ChatColor.RED + module.getName() + " is not enabled.");
-                    return true;
-                }
-                VoxelGuest.getModuleManagerInstance().disableModuleByType(module.getClass());
-                sender.sendMessage(ChatColor.GRAY + module.getName() + " has been disabled!");
-                return true;
-            }
+            sender.sendMessage(ChatColor.RED + "No such module.");
+            return false;
         }
 
-        sender.sendMessage(ChatColor.RED + "No such module.");
-        return false;
+        if (stateContainer.disable())
+        {
+            sender.sendMessage(ChatColor.GRAY + moduleClassName + " has been disabled!");
+            return true;
+        }
+        else
+        {
+            sender.sendMessage(ChatColor.GRAY + moduleClassName + " is not enabled!");
+            return true;
+        }
     }
 
 }
