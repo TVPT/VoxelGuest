@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class ModuleMeta
 {
     @DatabaseField(id = true)
-    private String moduleName;
+    private String  moduleName;
     @DatabaseField
     private boolean enabled;
 
