@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockFormEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableSnowFormation extends GuestRegionRule
 {
     @Override

@@ -11,7 +11,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableCreatureSpawn extends GuestRegionRule
 {
     @Override

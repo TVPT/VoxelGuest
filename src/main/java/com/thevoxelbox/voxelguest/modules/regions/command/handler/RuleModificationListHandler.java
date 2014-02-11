@@ -17,7 +17,7 @@ import java.util.List;
 public class RuleModificationListHandler extends OptionHandler<RuleModification>
 {
     private static final List<String> OPTIONS = Arrays.asList("true", "on", "yes", "1", "enable", "enabled", "allow", "allowed",
-            "false", "off", "no", "0", "disable", "disabled", "disallow", "disallowed");
+                                                              "false", "off", "no", "0", "disable", "disabled", "disallow", "disallowed");
 
     public RuleModificationListHandler(final CmdLineParser parser, final OptionDef option, final Setter<? super RuleModification> setter)
     {

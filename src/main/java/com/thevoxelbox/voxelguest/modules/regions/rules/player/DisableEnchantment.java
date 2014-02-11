@@ -10,7 +10,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableEnchantment extends GuestRegionRule
 {
     @Override

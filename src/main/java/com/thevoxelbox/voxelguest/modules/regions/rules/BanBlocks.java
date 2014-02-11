@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class BanBlocks extends GuestRegionRule
 {
     @Override

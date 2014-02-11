@@ -4,6 +4,7 @@ import com.thevoxelbox.voxelguest.api.modules.regions.RuleExecutionSettings;
 import com.thevoxelbox.voxelguest.api.modules.regions.rules.RegionRule;
 
 /**
+ * Default implementation of RuleExecutionSettings interface
  * @author Monofraps
  */
 public class GuestRuleExecutionSettings implements RuleExecutionSettings

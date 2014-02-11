@@ -17,80 +17,8 @@ import java.util.Set;
  */
 public final class RuleIndex
 {
-    private static Map<String, RegionRule> ruleIndex = new HashMap<>();
+    private static Map<String, RegionRule>   ruleIndex  = new HashMap<>();
     private static Map<String, List<String>> ruleGroups = new HashMap<>();
-
-    static
-    {
-        /*registerRule(new DisableBlockBurn());
-        registerRule(new DisableBlockDrop());
-        registerRule(new DisableBlockFade());
-        registerRule(new DisableBlockGrowth());
-        registerRule(new DisableBlockIgnition());
-        registerRule(new DisableBlockPhysics());
-        registerRule(new DisableBlockSpread());
-        registerRule(new DisableDragonEggMovement());
-        registerRule(new DisableIceFormation());
-        registerRule(new DisableIceMelting());
-        registerRule(new DisableLavaFlow());
-        registerRule(new DisableLeaveDecay());
-        registerRule(new DisableSnowFormation());
-        registerRule(new DisableSnowMelting());
-        registerRule(new DisableSoilDehydration());
-        registerRule(new DisableWaterFlow());
-
-        registerRule(new DisableCreeperExplosions());
-        registerRule(new DisableTntExplosion());
-
-        registerRule(new DisableBlockExplosionDamage());
-        registerRule(new DisableCactusDamage());
-        registerRule(new DisableDrowningDamage());
-        registerRule(new DisableEntityDamage());
-        registerRule(new DisableEntityExplosionDamage());
-        registerRule(new DisableFallDamage());
-        registerRule(new DisableFireDamage());
-        registerRule(new DisableFireTickDamage());
-        registerRule(new DisableHungerDamage());
-        registerRule(new DisableLavaDamage());
-        registerRule(new DisableLightningDamage());
-        registerRule(new DisableMagicDamage());
-        registerRule(new DisableMonsterDamage());
-        registerRule(new DisablePoisonDamage());
-        registerRule(new DisableProjectileDamage());
-        registerRule(new DisablePvpDamage());
-        registerRule(new DisableSuffocationDamage());
-        registerRule(new DisableVoidDamage());
-
-        registerRule(new DisableEnchantment());
-
-        registerRule(new BanBlocks());
-        registerRule(new BanItems());
-        registerRule(new DisableCreatureSpawn());
-        registerRule(new DisableFireSpread());
-        registerRule(new DisableFoodLevelChange());
-        registerRule(new DisableMonsterSpawn());
-        registerRule(new DisableTntBreakPainting());
-        registerRule(new RestrictRegionBuild());
-
-        final List<String> playerDamageGroup = createRuleGroup("def_PlayerDamage");
-        playerDamageGroup.add(DisableBlockExplosionDamage.class.getName());
-        playerDamageGroup.add(DisableCactusDamage.class.getName());
-        playerDamageGroup.add(DisableDrowningDamage.class.getName());
-        playerDamageGroup.add(DisableEntityDamage.class.getName());
-        playerDamageGroup.add(DisableEntityExplosionDamage.class.getName());
-        playerDamageGroup.add(DisableFallDamage.class.getName());
-        playerDamageGroup.add(DisableFireDamage.class.getName());
-        playerDamageGroup.add(DisableFireTickDamage.class.getName());
-        playerDamageGroup.add(DisableHungerDamage.class.getName());
-        playerDamageGroup.add(DisableLavaDamage.class.getName());
-        playerDamageGroup.add(DisableLightningDamage.class.getName());
-        playerDamageGroup.add(DisableMagicDamage.class.getName());
-        playerDamageGroup.add(DisableMonsterDamage.class.getName());
-        playerDamageGroup.add(DisablePoisonDamage.class.getName());
-        playerDamageGroup.add(DisablePvpDamage.class.getName());
-        playerDamageGroup.add(DisableSuffocationDamage.class.getName());
-        playerDamageGroup.add(DisableVoidDamage.class.getName());   */
-    }
 
     private RuleIndex()
     {
@@ -109,7 +37,6 @@ public final class RuleIndex
 
         for (final Class<?> rule : rules)
         {
-            //TODO: Create an annotation processor for for these checks to check at compile time
             if (!RegionRule.class.isAssignableFrom(rule))
             {
                 Bukkit.getLogger().severe(String.format("Failed to register rule %s. Class has to implement RegionRule.", rule.getName()));

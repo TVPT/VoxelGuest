@@ -9,7 +9,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableFoodLevelChange extends GuestRegionRule
 {
     @Override

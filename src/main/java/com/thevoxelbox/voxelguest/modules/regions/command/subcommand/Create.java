@@ -4,13 +4,17 @@ import com.thevoxelbox.voxelguest.VoxelGuest;
 import com.thevoxelbox.voxelguest.api.modules.regions.Region;
 import com.thevoxelbox.voxelguest.modules.regions.GuestRegion;
 import com.thevoxelbox.voxelguest.modules.regions.RegionModule;
+import com.thevoxelbox.voxelguest.modules.regions.command.handler.RegionBoundHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
+
+import java.util.List;
 
 /**
  * @author monofraps
@@ -18,17 +22,11 @@ import org.kohsuke.args4j.Option;
 public final class Create implements Command
 {
     @Argument(index = 0, metaVar = "<region-name>", required = true)
-    private String regionName;
-    @Argument(index = 1, metaVar = "x1")
-    private int x1;
-    @Argument(index = 2, metaVar = "z1")
-    private int z1;
-    @Argument(index = 3, metaVar = "x2")
-    private int x2;
-    @Argument(index = 4, metaVar = "z2")
-    private int z2;
+    private String       regionName;
+    @Option(name = "-bounds", aliases = {"-b", "-coords", "-c"}, required = true, handler = RegionBoundHandler.class)
+    private List<Vector> bounds;
     @Option(name = "-world", aliases = {"-w"})
-    private String worldName = "";
+    private String  worldName      = "";
     @Option(name = "-priority", aliases = {"-p", "-pri", "-prio"})
     private Integer regionPriority = 0;
 
@@ -54,7 +52,7 @@ public final class Create implements Command
             return true;
         }
 
-        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().getModuleInstance(RegionModule.class);
+        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().findStateContainer(RegionModule.class).getModule();
         // extremely unlikely that module becomes null
 
         if (module.getRegionProvider().regionExists(regionName, worldName))
@@ -63,7 +61,7 @@ public final class Create implements Command
             return true;
         }
 
-        final Region region = new GuestRegion(regionName, new Location(world, x1, 0, z1), new Location(world, x2, world.getMaxHeight(), z2));
+        final Region region = new GuestRegion(regionName, new Location(world, bounds.get(0).getX(), 0, bounds.get(0).getZ()), new Location(world, bounds.get(1).getX(), world.getMaxHeight(), bounds.get(1).getZ()));
         region.setPriority(regionPriority);
         module.getRegionProvider().saveRegion(region);
 

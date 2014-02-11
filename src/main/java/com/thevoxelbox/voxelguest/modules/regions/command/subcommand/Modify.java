@@ -27,9 +27,9 @@ public final class Modify implements Command
     @Option(name = "-rule", metaVar = "<handle>:<on|off>", handler = RuleModificationListHandler.class)
     private List<RuleModification> ruleModifications = new ArrayList<>();
     @Option(name = "-priority", aliases = {"-p", "-pri", "-prio"})
-    private Integer regionPriority = null;
+    private Integer                regionPriority    = null;
     @Option(name = "-world", aliases = {"-w"})
-    private String worldName = "";
+    private String                 worldName         = "";
 
     @Override
     public boolean execute(final CommandSender sender)
@@ -53,7 +53,7 @@ public final class Modify implements Command
             return true;
         }
 
-        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().getModuleInstance(RegionModule.class);
+        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().findStateContainer(RegionModule.class).getModule();
         // extremely unlikely that module becomes null
 
         final Region region;

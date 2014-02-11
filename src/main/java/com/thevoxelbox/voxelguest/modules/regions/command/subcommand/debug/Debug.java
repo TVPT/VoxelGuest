@@ -14,8 +14,8 @@ public final class Debug implements Command
 {
     @Argument(index = 0, metaVar = "<sub-command>", required = true, handler = SubCommandHandler.class)
     @SubCommands({
-            @SubCommand(name = "rinfo", impl = RegionInfo.class)
-    })
+                         @SubCommand(name = "rinfo", impl = RegionInfo.class)
+                 })
     private Command cmd;
 
     @Override

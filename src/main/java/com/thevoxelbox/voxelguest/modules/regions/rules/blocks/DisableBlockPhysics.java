@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableBlockPhysics extends GuestRegionRule
 {
     @Override

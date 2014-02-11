@@ -18,25 +18,25 @@ import java.util.ArrayList;
 public final class GuestRegion implements Region
 {
     @DatabaseField(generatedId = true)
-    private long id;
+    private long   id;
     @DatabaseField
-    private int lowerX;
+    private int    lowerX;
     @DatabaseField
-    private int lowerY;
+    private int    lowerY;
     @DatabaseField
-    private int lowerZ;
+    private int    lowerZ;
     @DatabaseField
-    private int upperX;
+    private int    upperX;
     @DatabaseField
-    private int upperY;
+    private int    upperY;
     @DatabaseField
-    private int upperZ;
+    private int    upperZ;
     @DatabaseField
     private String worldName;
     @DatabaseField
     private String name;
     @DatabaseField
-    private int priority;
+    private int    priority;
     @DatabaseField(dataType = DataType.SERIALIZABLE)
     private ArrayList<String> activeRules = new ArrayList<>();
 

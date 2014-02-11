@@ -247,7 +247,7 @@ public final class BukkitEventListener implements Listener
 
     private List<Region> getAffectedRegions(final Event event)
     {
-        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().getModuleInstance(RegionModule.class);
+        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().findStateContainer(RegionModule.class).getModule();
         // extremely unlikely that module becomes null
         final RegionProvider provider = module.getRegionProvider();
 

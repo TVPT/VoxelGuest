@@ -11,11 +11,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public final class RuleSettingsData
 {
     @DatabaseField(generatedId = true)
-    private Long id;
+    private Long   id;
     @DatabaseField
     private String ruleId;
     @DatabaseField
-    private Long regionId;
+    private Long   regionId;
     @DatabaseField
     private String jsonString;
 

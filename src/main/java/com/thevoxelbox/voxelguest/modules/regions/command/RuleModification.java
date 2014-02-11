@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public final class RuleModification
 {
-    private String rulId;
+    private String  rulId;
     private boolean enable;
 
     /**

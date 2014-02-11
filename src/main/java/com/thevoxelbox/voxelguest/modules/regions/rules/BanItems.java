@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class BanItems extends GuestRegionRule
 {
     @Override

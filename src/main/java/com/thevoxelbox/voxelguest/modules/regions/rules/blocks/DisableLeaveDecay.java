@@ -10,7 +10,7 @@ import org.bukkit.event.block.LeavesDecayEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableLeaveDecay extends GuestRegionRule
 {
     @Override

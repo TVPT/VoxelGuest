@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule(groups = {"explosions"})
 public class DisableCreeperExplosions extends GuestRegionRule
 {
     @Override

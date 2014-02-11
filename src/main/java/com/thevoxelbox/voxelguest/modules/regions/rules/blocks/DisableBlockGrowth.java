@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockGrowEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableBlockGrowth extends GuestRegionRule
 {
     @Override

@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class RestrictRegionBuild extends GuestRegionRule
 {
     private static final String BUILD_PERMISSION_ROOT = "voxelguest.modules.region.modify.";

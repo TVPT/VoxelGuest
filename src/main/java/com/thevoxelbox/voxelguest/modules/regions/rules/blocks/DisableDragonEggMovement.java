@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableDragonEggMovement extends GuestRegionRule
 {
     @Override

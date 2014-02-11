@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelguest.modules.regions;
 
+import com.thevoxelbox.voxelguest.api.AutoRegisterModule;
 import com.thevoxelbox.voxelguest.api.modules.regions.RegionProvider;
 import com.thevoxelbox.voxelguest.modules.GuestModule;
 import com.thevoxelbox.voxelguest.modules.regions.command.RegionCommand;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 /**
  * @author Butters
  */
+@AutoRegisterModule
 public final class RegionModule extends GuestModule
 {
     private final BukkitEventListener bukkitEventListener;

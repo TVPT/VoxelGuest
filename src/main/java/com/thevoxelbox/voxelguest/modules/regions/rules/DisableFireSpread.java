@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableFireSpread extends GuestRegionRule
 {
     @Override

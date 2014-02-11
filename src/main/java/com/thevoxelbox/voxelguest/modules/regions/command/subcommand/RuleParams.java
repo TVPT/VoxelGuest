@@ -25,11 +25,11 @@ public final class RuleParams implements Command
     @Argument(index = 1, metaVar = "<rule-handle>", required = true)
     private String ruleHandle;
     @Argument(index = 2, metaVar = "[<settings>]", handler = SettingsValuesHandler.class)
-    private String settingsParams = "";
+    private String  settingsParams = "";
     @Option(name = "-priority", aliases = {"-p", "-pri", "-prio"})
-    private Integer rulePriority = null;
+    private Integer rulePriority   = null;
     @Option(name = "-world", aliases = {"-w"})
-    private String worldName = "";
+    private String  worldName      = "";
 
     @Override
     public boolean execute(final CommandSender sender)
@@ -53,7 +53,7 @@ public final class RuleParams implements Command
             return true;
         }
 
-        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().getModuleInstance(RegionModule.class);
+        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().findStateContainer(RegionModule.class).getModule();
         // extremely unlikely that module becomes null
 
         final Region region;

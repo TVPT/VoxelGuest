@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableBlockDrop extends GuestRegionRule
 {
     @Override

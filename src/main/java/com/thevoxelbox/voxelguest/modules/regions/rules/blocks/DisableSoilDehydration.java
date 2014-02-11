@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableSoilDehydration extends GuestRegionRule
 {
     @Override

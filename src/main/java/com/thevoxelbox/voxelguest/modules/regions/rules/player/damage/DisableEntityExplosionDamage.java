@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule(groups = {"playerDamage"})
 public class DisableEntityExplosionDamage extends GuestRegionRule
 {
     @Override

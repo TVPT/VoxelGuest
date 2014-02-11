@@ -9,7 +9,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableTntBreakPainting extends GuestRegionRule
 {
     @Override

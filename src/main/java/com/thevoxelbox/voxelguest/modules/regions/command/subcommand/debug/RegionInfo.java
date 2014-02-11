@@ -44,7 +44,7 @@ public final class RegionInfo implements Command
             return true;
         }
 
-        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().getModuleInstance(RegionModule.class);
+        final RegionModule module = (RegionModule) VoxelGuest.getModuleManagerInstance().findStateContainer(RegionModule.class).getModule();
         // extremely unlikely that module becomes null
 
         final Region region;

@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockFadeEvent;
 /**
  * @author Monofraps
  */
-@Rule(groups = {""})
+@Rule
 public class DisableBlockFade extends GuestRegionRule
 {
     @Override
