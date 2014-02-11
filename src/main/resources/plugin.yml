@@ -1,6 +1,6 @@
 name: ${project.name}
 main: com.thevoxelbox.voxelguest.VoxelGuest
-authors: [Monofraps, TheCryoknight, MikeMatrix, thedeadlybutter]
+authors: [Monofraps, TheCryoknight, MikeMatrix, thedeadlybutter, Deamon5550]
 version: ${project.build.version}
 website: ${project.url}
 description: ${project.description}
