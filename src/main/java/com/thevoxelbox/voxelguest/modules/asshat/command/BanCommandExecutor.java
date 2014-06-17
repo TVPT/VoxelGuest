@@ -4,6 +4,7 @@ import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.asshat.command.argument.AsshatCommandArguments;
+import com.thevoxelbox.voxelguest.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,6 +16,7 @@ import org.kohsuke.args4j.CmdLineParser;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Executes /ban commands.
@@ -88,7 +90,20 @@ public class BanCommandExecutor implements TabExecutor
 
     private void safeBan(final String playerName, final String banReason, final CommandSender commandSender, final boolean silentFlag)
     {
-        if (Banlist.isPlayerBanned(playerName))
+        // Resolve player name to UUID
+        final UUID playerUUID;
+        try
+        {
+            playerUUID = UUIDFetcher.getUUIDOf(playerName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            commandSender.sendMessage("An error occurred resolving the player's UUID - check your input or file a bug report.");
+            return;
+        }
+
+        if (Banlist.isPlayerBanned(playerUUID))
         {
             commandSender.sendMessage(String.format("Player %s is already banned.", playerName));
             return;
@@ -96,7 +111,7 @@ public class BanCommandExecutor implements TabExecutor
 
         try
         {
-            Banlist.ban(playerName, banReason);
+            Banlist.ban(playerUUID, banReason);
             Bukkit.getLogger().info(String.format("%s banned by %s for %s", playerName, commandSender.getName(), banReason));
             if (!silentFlag)
             {

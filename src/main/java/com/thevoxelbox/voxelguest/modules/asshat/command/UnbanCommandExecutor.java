@@ -3,6 +3,7 @@ package com.thevoxelbox.voxelguest.modules.asshat.command;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
+import com.thevoxelbox.voxelguest.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,6 +12,7 @@ import org.bukkit.command.TabExecutor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Executes /unban commands.
@@ -40,7 +42,7 @@ public class UnbanCommandExecutor implements TabExecutor
             return false;
         }
 
-        final String playerName = args[0].toLowerCase();
+        final String playerName = args[0];
         boolean silentFlag = false;
 
         for (String arg : args)
@@ -51,22 +53,34 @@ public class UnbanCommandExecutor implements TabExecutor
             }
         }
 
-        if (!Banlist.isPlayerBanned(playerName))
+        final UUID playerUUID;
+        try
+        {
+            playerUUID = UUIDFetcher.getUUIDOf(playerName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            commandSender.sendMessage("An error occurred while resolving the player's UUID - please check your input or file a bug report.");
+            return true;
+        }
+
+        if (!Banlist.isPlayerBanned(playerUUID))
         {
             commandSender.sendMessage(String.format("Player %s is not banned.", playerName));
             return true;
         }
 
-        safeUnban(playerName, commandSender, silentFlag);
+        safeUnban(playerName, playerUUID, commandSender, silentFlag);
 
         return true;
     }
 
-    private void safeUnban(final String playerName, final CommandSender commandSender, final boolean silentFlag)
+    private void safeUnban(final String playerName, final UUID playerUUID, final CommandSender commandSender, final boolean silentFlag)
     {
         try
         {
-            Banlist.unban(playerName);
+            Banlist.unban(playerUUID);
             Bukkit.getLogger().info(String.format("%s unbanned by %s", playerName, commandSender.getName()));
             if (!silentFlag)
             {
@@ -81,10 +95,12 @@ public class UnbanCommandExecutor implements TabExecutor
     }
 
     @Override
+    @Deprecated
     public final List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args)
     {
         if (sender.hasPermission("voxelguest.asshat.unban"))
         {
+            sender.sendMessage("You are using deprecated functionality. This feature will be removed with the next VG release.");
             final List<String> bannedNamesList = Banlist.getBannedNames();
             if (args.length == 0)
             {

@@ -4,6 +4,7 @@ import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModuleConfiguration;
 import com.thevoxelbox.voxelguest.modules.asshat.command.argument.AsshatCommandArguments;
 import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
+import com.thevoxelbox.voxelguest.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,6 +16,7 @@ import org.kohsuke.args4j.CmdLineParser;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Executes /mute and /gag commands.
@@ -86,7 +88,19 @@ public class MuteCommandExecutor implements TabExecutor
 
     private void safeMute(final String playerName, final String muteReason, final CommandSender commandSender, final boolean silentFlag, final boolean selfUngag)
     {
-        if (Mutelist.isPlayerMuted(playerName))
+        final UUID playerUUID;
+        try
+        {
+            playerUUID = UUIDFetcher.getUUIDOf(playerName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            commandSender.sendMessage("An error occurred while resolving the player's UUID - please check your input or file a bug report.");
+            return;
+        }
+
+        if (Mutelist.isPlayerMuted(playerUUID))
         {
             commandSender.sendMessage(String.format("Player %s is already gagged.", playerName));
             return;
@@ -94,7 +108,7 @@ public class MuteCommandExecutor implements TabExecutor
 
         try
         {
-            Mutelist.mute(playerName, muteReason, selfUngag);
+            Mutelist.mute(playerUUID, muteReason, selfUngag);
             Bukkit.getLogger().info(String.format("%s gagged by %s for %s", playerName, commandSender.getName(), muteReason));
             if (!silentFlag)
             {

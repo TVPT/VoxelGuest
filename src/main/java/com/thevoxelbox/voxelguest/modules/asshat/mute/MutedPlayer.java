@@ -7,6 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author Monofraps
  */
 @DatabaseTable(tableName = "mutes")
+@Deprecated
 public class MutedPlayer
 {
     @DatabaseField(generatedId = true)

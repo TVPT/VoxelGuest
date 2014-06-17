@@ -3,12 +3,15 @@ package com.thevoxelbox.voxelguest.modules.asshat.listener;
 import com.thevoxelbox.voxelguest.modules.asshat.AsshatModule;
 import com.thevoxelbox.voxelguest.modules.asshat.ban.Banlist;
 import com.thevoxelbox.voxelguest.modules.asshat.mute.Mutelist;
+import com.thevoxelbox.voxelguest.utils.UUIDFetcher;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+
+import java.util.UUID;
 
 /**
  * @author Monofraps
@@ -34,20 +37,21 @@ public class PlayerListener implements Listener
     public final void onChatEvent(final AsyncPlayerChatEvent event)
     {
         final Player player = event.getPlayer();
+        final UUID playerUUID = player.getUniqueId();
 
-        if (Mutelist.isPlayerMuted(player.getName()))
+        if (Mutelist.isPlayerMuted(playerUUID))
         {
             event.setCancelled(true);
 
             // TODO: Make that phrase configurable
-            if (Mutelist.isSelfUngaggable(player.getName()) && event.getMessage().equals("I agree. Allow me to chat."))
+            if (Mutelist.isSelfUngaggable(playerUUID) && event.getMessage().equals("I agree. Allow me to chat."))
             {
-                Mutelist.unmute(player.getName());
+                Mutelist.unmute(playerUUID);
             }
             else
             {
                 player.sendMessage("You are muted for: ");
-                player.sendMessage(Mutelist.getPlayerMutereason(player.getName()));
+                player.sendMessage(Mutelist.getPlayerMutereason(playerUUID));
                 player.sendMessage("You cannot chat until you say &6the ungag key phrase.");
             }
         }
@@ -72,9 +76,21 @@ public class PlayerListener implements Listener
     {
         final String playerName = event.getName();
 
-        if (Banlist.isPlayerBanned(playerName))
+        final UUID playerUUID;
+        try
         {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Banlist.getPlayerBanreason(playerName));
+            playerUUID = UUIDFetcher.getUUIDOf(playerName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "We're having trouble determining your UUID. Please get in touch with an admin.");
+            return;
+        }
+
+        if (Banlist.isPlayerBanned(playerUUID))
+        {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Banlist.getPlayerBanreason(playerUUID));
         }
     }
 

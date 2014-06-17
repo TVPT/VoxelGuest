@@ -44,7 +44,7 @@ public final class AsshatCommandArguments
      */
     public String getPlayerName()
     {
-        return playerName.toLowerCase();
+        return playerName;
     }
 
     /**
