@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,9 +26,9 @@ import static com.google.common.base.Preconditions.*;
 public class GuestModuleStateContainer implements ModuleStateContainer
 {
     private Module module;
-    private boolean isEnabled = false;
-    private Set<Listener> moduleEventListeners;
-    private Map<String, CommandExecutor> commandExecutors = new HashMap<>();
+    private boolean                      isEnabled            = false;
+    private Set<Listener>                moduleEventListeners = new HashSet<>();
+    private Map<String, CommandExecutor> commandExecutors     = new HashMap<>();
 
     @Override
     public boolean enable()
@@ -88,6 +89,7 @@ public class GuestModuleStateContainer implements ModuleStateContainer
     public boolean disable()
     {
         checkNotNull(module, "GuestModuleStateContainer has not been associated.");
+        if(!isEnabled) return true;
 
         if (module.getConfiguration() != null)
         {
@@ -117,6 +119,7 @@ public class GuestModuleStateContainer implements ModuleStateContainer
 
         for (final Listener listener : moduleListeners)
         {
+            if(listener == null) continue;
             moduleEventListeners.remove(listener);
             HandlerList.unregisterAll(listener);
         }
